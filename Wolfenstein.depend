@@ -3,7 +3,9 @@
 	"raylib.h"
 	<math.h>
 
-1617997251 source:c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\main.c
+1618004213 source:c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\main.c
 	"raylib.h"
 	<math.h>
+	<stdio.h>
+	<time.h>
 

@@ -6,8 +6,26 @@
 
 #include "raylib.h"
 #include <math.h>
+#include <stdio.h>
+#include <time.h>
 
 #define SAIR 6
+
+typedef struct
+{
+        Texture2D MenuFundo;    // Imagem do plano de fundo
+        Texture2D Logo;    // Imagem de fundo (Logo)
+        Font fonteWolfen;
+        Texture2D TelaDeFundo;
+
+}Recursos;
+
+typedef struct
+{
+        Recursos Res;
+
+
+}Jogo;
 
 ///Protótipos
 void IniciarJanela( void );
@@ -15,32 +33,37 @@ void MovimentoMenu( int *selecao , int qtd_opcoes );
 int CentraTextoX( char *texto , int fontsize );
 int CentraTextoXEX( Font fonte , char *texto , float fontsize , float space);
 
-int MenuPrincipal( void );
-int MenuDificuldade( void );
+int MenuPrincipal( Jogo *jogo );
+int MenuDificuldade( Jogo *jogo );
 
-void EntradaNome( void );
-void NomeEntrada( void );
+void NomeEntrada( Jogo *jogo );
 char *ItensMenuPrincipal(int escolha);
 char *ItensMenuDificuldade( int escolha );
+Jogo IniciaJogo( void );
+void LimparBuffer( void );
+
 
 
 ///Main
 int main()
 {
+        int selecaoMenu = 0;
+
         IniciarJanela();
 
-        int selecaoMenu = 0;
+        Jogo jogo = IniciaJogo();
+
 
         while( selecaoMenu != SAIR  &&  !WindowShouldClose() )
         {
-                selecaoMenu = MenuPrincipal();   // Retorna opção que jogador apertou enter
+                selecaoMenu = MenuPrincipal( &jogo );   // Retorna opção que jogador apertou enter
 
+                printf("\n\nInicio Switch Retorno :: %d" , selecaoMenu );
                 switch( selecaoMenu )   // Escolhe ação dependendo opção escolhida no menu principal
                 {
 
                         case 0:   //Novo Jogo ---------------------------------------------------------------------------------------------------------------------------------------------------
-
-                                MenuDificuldade();   //Menu secundário para escolher dificuldade
+                                selecaoMenu = MenuDificuldade( &jogo );   //Menu secundário para escolher dificuldade
 //                                CriarNovoJogador();   //Menu secundário para definir nome
 
 //                                whille( !IsGameOver() && !IsEndGame() && !IsVoltarMenu() ) //Continua avançando de level a menos que usuário receba game over, zere o jogo ou volte para o menu
@@ -52,44 +75,44 @@ int main()
 //                                }
                                 break;
 
-
                         case 1:    //Continuar ---------------------------------------------------------------------------------------------------------------------------------------------------
-
 //                                ListaJogadoresSalvos();  //Menu secundário que apresenta jogadores salvos ( cada jogador criado só pode manter um savegame para não virar uma zona)
                                 break;
 
 
                         case 2:    //Modo Horda ---------------------------------------------------------------------------------------------------------------------------------------------------
-
 //                                IniciarModoHorda();   //Inicia modo horda. Dificuldade única
                                 break;
 
-
                         case 3:    //Configurar ---------------------------------------------------------------------------------------------------------------------------------------------------
-
 //                                AbreConfiguracoes();   //Menu secundário de configurações
                                 break;
 
-
                         case 4:    //Ajuda ---------------------------------------------------------------------------------------------------------------------------------------------------
-
 //                                ApresentaAjuda();   // Ajudas e dicas gerais sobre o jogo e sobre os comandos
+
                                 break;
 
-
                         case 5:    //Sobre ---------------------------------------------------------------------------------------------------------------------------------------------------
+                                //Só um teste
+                                while( !WindowShouldClose() )
+                                {
+
+                                        BeginDrawing();
+                                                ClearBackground( WHITE );
+                                                DrawRectangle( 100 , 400 , 70 , 30 , RED);
+                                                DrawTriangle( (Vector2 ){ 100 , 100} , (Vector2 ){ 500 , 100} , (Vector2 ){ 400 , 400} , GREEN);
+                                        EndDrawing();
+                                }
 
 //                                ApresentaSobre();   //Apresenta autores e etc
                                 break;
 
-
                         case 6:    //Sair ---------------------------------------------------------------------------------------------------------------------------------------------------
-
 //                                ConfirmarSair();   //Janela de confirmação de saída
-
                                 break;
-
                 }
+                printf("\n\nFinal Switch");
         }
 
         CloseWindow();
@@ -103,7 +126,7 @@ int main()
 #define COR_MENU_COMUM WHITE          // Cor do texto do menu nao selecionado
 #define COR_MENU_SELECAO GOLD          // Cor do texto do menu selecionado
 
-int MenuPrincipal( void )
+int MenuPrincipal( Jogo *jogo )
 {
         int i;
         int selecao = 0;   // Informa qual item do menu esta em foco
@@ -113,27 +136,25 @@ int MenuPrincipal( void )
         const int VARIACAO_ALTURA = FONT_SIZE * 1.5;    // Variacao de altura entre cada item dado pelo tamanho da letra
         const int QTD_OPCOES = 7;     // Quantidade de opcoes no menu
 
-        Texture2D MenuFundo = LoadTexture("Menu_Imagens/MenuPrincipal.png");    // Imagem do plano de fundo
-        Texture2D Logo = LoadTexture("Logo/Logo.png");    // Imagem de fundo (Logo)
-
         //LOOP MENU
-        while( !IsKeyPressed( KEY_ENTER ) )
+        printf("\n>>%d<<" , IsKeyPressed( KEY_ENTER ));
+        LimparBuffer();
+        while( !IsKeyPressed( KEY_ENTER )  )
         {
+                // Captura movimento entre itens do menu
+                MovimentoMenu( &selecao , QTD_OPCOES );
+
                 BeginDrawing();
                 {
-
                         // Fundo
                         ClearBackground(WHITE);
-                        DrawTexture( MenuFundo , ( GetScreenWidth() - MenuFundo.width ) / 2 , ( GetScreenHeight() - MenuFundo.height ) / 2 , WHITE);
-                        NomeEntrada();
-                        DrawTextureEx( Logo ,(Vector2 ){ 5 , 5 } , 0 ,  .2 , WHITE );
+                        DrawTexture( jogo->Res.MenuFundo , ( GetScreenWidth() - jogo->Res.MenuFundo.width ) / 2 , ( GetScreenHeight() - jogo->Res.MenuFundo.height ) / 2 , WHITE);  //Plano de Fundo Customizado
+                        NomeEntrada( jogo );  //Nome Wolfenstein com efeito de entrada
+                        DrawTextureEx( jogo->Res.Logo , (Vector2 ){ 5 , 5 } , 0 ,  .2 , WHITE );  //Mini logo no canto superior esquerdo
 
                         // Desenha todos os itens em cor comum
                         for( i = 0 ; i < QTD_OPCOES ; i++)
                                 DrawText( TextFormat( ItensMenuPrincipal( i ) )  , CentraTextoX( ItensMenuPrincipal( i ) , FONT_SIZE ) , ALTURA_ITEM_0 + i * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_COMUM  );
-
-                        // Captura movimento entre itens do menu
-                        MovimentoMenu( &selecao , QTD_OPCOES );
 
                         // Desenha o item em foco em cor de selecao
                         DrawText( TextFormat( ItensMenuPrincipal( selecao ) ) , CentraTextoX( ItensMenuPrincipal( selecao ) , FONT_SIZE ) , ALTURA_ITEM_0 + selecao * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_SELECAO  );
@@ -172,10 +193,9 @@ char *ItensMenuPrincipal(int escolha)
 #define MULT 5
 #define ESP_WOLF 7
 
-void NomeEntrada( void )
+void NomeEntrada( Jogo *jogo )
 {
         static int i = 0 , j = 10 * MULT;
-        Font fonteWolfen = LoadFontEx("Fontes/ReturnToCastle-MZnx.ttf"  ,96 , 0 , 0);
         int k , f , L1 , L2;
         const char Nome[ 12 ] = "WOLFENSTEIN";
         char Escreva[ 12 ] = "           ";
@@ -197,7 +217,7 @@ void NomeEntrada( void )
         else
                 TextCopy( Escreva , Nome );
 
-        DrawTextEx(fonteWolfen ,  Escreva , (Vector2){ CentraTextoXEX( fonteWolfen , Escreva , FONT_SIZE_WOLF , ESP_WOLF  )  ,  HWOLF / ( 27 - i ) }  , FONT_SIZE_WOLF , ESP_WOLF , WHITE );
+        DrawTextEx( jogo->Res.fonteWolfen ,  Escreva , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen , Escreva , FONT_SIZE_WOLF , ESP_WOLF  )  ,  HWOLF / ( 27 - i ) }  , FONT_SIZE_WOLF , ESP_WOLF , WHITE );
 
 }
 
@@ -225,7 +245,9 @@ void MovimentoMenu( int *selecao , int qtd_opcoes )
 //##############################################################################
 
 #define FPS 30
-#define EXITKEY KEY_BACKSLASH
+//#define EXITKEY KEY_BACKSLASH
+#define EXITKEY KEY_ESCAPE
+
 void IniciarJanela( void )
 {
         int TelaLargura = GetMonitorWidth(0);
@@ -233,12 +255,24 @@ void IniciarJanela( void )
 
         InitWindow( TelaLargura , TelaAltura , "WOLFENSTEIN" );
         SetTargetFPS( FPS );
-        ToggleFullscreen();
+        //ToggleFullscreen();
         SetExitKey( EXITKEY );
         DisableCursor();
 }
 
 
+
+///
+Jogo IniciaJogo( void )
+{
+        Jogo jogo;
+        jogo.Res.Logo =  LoadTexture("Logo/Logo.png");   // Imagem de fundo (Logo)
+        jogo.Res.MenuFundo =  LoadTexture("Menu_Imagens/MenuPrincipal.png");   // Imagem do plano de fundo
+        jogo.Res.TelaDeFundo =  LoadTexture("Menu_Imagens/FundoLimpo.png");
+        jogo.Res.fonteWolfen =    LoadFontEx("Fontes/ReturnToCastle-MZnx.ttf"  ,96 , 0 , 0);
+
+        return jogo;
+}
 
 /**     Funcao CentraTextoX() : Centraliza o texto em relacao à largura da tela
     *           -> Entradas: Endereço do texto e Tamanho da fonte.
@@ -272,7 +306,7 @@ int CentraTextoXEX( Font fonte , char *texto , float fontsize , float space)
 #define CHUCK_NORRIS 3
 #define VOLTAR 4
 
-int MenuDificuldade( void )
+int MenuDificuldade( Jogo *jogo )
 {
         int selecao = 0;
         register int i ;
@@ -285,28 +319,28 @@ int MenuDificuldade( void )
         const int ALTURA_ITEM_VOLTAR = ALTURA_ITEM_0 + QTD_OPCOES * VARIACAO_ALTURA + 30 ;   //Posicao Y do primeiro item menu
 
 
-        Texture TelaDeFundo = LoadTexture("Menu_Imagens/FundoLimpo.png");
 
         while( !IsKeyPressed( KEY_ENTER ) )
         {
                 BeginDrawing();
-                        {
+
                         //Desenhar Plano de Fundo
-                        DrawTexture( TelaDeFundo , 1 , 1 , WHITE );
+                        ClearBackground( WHITE );
+                        DrawTexture( jogo->Res.TelaDeFundo , 1 , 1 , WHITE );
 
                         MovimentoMenu( &selecao , QTD_OPCOES );
 
                         //Itens Não Selecionados
                         for( i = 0 ; i < QTD_OPCOES - 1 ; i++)
                                 DrawText( TextFormat( ItensMenuDificuldade( i ) )  , CentraTextoX( ItensMenuDificuldade( i ) , FONT_SIZE ) , ALTURA_ITEM_0 + i * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_COMUM  );
-                        //
+
 
                         //Item Selecionado
                         if( selecao != VOLTAR)
                                 DrawText( ItensMenuDificuldade( selecao ) , CentraTextoX( ItensMenuDificuldade( selecao) , FONT_SIZE) , ALTURA_ITEM_0 + selecao * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_SELECAO);
                         else
                                 DrawText( ItensMenuDificuldade( selecao ) , CentraTextoX( ItensMenuDificuldade( selecao) , FONT_SIZE) , ALTURA_ITEM_VOLTAR , FONT_SIZE , COR_MENU_SELECAO);
-                }
+
                 EndDrawing();
         }
 
@@ -331,4 +365,12 @@ char *ItensMenuDificuldade( int escolha )
         return itens[ escolha ];
 }
 
+void LimparBuffer( void )
+{
+        int i;
+
+        for( i = 40 ; i ; i--)
+                GetKeyPressed();
+
+}
 

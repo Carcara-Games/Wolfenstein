@@ -7,33 +7,40 @@
 #include "raylib.h"
 #include <math.h>
 
+#define SAIR 6
 
+///Protótipos
 void IniciarJanela( void );
-void MovimentoMenu( int *selecao );
+void MovimentoMenu( int *selecao , int qtd_opcoes );
 int CentraTextoX( char *texto , int fontsize );
 int CentraTextoXEX( Font fonte , char *texto , float fontsize , float space);
-int Menu( void );
+
+int MenuPrincipal( void );
+int MenuDificuldade( void );
+
 void EntradaNome( void );
 void NomeEntrada( void );
 char *ItensMenuPrincipal(int escolha);
+char *ItensMenuDificuldade( int escolha );
 
-#define SAIR 6
 
+///Main
 int main()
 {
         IniciarJanela();
 
         int selecaoMenu = 0;
 
-        while( selecaoMenu != SAIR  ||  WindowShouldClose() )
+        while( selecaoMenu != SAIR  &&  !WindowShouldClose() )
         {
-                selecaoMenu = Menu();   // Retorna opção que jogador apertou enter
+                selecaoMenu = MenuPrincipal();   // Retorna opção que jogador apertou enter
 
-                switch( selecaoMenu )   // Age em cima da opção do menu principal
+                switch( selecaoMenu )   // Escolhe ação dependendo opção escolhida no menu principal
                 {
-                        //Novo Jogo
-                        case 0:
-//                                Dificuldade();   //Menu secundário para escolher dificuldade
+
+                        case 0:   //Novo Jogo ---------------------------------------------------------------------------------------------------------------------------------------------------
+
+                                MenuDificuldade();   //Menu secundário para escolher dificuldade
 //                                CriarNovoJogador();   //Menu secundário para definir nome
 
 //                                whille( !IsGameOver() && !IsEndGame() && !IsVoltarMenu() ) //Continua avançando de level a menos que usuário receba game over, zere o jogo ou volte para o menu
@@ -43,36 +50,41 @@ int main()
 //                                        Level++;
 //                                        CarregarFase(Level); //Carrega as fases em sequência. Se Jogador recebe game over, zera ou pede para voltar para o menu ativa as respectivas flags
 //                                }
-//
                                 break;
 
-                        //Continuar
-                        case 1:
+
+                        case 1:    //Continuar ---------------------------------------------------------------------------------------------------------------------------------------------------
+
 //                                ListaJogadoresSalvos();  //Menu secundário que apresenta jogadores salvos ( cada jogador criado só pode manter um savegame para não virar uma zona)
                                 break;
 
-                        //Modo Horda
-                        case 2:
+
+                        case 2:    //Modo Horda ---------------------------------------------------------------------------------------------------------------------------------------------------
+
 //                                IniciarModoHorda();   //Inicia modo horda. Dificuldade única
                                 break;
 
-                        //Configurar
-                        case 3:
+
+                        case 3:    //Configurar ---------------------------------------------------------------------------------------------------------------------------------------------------
+
 //                                AbreConfiguracoes();   //Menu secundário de configurações
                                 break;
 
-                        //Ajuda
-                        case 4:
+
+                        case 4:    //Ajuda ---------------------------------------------------------------------------------------------------------------------------------------------------
+
 //                                ApresentaAjuda();   // Ajudas e dicas gerais sobre o jogo e sobre os comandos
                                 break;
 
-                        //Sobre
-                        case 5:
+
+                        case 5:    //Sobre ---------------------------------------------------------------------------------------------------------------------------------------------------
+
 //                                ApresentaSobre();   //Apresenta autores e etc
                                 break;
 
-                        //Sair
-                        case 6:
+
+                        case 6:    //Sair ---------------------------------------------------------------------------------------------------------------------------------------------------
+
 //                                ConfirmarSair();   //Janela de confirmação de saída
 
                                 break;
@@ -88,20 +100,22 @@ int main()
 
 /// Funcao Menu() : Desenha o menu quando programa esta na parte inicial
 
-#define COR_MENU_FUNDO LIGHTGRAY          // Cor de fundo do menu
 #define COR_MENU_COMUM WHITE          // Cor do texto do menu nao selecionado
 #define COR_MENU_SELECAO GOLD          // Cor do texto do menu selecionado
-#define QTD_OPCOES 7            //QTD de opcoes
 
-int Menu( void )
+int MenuPrincipal( void )
 {
         int i;
         int selecao = 0;   // Informa qual item do menu esta em foco
-        const int FONTSIZE = 30;   // Altura da fonte do menu
-        const int ALTMENU0 = GetScreenWidth() / 4;   //Posicao Y do primeiro item menu
-        const int ALTMENUVAR = FONTSIZE * 1.5;    // Variacao de altura entre cada item dado pelo tamanho da letra
-        Texture2D MenuFundo = LoadTexture("Menu_Imagens/Menu10.png");    // Imagem do fundo
-        Texture2D Logo = LoadTexture("Logo/Logo.png");    // Imagem do fundo
+
+        const int FONT_SIZE = 30;   // Tamanho da fonte do menu
+        const int ALTURA_ITEM_0 = GetScreenWidth() / 4;   //Posicao Y do primeiro item menu
+        const int VARIACAO_ALTURA = FONT_SIZE * 1.5;    // Variacao de altura entre cada item dado pelo tamanho da letra
+        const int QTD_OPCOES = 7;     // Quantidade de opcoes no menu
+
+        Texture2D MenuFundo = LoadTexture("Menu_Imagens/MenuPrincipal.png");    // Imagem do plano de fundo
+        Texture2D Logo = LoadTexture("Logo/Logo.png");    // Imagem de fundo (Logo)
+
         //LOOP MENU
         while( !IsKeyPressed( KEY_ENTER ) )
         {
@@ -116,13 +130,13 @@ int Menu( void )
 
                         // Desenha todos os itens em cor comum
                         for( i = 0 ; i < QTD_OPCOES ; i++)
-                                DrawText( TextFormat( ItensMenuPrincipal( i ) )  , CentraTextoX( ItensMenuPrincipal( i ) , FONTSIZE ) , ALTMENU0 + i * ALTMENUVAR , FONTSIZE , COR_MENU_COMUM  );
+                                DrawText( TextFormat( ItensMenuPrincipal( i ) )  , CentraTextoX( ItensMenuPrincipal( i ) , FONT_SIZE ) , ALTURA_ITEM_0 + i * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_COMUM  );
 
                         // Captura movimento entre itens do menu
-                        MovimentoMenu( &selecao );
+                        MovimentoMenu( &selecao , QTD_OPCOES );
 
                         // Desenha o item em foco em cor de selecao
-                        DrawText( TextFormat( ItensMenuPrincipal( selecao ) ) , CentraTextoX( ItensMenuPrincipal( selecao ) , FONTSIZE ) , ALTMENU0 + selecao * ALTMENUVAR , FONTSIZE , COR_MENU_SELECAO  );
+                        DrawText( TextFormat( ItensMenuPrincipal( selecao ) ) , CentraTextoX( ItensMenuPrincipal( selecao ) , FONT_SIZE ) , ALTURA_ITEM_0 + selecao * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_SELECAO  );
                 }
                 EndDrawing();
         }
@@ -136,7 +150,7 @@ int Menu( void )
     */
 char *ItensMenuPrincipal(int escolha)
 {
-        static char opcao[ QTD_OPCOES ][ 30 ] =             {
+        static char opcao[ 7 ][ 30 ] =             {
                                                                                 "Novo Jogo" ,  // 0       //Items do menu
                                                                                 "Continuar" ,   // 1
                                                                                 "Modo Horda" ,  // 2
@@ -193,9 +207,9 @@ void NomeEntrada( void )
     *           -> Entradas: Endereço do variavel de selecao
     */
 
-void MovimentoMenu( int *selecao )
+void MovimentoMenu( int *selecao , int qtd_opcoes )
 {
-        if( IsKeyPressed( KEY_DOWN)  &&  *selecao < QTD_OPCOES - 1 )
+        if( IsKeyPressed( KEY_DOWN)  &&  *selecao < qtd_opcoes - 1  )
         {
                 (*selecao)++;
                 return;
@@ -249,5 +263,72 @@ int CentraTextoXEX( Font fonte , char *texto , float fontsize , float space)
 //##############################################################################
 
 
+
+/**     Funcao MenuDificuldade() : Apresenta o menu de escolha de dificuldade
+    */
+#define RECRUTA 0
+#define SOLDADO 1
+#define VETERANO 2
+#define CHUCK_NORRIS 3
+#define VOLTAR 4
+
+int MenuDificuldade( void )
+{
+        int selecao = 0;
+        register int i ;
+
+        const int QTD_OPCOES = 5;     // Quantidade de opcoes no menu
+        const int FONT_SIZE = 30;   // Tamanho da fonte
+
+        const int VARIACAO_ALTURA = FONT_SIZE * 1.5;    // Variacao de altura entre cada item dado pelo tamanho da letra
+        const int ALTURA_ITEM_0 = GetScreenWidth() / 4;   //Posicao Y do primeiro item menu
+        const int ALTURA_ITEM_VOLTAR = ALTURA_ITEM_0 + QTD_OPCOES * VARIACAO_ALTURA + 30 ;   //Posicao Y do primeiro item menu
+
+
+        Texture TelaDeFundo = LoadTexture("Menu_Imagens/FundoLimpo.png");
+
+        while( !IsKeyPressed( KEY_ENTER ) )
+        {
+                BeginDrawing();
+                        {
+                        //Desenhar Plano de Fundo
+                        DrawTexture( TelaDeFundo , 1 , 1 , WHITE );
+
+                        MovimentoMenu( &selecao , QTD_OPCOES );
+
+                        //Itens Não Selecionados
+                        for( i = 0 ; i < QTD_OPCOES - 1 ; i++)
+                                DrawText( TextFormat( ItensMenuDificuldade( i ) )  , CentraTextoX( ItensMenuDificuldade( i ) , FONT_SIZE ) , ALTURA_ITEM_0 + i * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_COMUM  );
+                        //
+
+                        //Item Selecionado
+                        if( selecao != VOLTAR)
+                                DrawText( ItensMenuDificuldade( selecao ) , CentraTextoX( ItensMenuDificuldade( selecao) , FONT_SIZE) , ALTURA_ITEM_0 + selecao * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_SELECAO);
+                        else
+                                DrawText( ItensMenuDificuldade( selecao ) , CentraTextoX( ItensMenuDificuldade( selecao) , FONT_SIZE) , ALTURA_ITEM_VOLTAR , FONT_SIZE , COR_MENU_SELECAO);
+                }
+                EndDrawing();
+        }
+
+        return selecao ;
+}
+//##############################################################################
+
+
+
+/**     Funcao ItensMenuDificuldade() : Retorna os itens do menu de escolha de dificuldade
+    */
+
+char *ItensMenuDificuldade( int escolha )
+{
+        static char itens[ 5 ][ 30 ] = { "Recruta",
+                                                   "Soldado",
+                                                   "Veterano",
+                                                   "Chuck Norris"
+                                                   "Voltar"
+                                                 };
+
+        return itens[ escolha ];
+}
 
 

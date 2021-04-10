@@ -8,8 +8,11 @@
 #include <math.h>
 #include <stdio.h>
 #include <time.h>
+#include <stdlib.h>
 
-#define SAIR 6
+#define SAIR_PRINCIPAL 6
+#define SIM 1
+#define NAO 0
 
 typedef struct
 {
@@ -17,6 +20,7 @@ typedef struct
         Texture2D Logo;    // Imagem de fundo (Logo)
         Font fonteWolfen;  // Fonte Estilizada Wolfenstein
         Texture2D TelaDeFundo;  //Tela de fundo somente cores
+        Texture2D FundoConfirmarSair;  //Janela de fundo da confirmação de saída
 
 }Recursos;
 
@@ -24,7 +28,7 @@ typedef struct
 {
         Recursos Res;  //Recursos do jogo
         int NivelMenu;  //Nível atual do menu( 0->Principal , 1- Algum dos secundários , 2->Menu interno do jogo , 3 - Jogando);
-
+        unsigned FECHAR : 1;
 }Jogo;
 
 ///Protótipos
@@ -37,15 +41,17 @@ void AtualizaMenu( int* selecao , int qtd_opcoes );
 void DesenhaMenuPrincipal(Jogo *jogo, int selecao);
 void DesenhaMenuDificuldade( Jogo *jogo , int selecao );
 
-void NomeEntrada( Jogo *jogo );
+void NomeWolfenEntrada( Jogo *jogo , int selecao  );
 char *ItensMenuPrincipal(int escolha);
 char *ItensMenuDificuldade( int escolha );
 Jogo IniciaJogo( void );
 void LimparBuffer( void );
 
+void DesenharConfirmarSair( int selecao , Jogo *jogo );
+void AtualizaConfirmarSair( int *selecao );
 
 
-///Main
+///MAIN
 int main()
 {
         IniciarJanela();  //Configura as opções da janela
@@ -54,7 +60,7 @@ int main()
 
         int selecaoMenu = 0;
 
-        while( !((IsKeyPressed(KEY_ENTER) && selecaoMenu == SAIR) || WindowShouldClose()))
+        while( !((IsKeyPressed(KEY_ENTER) && selecaoMenu == SAIR_PRINCIPAL) || WindowShouldClose() || jogo.FECHAR) )
         {
                 DesenhaMenuPrincipal(&jogo, selecaoMenu);   // Desenha menu principal
                 AtualizaMenu( &selecaoMenu , 7 );   // Retorna opção que jogador apertou enter. 7 é o número de opções do menu principal
@@ -70,9 +76,15 @@ int main()
                                         {
                                                 DesenhaMenuDificuldade( &jogo , selecaoMenu );   // Desenha Menu secundário para escolher dificuldade
                                                 AtualizaMenu( &selecaoMenu , 5 );   //Atualiza Menu secundário
+
+                                                if( selecaoMenu != 4 && IsKeyPressed( KEY_ENTER )  )
+                                                {
+                //                                      CriarNovoJogador();   //Menu secundário para definir nome
+
+                                                }
+
                                         }
                                         while( !(selecaoMenu == 4 && IsKeyPressed( KEY_ENTER ) ) );
-        //                                CriarNovoJogador();   //Menu secundário para definir nome
 
         //                                whille( !IsGameOver() && !IsEndGame() && !IsVoltarMenu() ) //Continua avançando de level a menos que usuário receba game over, zere o jogo ou volte para o menu
         //                                {
@@ -83,7 +95,7 @@ int main()
         //                                }
                                         break;
 
-                                case 1:    //Continuar ---------------------------------------------------------------------------------------------------------------------------------------------------
+                                case 1:    //Continuar ------------------------------------------------------------------------------------------------------------------------------------------------------
         //                                ListaJogadoresSalvos();  //Menu secundário que apresenta jogadores salvos ( cada jogador criado só pode manter um savegame para não virar uma zona)
                                         break;
 
@@ -92,16 +104,16 @@ int main()
         //                                IniciarModoHorda();   //Inicia modo horda. Dificuldade única
                                         break;
 
-                                case 3:    //Configurar ---------------------------------------------------------------------------------------------------------------------------------------------------
+                                case 3:    //Configurar ------------------------------------------------------------------------------------------------------------------------------------------------------
         //                                AbreConfiguracoes();   //Menu secundário de configurações
                                         break;
 
-                                case 4:    //Ajuda ---------------------------------------------------------------------------------------------------------------------------------------------------
+                                case 4:    //Ajuda ------------------------------------------------------------------------------------------------------------------------------------------------------------
         //                                ApresentaAjuda();   // Ajudas e dicas gerais sobre o jogo e sobre os comandos
 
                                         break;
 
-                                case 5:    //Sobre ---------------------------------------------------------------------------------------------------------------------------------------------------
+                                case 5:    //Sobre ------------------------------------------------------------------------------------------------------------------------------------------------------------
                                         //Só um teste
                                         while( !WindowShouldClose() )
                                         {
@@ -117,7 +129,13 @@ int main()
                                         break;
 
                                 case 6:    //Sair ---------------------------------------------------------------------------------------------------------------------------------------------------
-        //                                ConfirmarSair();   //Janela de confirmação de saída
+                                        selecaoMenu = 0;
+                                        do
+                                        {
+                                                AtualizaConfirmarSair( &selecaoMenu );   //Janela de confirmação de saída
+                                                DesenharConfirmarSair( selecaoMenu , &jogo);
+                                                 jogo.FECHAR = selecaoMenu ? SIM : NAO;
+                                        }while( !IsKeyPressed( KEY_ENTER ) );
                                         break;
                         }
                 }
@@ -169,7 +187,7 @@ void DesenhaMenuPrincipal(Jogo* jogo, int selecao) {
                 // Fundo
                 ClearBackground(WHITE);
                 DrawTexture( jogo->Res.MenuFundo , ( GetScreenWidth() - jogo->Res.MenuFundo.width ) / 2 , ( GetScreenHeight() - jogo->Res.MenuFundo.height ) / 2 , WHITE);  //Plano de Fundo Customizado
-                NomeEntrada( jogo );  //Nome Wolfenstein com efeito de entrada
+                NomeWolfenEntrada( jogo , selecao );  //Nome Wolfenstein com efeito de entrada
                 DrawTextureEx( jogo->Res.Logo , (Vector2 ){ 5 , 5 } , 0 ,  .2 , WHITE );  //Mini logo no canto superior esquerdo
 
                 // Desenha todos os itens em cor comum
@@ -203,7 +221,7 @@ char *ItensMenuPrincipal(int escolha)
 }
 //##############################################################################
 
-/**     Funcao NomeEntrada() : Escreve Wolfenstein com efeito legal
+/**     Funcao NomeWolfenEntrada() : Escreve Wolfenstein com efeito legal
     */
 
 #define HWOLF 150    //Posicao Y na tela do nome Wolfenstein
@@ -211,14 +229,14 @@ char *ItensMenuPrincipal(int escolha)
 #define MULT 5
 #define ESP_WOLF 7
 
-void NomeEntrada( Jogo *jogo )
+void NomeWolfenEntrada( Jogo *jogo , int selecao  )
 {
         static int i = 0 , j = 10 * MULT;
         int k , f , L1 , L2;
         const char Nome[ 12 ] = "WOLFENSTEIN";
         char Escreva[ 12 ] = "           ";
 
-        if( jogo->NivelMenu != 0 )
+        if( jogo->NivelMenu != 0  &&  selecao != SAIR_PRINCIPAL )
         {
                 jogo->NivelMenu = 0;
                 i = 0;
@@ -249,6 +267,19 @@ void NomeEntrada( Jogo *jogo )
 
 
 
+/**     Funcao DesenhaWolfenstein() : Desenha o nome do jogo com a fonte certa
+    *                   ->Entrada: Jogo
+    */
+
+void DesenhaWolfenstein( Jogo *jogo )
+{
+
+}
+
+//##############################################################################
+
+
+
 /**     Funcao IniciarJanela() : Inicia janela do jogo
     */
 
@@ -263,7 +294,7 @@ void IniciarJanela( void )
 
         InitWindow( TelaLargura , TelaAltura , "WOLFENSTEIN" );
         SetTargetFPS( FPS );
-        //ToggleFullscreen();
+        ToggleFullscreen();
         SetExitKey( EXITKEY );
         DisableCursor();
 }
@@ -274,10 +305,14 @@ void IniciarJanela( void )
 Jogo IniciaJogo( void )
 {
         Jogo jogo;
+
         jogo.Res.Logo =  LoadTexture("Logo/Logo.png");   // Imagem de fundo (Logo)
         jogo.Res.MenuFundo =  LoadTexture("Menu_Imagens/MenuPrincipal.png");   // Imagem do plano de fundo
         jogo.Res.TelaDeFundo =  LoadTexture("Menu_Imagens/FundoLimpo.png");
         jogo.Res.fonteWolfen =    LoadFontEx("Fontes/ReturnToCastle-MZnx.ttf"  ,96 , 0 , 0);
+        jogo.Res.FundoConfirmarSair =    LoadTexture("Menu_Imagens/FundoConfirmarSair.png");
+
+        jogo.FECHAR = 0;
 
         return jogo;
 }
@@ -316,7 +351,7 @@ int CentraTextoXEX( Font fonte , char *texto , float fontsize , float space)
 
 void DesenhaMenuDificuldade( Jogo *jogo , int selecao )
 {
-        register int i ;
+        int i ;
 
         const int QTD_OPCOES = 5;     // Quantidade de opcoes no menu
         const int FONT_SIZE = 30;   // Tamanho da fonte
@@ -375,4 +410,59 @@ char *ItensMenuDificuldade( int escolha )
 
         return itens[ escolha ];
 }
+//##############################################################################
 
+
+
+/**     Funcao AtualizaConfirmarSair();() : Retorna os itens do menu de escolha de dificuldade
+    */
+void AtualizaConfirmarSair( int *selecao )
+{
+
+        if( ( IsKeyPressed( KEY_DOWN) || IsKeyPressed( KEY_RIGHT) ) &&  !*selecao  )
+        {
+                (*selecao)++;
+                return;
+        }
+
+        if( ( IsKeyPressed( KEY_UP) || IsKeyPressed( KEY_LEFT) ) &&  *selecao )
+        {
+                (*selecao)--;
+                return;
+        }
+
+}
+//##############################################################################
+
+
+
+/**     Funcao DesenharConfirmarSair();() : Retorna os itens do menu de escolha de dificuldade
+    */
+void DesenharConfirmarSair( int selecao , Jogo *jogo )
+{
+        Rectangle Janela ;
+        Janela.width = 550;
+        Janela.height = 100;
+        Janela.x = ( GetScreenWidth() - Janela.width ) / 2;
+        Janela.y = ( GetScreenHeight() - Janela.height ) / 2;
+        const int fonte = 30 ;
+
+        Color cor0;
+        Color cor1;
+
+        BeginDrawing();
+                DrawTexture( jogo->Res.TelaDeFundo , 1 , 1 , WHITE );
+                NomeWolfenEntrada( jogo , SAIR_PRINCIPAL );
+//                DrawTexturePro(  jogo->Res.FundoConfirmarSair , Janela , Janela , (Vector2 ){ Janela.x , Janela.y } ,  0 , WHITE );
+                DrawTextureEx(  jogo->Res.FundoConfirmarSair , (Vector2 ){ Janela.x , Janela.y } , 0 , 1 , WHITE );
+
+                cor0 = selecao ? WHITE : GOLD;
+                cor1 = selecao ? GOLD : WHITE;
+
+                DrawText("Tem certeza ?" , Janela.x + Janela.width / 3 - 40 ,  Janela.y + Janela.height / 2, fonte , WHITE );
+                DrawText("NO" , Janela.x + Janela.width / 3 - 50 ,  Janela.y + Janela.height / 2 + 85, fonte , cor0 );
+                DrawText("YES" , Janela.x + 2 * Janela.width / 3 - 50 ,  Janela.y + Janela.height / 2 + 85 , fonte , cor1 );
+
+        EndDrawing();
+}
+//##############################################################################

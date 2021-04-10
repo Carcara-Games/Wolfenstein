@@ -49,6 +49,8 @@ void LimparBuffer( void );
 
 void DesenharConfirmarSair( int selecao , Jogo *jogo );
 void AtualizaConfirmarSair( int *selecao );
+void DesenharObrigado( void );
+
 
 
 ///MAIN
@@ -142,6 +144,7 @@ int main()
 
         }
 
+        DesenharObrigado();
         CloseWindow();
         return 0;
 }
@@ -460,9 +463,29 @@ void DesenharConfirmarSair( int selecao , Jogo *jogo )
                 cor1 = selecao ? GOLD : WHITE;
 
                 DrawText("Tem certeza ?" , Janela.x + Janela.width / 3 - 40 ,  Janela.y + Janela.height / 2, fonte , WHITE );
-                DrawText("NO" , Janela.x + Janela.width / 3 - 50 ,  Janela.y + Janela.height / 2 + 85, fonte , cor0 );
-                DrawText("YES" , Janela.x + 2 * Janela.width / 3 - 50 ,  Janela.y + Janela.height / 2 + 85 , fonte , cor1 );
+                DrawText("  ~ " , Janela.x + Janela.width / 3 - 50 ,  Janela.y + Janela.height / 2 + 65, fonte , cor0 );
+                DrawText("NAO" , Janela.x + Janela.width / 3 - 50 ,  Janela.y + Janela.height / 2 + 85, fonte , cor0 );
+                DrawText("SIM" , Janela.x + 2 * Janela.width / 3 - 50 ,  Janela.y + Janela.height / 2 + 85 , fonte , cor1 );
 
         EndDrawing();
 }
 //##############################################################################
+
+
+
+void DesenharObrigado( void )
+{
+        char obrigado[] = "Obrigado por jogar!";
+        int fontsize = 50;
+        int i;
+
+        for( i = FPS * 2 ; i ; i-- )
+        {
+                BeginDrawing();
+                        ClearBackground( BLACK );
+                        DrawText( obrigado , CentraTextoX( obrigado , fontsize ) , GetScreenHeight() / 2 , fontsize , RAYWHITE);
+                EndDrawing();
+        }
+
+
+}

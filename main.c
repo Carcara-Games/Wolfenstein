@@ -10,48 +10,147 @@
 #include <time.h>
 #include <stdlib.h>
 
-#define SAIR_PRINCIPAL 6
+#define ITENS_MAIN_MENU 7
+#define ITENS_NOVO_JOGO 5
 #define SIM 1
 #define NAO 0
+#define MAXLEVEL 3
 
 typedef struct
 {
         Texture2D MenuFundo;    // Imagem do plano de fundo principal
         Texture2D Logo;    // Imagem de fundo (Logo)
         Font fonteWolfen;  // Fonte Estilizada Wolfenstein
+        Font fonteWolfen2;  // Fonte Estilizada Wolfenstein
         Texture2D TelaDeFundo;  //Tela de fundo somente cores
         Texture2D FundoConfirmarSair;  //Janela de fundo da confirmação de saída
 
 }Recursos;
 
+
+typedef struct
+{
+        int KitMedicoP;  //Cura metade da saúde
+        int KitMedicoG;  //Cura saúde completamente
+        int vidaUp;  //Aumenta em 1 a quantidade de vidas
+        int XP;
+        int MunPistola;
+        int MunRifle;
+        int MunEspingarda;
+        int MunGranada;
+        float px;
+        float py;
+        int Rotac;  //0 -> Horizontal frente para baixo , 1-> Vertical frente direita , 2 -> Hor. frente para cima, 4 -> Vert. frente para esquerda
+        unsigned ABERTO : 1;
+}Bau;
+
+typedef struct
+{
+        int AlturaTotal;
+        int LarguraTotal;
+        int qtdBaus;  // Quantidade de baus
+        int qtdPortas;  // Quantidade de portas iterativas par o jogador
+        int qtdSpawnsT1;  //Quantidade de portas ou outro marco de onde brotam inimigos tipos 1
+        int qtdSpawnsT2;  //Quantidade de portas ou outro marco de onde brotam inimigos tipos 2
+        int qtdInimT1;  // Quantidade de inimigos tipo 1
+        int qtdInimT2;  // Quantidade de inimigos tipo 2
+        Bau *baus;
+        unsigned TERMINADO; //O level foi terminado
+
+}DadosLevel;
+
+typedef int BOOL;
+
+typedef struct
+{
+        char *nome;
+        float px;
+        float py;
+        float Rotac;
+        float mousex;
+        float mousey;
+        unsigned FACA : 1;
+        unsigned PISTOLA : 1;
+        unsigned RIFLE : 1;
+        unsigned ESPINGARDA : 1;
+        unsigned GRANADA : 1;
+        int PistolaMun;
+        int RifleMun;
+        int EspingardaMun;
+        int GranadaMun;
+        int pontos;  //Pontuação do jogador
+        int vidas;  //Vidas gerais. Cada vez que saude zera perde uma vida.
+        int saude;  //Pontos de saúde. Quantidade a definir.
+        int missaoCumprida;
+        unsigned VIVO : 1;
+}Jogador;
+
 typedef struct
 {
         Recursos Res;  //Recursos do jogo
-        int NivelMenu;  //Nível atual do menu( 0->Principal , 1- Algum dos secundários , 2->Menu interno do jogo , 3 - Jogando);
+        int NivelMenu;  //Nível atual do menu( 0->Principal , 1- Algum dos secundários , 2->Menu interno do jogo , 3 - Jogando)
         unsigned FECHAR : 1;
+        unsigned VOLTARMENU : 1;
+        Jogador jogador;
+        DadosLevel dadosLevel;
+        int Level;
 }Jogo;
+
+#define QTD_MAX_INI_T1 15
+typedef struct  //Tipo um tem 1 ponto de saúde
+{
+        float px;
+        float py;
+        float Rotac;
+        int dropXP;  // Quantidade de Xp que o jogador ganha ao eliminar o inimigo
+        unsigned VIVO : 1;
+
+}InimT1;
+
+#define QTD_MAX_INI_T2 5
+typedef struct
+{
+        float px;
+        float py;
+        float Rotac;
+        int saude;  // T2 começa com 2 de pontos de saúde
+        int dropXP;  // Quantidade de Xp que o jogador ganha ao eliminar o inimigo
+        int dropMun;  // Quantidade de munição que o jogador ganha ao eliminar o inimigo
+        int dropMunTipo;  // Tipo de munição que o jogador ganha ao eliminar o inimigo
+        unsigned VIVO : 1;
+
+}InimT2;
+
 
 ///Protótipos
 void IniciarJanela( void );
+Jogo IniciaJogo( void );
+
 void MovimentoMenu( int *selecao , int qtd_opcoes );
 int CentraTextoX( char *texto , int fontsize );
 int CentraTextoXEX( Font fonte , char *texto , float fontsize , float space);
 
 void AtualizaMenu( int* selecao , int qtd_opcoes );
+void AtualizaConfirmarSair( int *selecao );
+void NomeWolfenEntrada( Jogo *jogo , int selecao  );
 void DesenhaMenuPrincipal(Jogo *jogo, int selecao);
 void DesenhaMenuDificuldade( Jogo *jogo , int selecao );
-
-void NomeWolfenEntrada( Jogo *jogo , int selecao  );
-char *ItensMenuPrincipal(int escolha);
-char *ItensMenuDificuldade( int escolha );
-Jogo IniciaJogo( void );
-void LimparBuffer( void );
-
 void DesenharConfirmarSair( int selecao , Jogo *jogo );
-void AtualizaConfirmarSair( int *selecao );
 void DesenharObrigado( void );
 
+void DesenhaSobre( Jogo jogo);
 
+char *ItensMenuPrincipal(int escolha);
+char *ItensMenuDificuldade( int escolha );
+
+BOOL IsGameOver( Jogo jogo );
+BOOL IsEndGame( Jogo jogo );
+BOOL IsVoltarMenu( Jogo jogo );
+BOOL IsLevelEnd( Jogo jogo );
+
+void CarregarLevel( Jogo *jogo);
+void AtualizaLevel( Jogo *jogo);
+void DesenhaLevel( Jogo jogo);
 
 ///MAIN
 int main()
@@ -62,7 +161,7 @@ int main()
 
         int selecaoMenu = 0;
 
-        while( !((IsKeyPressed(KEY_ENTER) && selecaoMenu == SAIR_PRINCIPAL) || WindowShouldClose() || jogo.FECHAR) )
+        while( !((IsKeyPressed( KEY_ENTER ) && selecaoMenu == ITENS_MAIN_MENU - 1 ) || WindowShouldClose() || jogo.FECHAR ) )
         {
                 DesenhaMenuPrincipal(&jogo, selecaoMenu);   // Desenha menu principal
                 AtualizaMenu( &selecaoMenu , 7 );   // Retorna opção que jogador apertou enter. 7 é o número de opções do menu principal
@@ -77,24 +176,27 @@ int main()
                                         do
                                         {
                                                 DesenhaMenuDificuldade( &jogo , selecaoMenu );   // Desenha Menu secundário para escolher dificuldade
-                                                AtualizaMenu( &selecaoMenu , 5 );   //Atualiza Menu secundário
+                                                AtualizaMenu( &selecaoMenu , ITENS_NOVO_JOGO );   //Atualiza Menu secundário Novo jogo
 
-                                                if( selecaoMenu != 4 && IsKeyPressed( KEY_ENTER )  )
+                                                if( selecaoMenu != ITENS_NOVO_JOGO - 1 && IsKeyPressed( KEY_ENTER )  )
                                                 {
-                //                                      CriarNovoJogador();   //Menu secundário para definir nome
+                //                                      CriarNovoJogador();   //  Definir nome do jogador
+                                                        while( !IsGameOver( jogo ) && !IsEndGame( jogo ) ) //Continua avançando de level a menos que usuário receba game over, zere o jogo ou volte para o menu
+                                                        {
+                                                                CarregarLevel( &jogo ); //Carrega as fases em sequência. Se Jogador recebe game over, zera ou pede para voltar para o menu ativa as respectivas flags
+                                                                while( !IsLevelEnd( jogo )  &&  !IsVoltarMenu( jogo ) )
+                                                                {
+                                                                        AtualizaLevel( &jogo );
+                                                                        DesenhaLevel( jogo );
+                                                                }
+                                                                jogo.Level++;
+                                                        }
 
                                                 }
 
                                         }
-                                        while( !(selecaoMenu == 4 && IsKeyPressed( KEY_ENTER ) ) );
+                                        while( !(selecaoMenu == ITENS_NOVO_JOGO - 1 && IsKeyPressed( KEY_ENTER ) ) );
 
-        //                                whille( !IsGameOver() && !IsEndGame() && !IsVoltarMenu() ) //Continua avançando de level a menos que usuário receba game over, zere o jogo ou volte para o menu
-        //                                {
-        //                                        static int Level = 0;  // Level Inicia em 0 para ser somado 1
-        //
-        //                                        Level++;
-        //                                        CarregarFase(Level); //Carrega as fases em sequência. Se Jogador recebe game over, zera ou pede para voltar para o menu ativa as respectivas flags
-        //                                }
                                         break;
 
                                 case 1:    //Continuar ------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -108,16 +210,8 @@ int main()
 
                                 case 3:    //Configurar ------------------------------------------------------------------------------------------------------------------------------------------------------
         //                                AbreConfiguracoes();   //Menu secundário de configurações
-                                        break;
-
-                                case 4:    //Ajuda ------------------------------------------------------------------------------------------------------------------------------------------------------------
-        //                                ApresentaAjuda();   // Ajudas e dicas gerais sobre o jogo e sobre os comandos
-
-                                        break;
-
-                                case 5:    //Sobre ------------------------------------------------------------------------------------------------------------------------------------------------------------
                                         //Só um teste
-                                        while( !WindowShouldClose() )
+                                        while( !IsKeyPressed( KEY_A ) )
                                         {
 
                                                 BeginDrawing();
@@ -126,8 +220,18 @@ int main()
                                                         DrawTriangle( (Vector2 ){ 100 , 100} , (Vector2 ){ 500 , 100} , (Vector2 ){ 400 , 400} , GREEN);
                                                 EndDrawing();
                                         }
+                                        break;
 
-        //                                ApresentaSobre();   //Apresenta autores e etc
+                                case 4:    //Ajuda ------------------------------------------------------------------------------------------------------------------------------------------------------------
+        //                                ApresentaAjuda();   // Ajudas e dicas gerais sobre o jogo e sobre os comandos
+
+                                        break;
+
+                                case 5:    //Sobre ------------------------------------------------------------------------------------------------------------------------------------------------------------
+                                        do{
+                                                DesenhaSobre( jogo );   //Apresenta autores e etc
+                                        }while( !IsKeyPressed(KEY_ENTER) );
+
                                         break;
 
                                 case 6:    //Sair ---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -239,7 +343,7 @@ void NomeWolfenEntrada( Jogo *jogo , int selecao  )
         const char Nome[ 12 ] = "WOLFENSTEIN";
         char Escreva[ 12 ] = "           ";
 
-        if( jogo->NivelMenu != 0  &&  selecao != SAIR_PRINCIPAL )
+        if( jogo->NivelMenu != 0  &&  selecao != ITENS_MAIN_MENU - 1  &&  selecao != ITENS_MAIN_MENU - 2 )  // Em SAIR e em SOBRE não renicia o efeito do nome
         {
                 jogo->NivelMenu = 0;
                 i = 0;
@@ -287,8 +391,8 @@ void DesenhaWolfenstein( Jogo *jogo )
     */
 
 #define FPS 30
-//#define EXITKEY KEY_BACKSLASH
-#define EXITKEY KEY_ESCAPE
+#define EXITKEY KEY_BACKSLASH
+//#define EXITKEY KEY_ESCAPE
 
 void IniciarJanela( void )
 {
@@ -313,6 +417,7 @@ Jogo IniciaJogo( void )
         jogo.Res.MenuFundo =  LoadTexture("Menu_Imagens/MenuPrincipal.png");   // Imagem do plano de fundo
         jogo.Res.TelaDeFundo =  LoadTexture("Menu_Imagens/FundoLimpo.png");
         jogo.Res.fonteWolfen =    LoadFontEx("Fontes/ReturnToCastle-MZnx.ttf"  ,96 , 0 , 0);
+        jogo.Res.fonteWolfen2 =    LoadFontEx("Fontes/wolfenstein.ttf"  ,96 , 0 , 0);
         jogo.Res.FundoConfirmarSair =    LoadTexture("Menu_Imagens/FundoConfirmarSair.png");
 
         jogo.FECHAR = 0;
@@ -371,7 +476,7 @@ void DesenhaMenuDificuldade( Jogo *jogo , int selecao )
                 BeginDrawing();
 
                         //Desenhar Plano de Fundo
-                        ClearBackground( WHITE );
+                        ClearBackground( BLUE );
                         DrawTexture( jogo->Res.TelaDeFundo , 1 , 1 , WHITE );
 
                         DrawText( ItensMenuDificuldade( 5 ) , CentraTextoX( ItensMenuDificuldade( 5 ) , FONT_SIZE_M1 ) , ALTURA_ITEM_0 - 70 , FONT_SIZE_M1 , WHITE);
@@ -439,7 +544,7 @@ void AtualizaConfirmarSair( int *selecao )
 
 
 
-/**     Funcao DesenharConfirmarSair();() : Retorna os itens do menu de escolha de dificuldade
+/**     Funcao DesenharConfirmarSair() : Retorna os itens do menu de escolha de dificuldade
     */
 void DesenharConfirmarSair( int selecao , Jogo *jogo )
 {
@@ -455,7 +560,7 @@ void DesenharConfirmarSair( int selecao , Jogo *jogo )
 
         BeginDrawing();
                 DrawTexture( jogo->Res.TelaDeFundo , 1 , 1 , WHITE );
-                NomeWolfenEntrada( jogo , SAIR_PRINCIPAL );
+                NomeWolfenEntrada( jogo , ITENS_MAIN_MENU - 1 );
 //                DrawTexturePro(  jogo->Res.FundoConfirmarSair , Janela , Janela , (Vector2 ){ Janela.x , Janela.y } ,  0 , WHITE );
                 DrawTextureEx(  jogo->Res.FundoConfirmarSair , (Vector2 ){ Janela.x , Janela.y } , 0 , 1 , WHITE );
 
@@ -472,7 +577,8 @@ void DesenharConfirmarSair( int selecao , Jogo *jogo )
 //##############################################################################
 
 
-
+/**     Funcao DesenharObrigado(): Desenha obrigado na tela
+    */
 void DesenharObrigado( void )
 {
         char obrigado[] = "Obrigado por jogar!";
@@ -489,3 +595,173 @@ void DesenharObrigado( void )
 
 
 }
+//##############################################################################
+
+
+
+/**     Funcao IsGameOver(): Retorn TRUE se jogador recebeu game over
+    */
+
+BOOL IsGameOver( Jogo jogo )
+{
+        if( !jogo.jogador.vidas && !jogo.jogador.VIVO )
+        {
+                return SIM;
+        }
+        else
+                return NAO;
+}
+//##############################################################################
+
+
+
+/**     Funcao IsEndGame(): Retorn TRUE se jogador recebeu zerou o jogo
+    */
+
+BOOL IsEndGame( Jogo jogo )
+{
+        if( jogo.Level > MAXLEVEL )
+        {
+                return SIM;
+        }
+        else
+                return NAO;
+}
+//##############################################################################
+
+
+
+/**     Funcao IsVoltarMenu(): Retorn TRUE se jogador quer volar para o menu principal
+    */
+
+BOOL IsVoltarMenu( Jogo jogo )
+{
+        if( jogo.VOLTARMENU )
+        {
+                return SIM;
+        }
+        else
+                return NAO;
+}
+//##############################################################################
+
+
+
+/**     Funcao IsLevelEnd(): Retorn TRUE se jogador terminou level
+    */
+
+BOOL IsLevelEnd( Jogo jogo )
+{
+        if( jogo.dadosLevel.TERMINADO )
+        {
+                return SIM;
+        }
+        else
+                return NAO;
+}
+//##############################################################################
+
+
+
+/**     Funcao CarregarLevel(): Carrega os levels
+    */
+void CarregarLevel( Jogo *jogo)
+{
+        int i;
+
+        switch( jogo->Level )
+        {
+                case 1:
+                        // Definindo Informações do level
+                        jogo->dadosLevel.AlturaTotal = 1000 ;//alet md
+                        jogo->dadosLevel.LarguraTotal = 800 ;//alet md
+                        jogo->dadosLevel.TERMINADO = 0 ;
+                        jogo->dadosLevel.qtdBaus = 1 ;//alet md
+                        jogo->dadosLevel.qtdInimT1 = 1 ;//alet md
+                        jogo->dadosLevel.qtdInimT2 = 0 ;//alet md
+                        jogo->dadosLevel.qtdPortas = 1 ;//alet md
+                        jogo->dadosLevel.qtdSpawnsT1 = 2 ;//alet md
+
+                        // Definindo Baús
+                        jogo->dadosLevel.baus = (Bau *)malloc( jogo->dadosLevel.qtdBaus * sizeof( Bau) );  // Alocando dinamicamente array dos baus
+
+                        //Itens
+                        for( i = 0 ; i < jogo->dadosLevel.qtdBaus ; i++ )
+                        {
+                                jogo->dadosLevel.baus[ i ].ABERTO = 0 ;
+                                jogo->dadosLevel.baus[ i ].KitMedicoP = 1;
+                                jogo->dadosLevel.baus[ i ].KitMedicoG = 0;
+                                jogo->dadosLevel.baus[ i ].MunEspingarda = 0;
+                                jogo->dadosLevel.baus[ i ].MunGranada = 1;
+                                jogo->dadosLevel.baus[ i ].MunPistola = GetRandomValue( 10 , 20) ;
+                                jogo->dadosLevel.baus[ i ].MunRifle = 0;
+                                jogo->dadosLevel.baus[ i ].vidaUp = 0 ;
+                                jogo->dadosLevel.baus[ i ].XP = GetRandomValue( 10 , 100);
+                        }
+
+                        //Posicionamento
+                        jogo->dadosLevel.baus->Rotac = 1 ;//alet md
+                        jogo->dadosLevel.baus->px = 15 ;  //alet md
+                        jogo->dadosLevel.baus->py = 15;  //alet md
+
+
+        }
+
+}
+//##############################################################################
+
+
+/**     Funcao AtualizaLevel(): Atualiza os dados do level atual
+    */
+void AtualizaLevel( Jogo *jogo)
+{
+
+
+}
+//##############################################################################
+
+
+
+/**     Funcao DesenhaLevel(): Desenha o level atual
+    */
+void DesenhaLevel( Jogo jogo)
+{
+
+
+}
+//##############################################################################
+
+
+
+/**     Funcao DesenhaSobre(): Desenha a janela de informações sobre a autoria do jogo
+    */
+
+void DesenhaSobre( Jogo jogo)
+{
+        const int fonte = 25 ;
+        const int escala = 1.3;
+        Rectangle Janela ;
+        Janela.width = escala * jogo.Res.FundoConfirmarSair.width;
+        Janela.height = escala * jogo.Res.FundoConfirmarSair.height;
+        Janela.x = ( GetScreenWidth() - Janela.width ) / 2;
+        Janela.y = 2 * ( GetScreenHeight() - Janela.height ) / 3;
+        int ESPY = 18 , ESPX = 25;
+
+
+        BeginDrawing();
+
+                DrawTexture( jogo.Res.TelaDeFundo , 1 , 1 , WHITE );
+                NomeWolfenEntrada( &jogo , ITENS_MAIN_MENU - 1 );
+                DrawTextureEx(  jogo.Res.FundoConfirmarSair , (Vector2 ){ Janela.x , Janela.y } , 0 , escala , WHITE );
+
+                DrawTextEx( jogo.Res.fonteWolfen ,    "WOLFENSTEIN 1.0" , (Vector2 ){ Janela.x + ESPX , Janela.y + ESPY } , fonte , 3 , WHITE );
+                DrawText(TextFormat("Escrito por : ") , Janela.x + 2 * ESPX ,  Janela.y + 4 * ESPY , fonte , WHITE );
+                DrawText("-Manoel Narciso Filho" , Janela.x + 3 * ESPX ,  Janela.y + 6 * ESPY , fonte , WHITE );
+                DrawText("-Matheus De Moraes Costa" , Janela.x + 3 * ESPX ,  Janela.y + 8 * ESPY , fonte , WHITE );
+                DrawText("SAIR" , Janela.x + ( Janela.width - MeasureText( "SAIR" , fonte ) ) / 2 , Janela.y + Janela.height - 30 , fonte , GOLD );
+
+        EndDrawing();
+
+
+}
+//##############################################################################

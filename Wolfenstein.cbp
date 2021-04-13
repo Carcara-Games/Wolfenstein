@@ -31,9 +31,37 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="booleanas.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="booleanas.h" />
+		<Unit filename="definicoes.h" />
+		<Unit filename="desenhajogo.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="desenhajogo.h" />
+		<Unit filename="desenhamenu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="desenhamenu.h">
+			<Option target="&lt;{~None~}&gt;" />
+		</Unit>
+		<Unit filename="inicializar.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="inicializar.h" />
+		<Unit filename="logicajogo.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="logicajogo.h" />
+		<Unit filename="logicamenu.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="logicamenu.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="structsgraficos.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

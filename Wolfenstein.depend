@@ -3,10 +3,63 @@
 	"raylib.h"
 	<math.h>
 
-1618176405 source:c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\main.c
+1618338222 source:c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\main.c
 	"raylib.h"
+	"structsgraficos.h"
+	"inicializar.h"
+	"logicamenu.h"
+	"logicajogo.h"
+	"desenhamenu.h"
+	"desenhajogo.h"
+	"definicoes.h"
+
+1618336716 c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\desenhamenu.h
+	"structsgraficos.h"
+	"logicamenu.h"
+
+1618335938 c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\structsgraficos.h
+	"raylib.h"
+
+1618336920 c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\logicamenu.h
+	"raylib.h"
+
+1618336920 source:c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\logicamenu.c
+	"logicamenu.h"
+
+1618337919 c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\definicoes.h
 	<math.h>
 	<stdio.h>
 	<time.h>
 	<stdlib.h>
+
+1618338705 source:c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\desenhamenu.c
+	"desenhamenu.h"
+	"definicoes.h"
+	<math.h>
+
+1618338094 source:c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\inicializar.c
+	"inicializar.h"
+
+1618337201 c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\inicializar.h
+	"structsgraficos.h"
+	"definicoes.h"
+
+1618338021 source:c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\booleanas.c
+	"booleanas.h"
+
+1618337417 c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\booleanas.h
+	"structsgraficos.h"
+	"definicoes.h"
+
+1618337742 source:c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\desenhajogo.c
+	"desenhajogo.h"
+
+1618337728 c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\desenhajogo.h
+	"structsgraficos.h"
+
+1618338118 source:c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\logicajogo.c
+	"logicajogo.h"
+
+1618338158 c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\logicajogo.h
+	"structsgraficos.h"
 

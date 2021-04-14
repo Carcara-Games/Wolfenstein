@@ -10,7 +10,7 @@
                 Font fonteWolfen;  // Fonte Estilizada Wolfenstein
                 Font fonteWolfen2;  // Fonte Estilizada Wolfenstein 2
                 Texture2D TelaDeFundo;  //Tela de fundo somente cores
-                Texture2D FundoConfirmarSair;  //Janela de fundo da confirmação de saída
+                Texture2D FundoConfirmarSair;  //Janela de fundo da confirmaï¿½ï¿½o de saï¿½da
                 Texture2D FundoLevel1;
                 Texture2D Mapa;  // Imagem do mapa
                 Texture2D Portas;  // Imagem das portas
@@ -20,8 +20,8 @@
 
         typedef struct
         {
-                int KitMedicoP;  //Cura metade da saúde
-                int KitMedicoG;  //Cura saúde completamente
+                int KitMedicoP;  //Cura metade da saï¿½de
+                int KitMedicoG;  //Cura saï¿½de completamente
                 int vidaUp;  //Aumenta em 1 a quantidade de vidas
                 int XP;
                 int MunPistola;
@@ -49,7 +49,7 @@
 
         typedef struct
         {
-                float limEsq;  // Limites de deslocamento da câmera aérea
+                float limEsq;  // Limites de deslocamento da cï¿½mera aï¿½rea
                 float limDir;
                 float limInf;
                 float limSup;
@@ -62,8 +62,8 @@
 
                 int qtdSpawnsT1;  //Quantidade de portas ou outro marco de onde brotam inimigos tipos 1
                 int qtdSpawnsT2;  //Quantidade de portas ou outro marco de onde brotam inimigos tipos 2
-                int qtdInimT1;  // Quantidade de inimigos tipo 1 que precisarão ser abatidos para que algum inimigo drope uma uma chave
-                int qtdInimT2;  // Quantidade de inimigos tipo 2 que precisarão ser abatidos para que algum inimigo drope uma uma chave
+                int qtdInimT1;  // Quantidade de inimigos tipo 1 que precisarï¿½o ser abatidos para que algum inimigo drope uma uma chave
+                int qtdInimT2;  // Quantidade de inimigos tipo 2 que precisarï¿½o ser abatidos para que algum inimigo drope uma uma chave
         }Sala;
 
         typedef int BOOL;
@@ -71,8 +71,8 @@
         typedef struct
         {
                 char *nome;
-                float px;  //Posição x na tela
-                float XMapa;  // Posição x no mapa
+                float px;  //Posiï¿½ï¿½o x na tela
+                float XMapa;  // Posiï¿½ï¿½o x no mapa
                 float py;
                 float YMapa;
                 float Rotac;
@@ -87,9 +87,9 @@
                 int RifleMun;
                 int EspingardaMun;
                 int GranadaMun;
-                int pontos;  //Pontuação do jogador
+                int pontos;  //Pontuaï¿½ï¿½o do jogador
                 int vidas;  //Vidas gerais. Cada vez que saude zera perde uma vida.
-                int saude;  //Pontos de saúde. Quantidade a definir.
+                int saude;  //Pontos de saï¿½de. Quantidade a definir.
                 int missaoCumprida;
                 unsigned VIVO : 1;
         }Jogador;
@@ -97,7 +97,7 @@
         typedef struct
         {
                 Recursos Res;  //Recursos do jogo
-                int NivelMenu;  //Nível atual do menu( 0->Principal , 1- Algum dos secundários , 2->Menu interno do jogo , 3 - Jogando)
+                int NivelMenu;  //Nï¿½vel atual do menu( 0->Principal , 1- Algum dos secundï¿½rios , 2->Menu interno do jogo , 3 - Jogando)
                 unsigned FECHAR : 1;
                 unsigned VOLTARMENU : 1;
                 Jogador jogador;
@@ -109,7 +109,7 @@
                 Rectangle tela;
         }Jogo;
 
-        typedef struct  //Tipo um tem 1 ponto de saúde
+        typedef struct  //Tipo um tem 1 ponto de saï¿½de
         {
                 float px;
                 float py;
@@ -123,12 +123,27 @@
                 float px;
                 float py;
                 float Rotac;
-                int saude;  // T2 começa com 2 de pontos de saúde
+                int saude;  // T2 comeï¿½a com 2 de pontos de saï¿½de
                 int dropXP;  // Quantidade de Xp que o jogador ganha ao eliminar o inimigo
-                int dropMun;  // Quantidade de munição que o jogador ganha ao eliminar o inimigo
-                int dropMunTipo;  // Tipo de munição que o jogador ganha ao eliminar o inimigo
+                int dropMun;  // Quantidade de muniï¿½ï¿½o que o jogador ganha ao eliminar o inimigo
+                int dropMunTipo;  // Tipo de muniï¿½ï¿½o que o jogador ganha ao eliminar o inimigo
                 unsigned VIVO : 1;
 
         }InimT2;
+
+        typedef struct
+        {
+                float px;
+                float py;
+                               
+        }Municao;
+
+         typedef struct
+        {
+                float px;
+                float py;
+
+        }Faca;
+        
 
 #endif // __STRUCTSGRAFICOS_H_

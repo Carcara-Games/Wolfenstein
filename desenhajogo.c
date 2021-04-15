@@ -41,8 +41,9 @@ void DesenhaJogador( Jogo jogo)
         ret.x = jogo.jogador.px - ret.width / 2;
         ret.y = jogo.jogador.py - ret.height / 2;
 
-        vet.x = 0;
-        vet.y = 0;
+        // vetor para origem centralizada de rotacao mouse
+        vet.x = ret.width/2;
+        vet.y = ret.height/2;
 
 
         DrawRectanglePro( ret  , vet , jogo.jogador.Rotac  , BLUE );

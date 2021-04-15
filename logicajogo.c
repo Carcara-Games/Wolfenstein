@@ -1,5 +1,6 @@
 
 #include "logicajogo.h"
+#include <math.h>
 
 /**     Funcao AtualizaLevel(): Atualiza os dados do level atual
     */
@@ -22,40 +23,44 @@ void AtualizaLevel( Jogo *jogo)
     */
 
 #ifndef PASSO
-#define PASSO 3.5 // Só pra lembrar. Alterar em definições
+#define PASSO 3.5 // Sï¿½ pra lembrar. Alterar em definiï¿½ï¿½es
 #endif
 
 void AtualizaPosicao( Jogo *jogo)
 {
-//        float ESC = 1; // Razão entre o deslocamento na tela e no mapa
+//        float ESC = 1; // Razï¿½o entre o deslocamento na tela e no mapa
 
 
-        //Alterando posição global no mapa
+        //Alterando posiï¿½ï¿½o global no mapa
         if( IsKeyDown( KEY_W ) )
                 jogo->jogador.YMapa -= PASSO;
 //        {
-//                jogo->jogador.py -= PASSO;//                jogo->jogador.YMapa -= PASSO / ESC ;
+//                jogo->jogador.py -= PASSO;
+//                jogo->jogador.YMapa -= PASSO / ESC ;
 //        }
 
         if( IsKeyDown( KEY_S ) )
                 jogo->jogador.YMapa += PASSO;
 //        {
-//                jogo->jogador.py += PASSO;//                jogo->jogador.YMapa += PASSO / ESC;
+//                jogo->jogador.py += PASSO;
+//                jogo->jogador.YMapa += PASSO / ESC;
 //        }
 
         if( IsKeyDown( KEY_D ) )
                 jogo->jogador.XMapa += PASSO;
 //        {
-//                jogo->jogador.px += PASSO;//                jogo->jogador.XMapa += PASSO / ESC ;
+//                jogo->jogador.px += PASSO;
+//                jogo->jogador.XMapa += PASSO / ESC ;
 //        }
 
         if( IsKeyDown( KEY_A ) )
                 jogo->jogador.XMapa -= PASSO;
 //        {
-//                jogo->jogador.px -= PASSO;//                jogo->jogador.XMapa -= PASSO / ESC ;
+//                jogo->jogador.px -= PASSO;
+//                jogo->jogador.XMapa -= PASSO / ESC ;
 //        }
 
-        //Alterando posição na tela
+        //Alterando posiï¿½ï¿½o na tela
         if( 1 )
         {
                 jogo->jogador.px = jogo->tela.width / 2;
@@ -87,7 +92,7 @@ void AtualizaMapa( Jogo *jogo)
         float novox = jogo->jogador.XMapa - jogo->tela.width / 2;  // Desloca coordenadas do desenho do fundo centrando o personagem
         float novoy = jogo->jogador.YMapa - jogo->tela.height / 2;
 
-//        if( novox > jogo->salas[ jogo->atualSala ].limEsq  &&  novox < jogo->salas[ jogo->atualSala ].limDir )  // Confere se não ultrapassará os limites de vizualização esquero e direito
+//        if( novox > jogo->salas[ jogo->atualSala ].limEsq  &&  novox < jogo->salas[ jogo->atualSala ].limDir )  // Confere se nï¿½o ultrapassarï¿½ os limites de vizualizaï¿½ï¿½o esquero e direito
                 jogo->tela.x = novox;
 
 //        if( novoy > jogo->salas[ jogo->atualSala ].limSup  &&  novoy < jogo->salas[ jogo->atualSala ].limInf )

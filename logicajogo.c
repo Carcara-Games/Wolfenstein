@@ -1,6 +1,6 @@
 
 #include "logicajogo.h"
-#include <math.h>
+#include <math.h> // uso para atan2
 
 /**     Funcao AtualizaLevel(): Atualiza os dados do level atual
     */

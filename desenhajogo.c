@@ -1,30 +1,25 @@
 
 #include "desenhajogo.h"
+#include "definicoes.h"
 
 /**     Funcao DesenhaMapa():
     */
 void DesenhaMapa( Jogo jogo)
 {
-        const float ESC = 4.5;
-        Rectangle  screen;
-        Rectangle  mapa;
         Vector2 pos;
-
-        mapa.width = jogo.tela.width / ESC;
-        mapa.height = jogo.tela.height / ESC;
-        mapa.x = jogo.tela.x;
-        mapa.y = jogo.tela.y;
-
-        screen.width = jogo.tela.width;
-        screen.height = jogo.tela.height;
-        screen.x = 0;
-        screen.y = 0;
-
         pos.x = 0;
         pos.y = 0;
 
-       DrawTexturePro( jogo.Res.Mapa , mapa , screen , pos , 0 , WHITE );
-
+        DrawTexturePro( jogo.Res.Mapa , jogo.MapaDesenho , jogo.tela , pos , 0 , WHITE );
+        DrawText( TextFormat("( %.2f , %.2f)" , jogo.jogador.PosMundo.x , jogo.jogador.PosMundo.y ) , 10 , 10 , 60 , MAROON );
+        DrawText( TextFormat("( atual sala : %d)" , jogo.atualSala ) , 10 , 100 , 60 , SKYBLUE );
+//        DrawText( TextFormat("( %.2f , %.2f)" , jogo.MapaDesenho.x , jogo.MapaDesenho.y ) , 10 , 70 , 30 , WHITE );
+//        DrawText( TextFormat("( %.2f , %.2f)" , ESCALA * (jogo.salas[ jogo.atualSala ].portas[ 0 ].pos.x -  jogo.MapaDesenho.x) , ESCALA * (jogo.salas[ jogo.atualSala ].portas[ 0 ].pos.y -  jogo.MapaDesenho.y ) ) , 10 , 70 , 30 , WHITE );
+//        DrawText( TextFormat("( %.2f , %.2f)" , ESCALA * (jogo.salas[ jogo.atualSala ].portas[ 1 ].pos.x -  jogo.MapaDesenho.x) , ESCALA * (jogo.salas[ jogo.atualSala ].portas[ 1 ].pos.y -  jogo.MapaDesenho.y ) ) , 10 , 70 , 30 , WHITE );
+//        DrawText( TextFormat(" P=%d , Z=%d " , jogo.salas[ jogo.atualSala ].qtdPortas , jogo.salas[ 0 ].qtdZonas ) , 10 , 100 , 60 , GREEN );
+//        DrawText( TextFormat(" P=%d , Z=%d " , jogo.salas[ jogo.atualSala ].qtdPortas , jogo.salas[ 0 ].qtdZonas ) , 10 , 100 , 60 , GREEN );
+//        DrawText( TextFormat(" xP = %.2f  |  yP=%.2f " , jogo.salas[ jogo.atualSala ].portas[ 0 ].pos.x , jogo.salas[ jogo.atualSala ].portas[ 0 ].pos.y ) , 10 , 200 , 40 , SKYBLUE );
+//        DrawText( TextFormat(" xP = %.2f  |  yP=%.2f " , jogo.salas[ jogo.atualSala ].portas[ 1 ].pos.x , jogo.salas[ jogo.atualSala ].portas[ 1 ].pos.y ) , 10 , 200 , 40 , SKYBLUE );
 }
 //##############################################################################
 
@@ -33,50 +28,58 @@ void DesenhaMapa( Jogo jogo)
     */
 void DesenhaJogador( Jogo jogo)
 {
-        Rectangle ret;
-        Vector2 vet;
+        DrawRectanglePro( jogo.jogador.PosTela , jogo.jogador.Origin , /*jogo.jogador.Rotac*/0 , BLUE );
+}
+//##############################################################################
 
-        ret.height = 30;
-        ret.width = 60;
-        ret.x = jogo.jogador.px - ret.width / 2;
-        ret.y = jogo.jogador.py - ret.height / 2;
+/**     Funcao DesenhaLevel(): Desenha o level atual
+    */
 
-        // vetor para origem centralizada de rotacao mouse
-        vet.x = ret.width/2;
-        vet.y = ret.height/2;
+void DesenhaLevel( Jogo jogo)
+{
+        BeginDrawing();
+
+        DesenhaMapa( jogo );
+        //DesenhaPortas( jogo );
+        DesenhaJogador( jogo );
 
 
-        DrawRectanglePro( ret  , vet , jogo.jogador.Rotac  , BLUE );
-//        DrawRectanglePro( ret  , vet , 0 , BLUE );
-//        DrawRectangle( ret.x , ret.y , ret.width , ret.height , GREEN);
+        EndDrawing();
 
+        //if( jogo.PASSAGEM ) PassagemPorta();
 }
 //##############################################################################
 
 
 
-/**     Funcao DesenhaPortas():
+/**     Funcao DesenhaPortas(): Desenha as portas trancadas
     */
 
 void DesenhaPortas( Jogo jogo)
 {
-//        int i;
+        int i ;
 
+        for( i = 0 ; i < jogo.salas[ jogo.atualSala ].qtdPortas ; i++ )
+                if( !jogo.salas[ jogo.atualSala ].portas[ i ].DESTRANCADA )
+                        if( CheckCollisionPointRec( jogo.salas[ jogo.atualSala ].portas[ i ].pos , jogo.MapaDesenho ) )
+                                DrawTexture( jogo.Res.Portas , ESCALA * (jogo.salas[ jogo.atualSala ].portas[ 0 ].pos.x -  jogo.MapaDesenho.x) , ESCALA * (jogo.salas[ jogo.atualSala ].portas[ 0 ].pos.y -  jogo.MapaDesenho.y) , WHITE );
+}
 //        for( i = 0 ; i < jogo.dadosLevel.salas[ i ].qtdPortas ; i++ )
 //                DrawTextureEx( jogo.Res.Portas , jogo.dadosLevel.salas[ i ].portas.pos , jogo.dadosLevel.salas[ i ].portas.rotac , 1 , WHITE );
-}
+
 //##############################################################################
 
+///Função PassagemPorta
 
-/**     Funcao DesenhaLevel(): Desenha o level atual
-    */
-void DesenhaLevel( Jogo jogo)
+void PassagemPorta( void )
 {
-        BeginDrawing();
-                DesenhaMapa( jogo );
-                //DesenhaPortas( jogo );
-                DesenhaJogador( jogo );
+        int i = FPS / 8;
 
-        EndDrawing();
+        for(  ; i ; i-- )
+        {
+                BeginDrawing();
+                        ClearBackground( BLACK );
+                EndDrawing();
+        }
 }
 //##############################################################################

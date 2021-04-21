@@ -7,5 +7,6 @@
         void DesenhaMapa( Jogo jogo);
         void DesenhaPortas( Jogo jogo);
         void DesenhaLevel( Jogo jogo);
+        void PassagemPorta( void );
 
 #endif // __DESENHAJOGO_H_

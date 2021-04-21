@@ -7,5 +7,11 @@
         void AtualizaPosicao( Jogo *jogo);
         void AtualizaMira( Jogo *jogo);
         void AtualizaMapa( Jogo *jogo);
+        BOOL ChecaMov( Jogo jogo , int varx , int vary );
+        int ChecaPortas( Jogo jogo );
+        void EntraEmPortas( Jogo *jogo );
+        void pausa( int tempo);
+
+
 
 #endif // __LOGICAJOGO_H_

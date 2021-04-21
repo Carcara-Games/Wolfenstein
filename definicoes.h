@@ -16,6 +16,10 @@
         #define EXITKEY KEY_BACKSLASH
         //#define EXITKEY KEY_ESCAPE
 
-        #define PASSO 3.5
+        #define PASSO 3
+
+        #define ESCALA 4.5
+
+        #define QTDSALAS 12
 
 #endif // __DEFINICOES_H_

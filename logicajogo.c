@@ -1,5 +1,6 @@
 
 #include "logicajogo.h"
+#include "definicoes.h"
 #include <math.h> // uso para atan2
 
 /**     Funcao AtualizaLevel(): Atualiza os dados do level atual
@@ -9,7 +10,8 @@ void AtualizaLevel( Jogo *jogo)
 //        AtualizaObjetos( &jogo );
 //        AtualizaFundo( &jogo );
         AtualizaPosicao( jogo );
-        AtualizaMira( jogo );
+        EntraEmPortas( jogo );
+//        AtualizaMira( jogo );
         AtualizaMapa( jogo );
 //        AtualizaTiroERecarga( &jogo );
 //        AtualizaArma( &jogo );
@@ -22,51 +24,34 @@ void AtualizaLevel( Jogo *jogo)
 /**     Funcao AtualizaPosicao():
     */
 
-#ifndef PASSO
-#define PASSO 3.5 // S� pra lembrar. Alterar em defini��es
-#endif
-
 void AtualizaPosicao( Jogo *jogo)
 {
-//        float ESC = 1; // Raz�o entre o deslocamento na tela e no mapa
+//        float ESC = 1; // Razao entre o deslocamento na tela e no mapa
 
 
-        //Alterando posi��o global no mapa
+        //Alterando posicao global no mapa
         if( IsKeyDown( KEY_W ) )
-                jogo->jogador.YMapa -= PASSO;
-//        {
-//                jogo->jogador.py -= PASSO;
-//                jogo->jogador.YMapa -= PASSO / ESC ;
-//        }
+                if( ChecaMov( *jogo , 0 , -PASSO ) )
+                        jogo->jogador.PosMundo.y -= PASSO;
 
         if( IsKeyDown( KEY_S ) )
-                jogo->jogador.YMapa += PASSO;
-//        {
-//                jogo->jogador.py += PASSO;
-//                jogo->jogador.YMapa += PASSO / ESC;
-//        }
+                if( ChecaMov( *jogo , 0 , PASSO ) )
+                        jogo->jogador.PosMundo.y += PASSO;
 
         if( IsKeyDown( KEY_D ) )
-                jogo->jogador.XMapa += PASSO;
-//        {
-//                jogo->jogador.px += PASSO;
-//                jogo->jogador.XMapa += PASSO / ESC ;
-//        }
+                if( ChecaMov( *jogo , PASSO , 0 ) )
+                        jogo->jogador.PosMundo.x += PASSO;
 
         if( IsKeyDown( KEY_A ) )
-                jogo->jogador.XMapa -= PASSO;
-//        {
-//                jogo->jogador.px -= PASSO;
-//                jogo->jogador.XMapa -= PASSO / ESC ;
-//        }
+                if( ChecaMov( *jogo , -PASSO , 0 ) )
+                        jogo->jogador.PosMundo.x -= PASSO;
 
-        //Alterando posi��o na tela
+        //Alterando posicao na tela
         if( 1 )
         {
-                jogo->jogador.px = jogo->tela.width / 2;
-                jogo->jogador.py = jogo->tela.height / 2;
+                jogo->jogador.PosTela.x = ( jogo->tela.width - jogo->jogador.PosTela.width) / 2;
+                jogo->jogador.PosTela.y = ( jogo->tela.height  -  jogo->jogador.PosTela.height ) / 2;
         }
-
 }
 //##############################################################################
 
@@ -74,10 +59,9 @@ void AtualizaPosicao( Jogo *jogo)
 /**     Funcao AtualizaMira():
     */
 
-
 void AtualizaMira( Jogo *jogo)
 {
-        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.py ) ,  ( GetMouseX() - jogo->jogador.px ) );
+        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y ) ,  ( GetMouseX() - jogo->jogador.PosTela.x ) );
 }
 //##############################################################################
 
@@ -86,16 +70,108 @@ void AtualizaMira( Jogo *jogo)
 /**     Funcao AtualizaMapa():
     */
 
-
 void AtualizaMapa( Jogo *jogo)
 {
-        float novox = jogo->jogador.XMapa - jogo->tela.width / 2;  // Desloca coordenadas do desenho do fundo centrando o personagem
-        float novoy = jogo->jogador.YMapa - jogo->tela.height / 2;
+        float novox = jogo->jogador.PosMundo.x - jogo->MapaDesenho.width / 2;  // Desloca coordenadas do desenho do fundo centrando o personagem
+        float novoy = jogo->jogador.PosMundo.y - jogo->MapaDesenho.height / 2;
 
 //        if( novox > jogo->salas[ jogo->atualSala ].limEsq  &&  novox < jogo->salas[ jogo->atualSala ].limDir )  // Confere se n�o ultrapassar� os limites de vizualiza��o esquero e direito
-                jogo->tela.x = novox;
+                jogo->MapaDesenho.x = novox;
 
 //        if( novoy > jogo->salas[ jogo->atualSala ].limSup  &&  novoy < jogo->salas[ jogo->atualSala ].limInf )
-                jogo->tela.y = novoy;
+                jogo->MapaDesenho.y = novoy;
+
+
 }
 //##############################################################################
+
+/**     Funcao ChecaMov():
+    */
+
+BOOL ChecaMov( Jogo jogo , int varx , int vary )
+{
+        int i;
+
+        for( i = 0 ; i < jogo.salas[ jogo.atualSala ].qtdZonas ; i++ )
+                if( jogo.jogador.PosMundo.x + varx <= jogo.salas[ jogo.atualSala ].zonas[ i ].dir  &&  jogo.jogador.PosMundo.x + varx >= jogo.salas[ jogo.atualSala ].zonas[ i ].esq   )
+                        if( jogo.jogador.PosMundo.y + vary <= jogo.salas[ jogo.atualSala ].zonas[ i ].inf  &&  jogo.jogador.PosMundo.y + vary >= jogo.salas[ jogo.atualSala ].zonas[ i ].sup )
+                                return 1;
+
+        return 0;
+}
+//##############################################################################
+
+
+
+/**     Funcao EntraEmPortas():
+    */
+
+void EntraEmPortas( Jogo *jogo )
+{
+        int porta = ChecaPortas( *jogo );
+
+        if( porta != -1 )
+        {
+                jogo->jogador.PosMundo.x = jogo->salas[ jogo->atualSala ].portas[ porta ].destino.x;
+                jogo->jogador.PosMundo.y = jogo->salas[ jogo->atualSala ].portas[ porta ].destino.y;
+                jogo->atualSala = jogo->salas[ jogo->atualSala ].portas[ porta ].alteraPSala;
+                jogo->PASSAGEM = 1;
+        }
+        else
+                jogo->PASSAGEM = 0;
+}
+//##############################################################################
+
+/**     Funcao ChecaPortas():
+    */
+
+BOOL ChecaPortas( Jogo jogo )
+{
+        int i;
+        int tol = 3 ;
+
+        for( i = 0 ; i < jogo.salas[ jogo.atualSala ].qtdPortas ; i++ )
+                if( jogo.salas[ jogo.atualSala ].portas[ i ].DESTRANCADA ){
+                        if( fabs( jogo.salas[ jogo.atualSala ].portas[ i ].rotac ) == 90  ){
+                                        if( jogo.jogador.PosMundo.y <= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y + tol  &&  jogo.jogador.PosMundo.y >= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y - tol   )
+                                                if( jogo.jogador.PosMundo.x == jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x )
+                                                        return i;
+                        }
+                        else
+                                        if( jogo.jogador.PosMundo.x <= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x + tol  &&  jogo.jogador.PosMundo.x >= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x - tol   )
+                                                if( jogo.jogador.PosMundo.y == jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y )
+                                                        return i;
+                }
+
+        return -1;
+}
+//##############################################################################
+
+
+///Função pausa
+
+void pausa( int tempo)
+{
+        int i;
+
+        for( i = tempo * FPS ; i ; i-- )
+        {
+                BeginDrawing();
+                EndDrawing();
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

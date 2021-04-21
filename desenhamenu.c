@@ -17,21 +17,21 @@ void DesenhaMenuPrincipal(Jogo* jogo, int selecao)
         const int VARIACAO_ALTURA = FONT_SIZE * 1.5;    // Variacao de altura entre cada item dado pelo tamanho da letra
         const int QTD_OPCOES = 7;     // Quantidade de opcoes no menu
 
-        Rectangle imagem;
-        imagem.height = jogo->Res.TelaDeFundo.height ;
-        imagem.width = jogo->Res.TelaDeFundo.width ;
-        imagem.x = 0 ;
-        imagem.y = 0 ;
+//        Rectangle imagem;
+//        imagem.height = jogo->Res.TelaDeFundo.height ;
+//        imagem.width = jogo->Res.TelaDeFundo.width ;
+//        imagem.x = 0 ;
+//        imagem.y = 0 ;
 
-        Vector2 pos = (Vector2 ){ 0 , 0 };
+//        Vector2 pos = (Vector2 ){ 0 , 0 };
 
         BeginDrawing();
         {
                 // Fundo
-                ClearBackground(WHITE);
-                DrawTexturePro( jogo->Res.MenuFundo , imagem , jogo->tela  , pos , 0 , WHITE );
-                NomeWolfenEntrada( jogo , selecao );  //Nome Wolfenstein com efeito de entrada
-                DrawTextureEx( jogo->Res.Logo , (Vector2 ){ 5 , 5 } , 0 ,  .2 , WHITE );  //Mini logo no canto superior esquerdo
+                ClearBackground(BLACK);
+//                DrawTexturePro( jogo->Res.MenuFundo , imagem , jogo->tela  , pos , 0 , WHITE );
+//                NomeWolfenEntrada( jogo , selecao );  //Nome Wolfenstein com efeito de entrada
+//                DrawTextureEx( jogo->Res.Logo , (Vector2 ){ 5 , 5 } , 0 ,  .2 , WHITE );  //Mini logo no canto superior esquerdo
 
                 // Desenha todos os itens em cor comum
                 for( i = 0 ; i < QTD_OPCOES ; i++)
@@ -68,20 +68,20 @@ void DesenhaMenuDificuldade( Jogo *jogo , int selecao )
         const int ALTURA_ITEM_0 = GetScreenWidth() / 4;   //Posicao Y do primeiro item menu
         const int ALTURA_ITEM_VOLTAR = ALTURA_ITEM_0 + QTD_OPCOES * VARIACAO_ALTURA + 30 ;   //Posicao Y do primeiro item menu
 
-        Rectangle imagem;
-        imagem.height = jogo->Res.TelaDeFundo.height ;
-        imagem.width = jogo->Res.TelaDeFundo.width ;
-        imagem.x = 0 ;
-        imagem.y = 0 ;
+//        Rectangle imagem;
+//        imagem.height = jogo->Res.TelaDeFundo.height ;
+//        imagem.width = jogo->Res.TelaDeFundo.width ;
+//        imagem.x = 0 ;
+//        imagem.y = 0 ;
 
-        Vector2 pos = (Vector2 ){ 0 , 0 };
+//        Vector2 pos = (Vector2 ){ 0 , 0 };
 
         {
                 BeginDrawing();
 
                         //Desenhar Plano de Fundo
                         ClearBackground( BLUE );
-                        DrawTexturePro( jogo->Res.TelaDeFundo , imagem , jogo->tela  , pos , 0 , WHITE );
+//                        DrawTexturePro( jogo->Res.TelaDeFundo , imagem , jogo->tela  , pos , 0 , WHITE );
 
                         DrawText( ItensMenuDificuldade( 5 ) , CentraTextoX( ItensMenuDificuldade( 5 ) , FONT_SIZE_M1 ) , ALTURA_ITEM_0 - 70 , FONT_SIZE_M1 , WHITE);
                         DrawText( ItensMenuDificuldade( 6 ) , CentraTextoX( ItensMenuDificuldade( 6 ) , FONT_SIZE_M2 ) , GetScreenHeight() - 30 , FONT_SIZE_M2 , WHITE);
@@ -167,6 +167,7 @@ void NomeWolfenEntrada( Jogo *jogo , int selecao  )
                 TextCopy( Escreva , Nome );
 
         DrawTextEx( jogo->Res.fonteWolfen ,  Escreva , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen , Escreva , FONT_SIZE_WOLF , ESP_WOLF  )  ,  HWOLF / ( 27 - i ) }  , FONT_SIZE_WOLF , ESP_WOLF , WHITE );
+
 
 }
 //##############################################################################

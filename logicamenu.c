@@ -27,14 +27,15 @@ char *ItensMenuPrincipal(int escolha)
 
 char *ItensMenuDificuldade( int escolha )
 {
-        static char itens[ 7 ][ 70 ] = { "Recruta",
-                                                   "Soldado",
-                                                   "Coronel",
-                                                   "Chuck Norris",
-                                                   "Voltar",
-                                                   "Escolha a sua patente:",
-                                                   "ALERTA: COM GRANDES PODERES VEM GRANDES RESPONSABILIDADES..."
-                                                 };
+        static char itens[ 7 ][ 70 ] = {
+                "Recruta",
+                "Soldado",
+                "Coronel",
+                "Chuck Norris",
+                "Voltar",
+                "Escolha a sua patente:",
+                "ALERTA: COM GRANDES PODERES VEM GRANDES RESPONSABILIDADES..."
+         };
 
         return itens[ escolha ];
 }

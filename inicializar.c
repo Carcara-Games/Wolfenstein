@@ -175,7 +175,7 @@ void CriaZonas( Jogo *jogo)
                 },
 
                 { //sala 03
-                        { 381 , 615 , 432 ,  732 } ,    //z0
+                        { 381 , 612 , 432 ,  732 } ,    //z0
                         { 396 , 732 , 414 , 744 } ,     //z1
                         { 396 , 603 , 417 , 609 }       //z3
                 },
@@ -263,8 +263,13 @@ void CriaPortas( Jogo *jogo)
 
                 { //sala 02
                         { 405 , 1123 } ,    //p1
-                        { 405 , 41444444 }      //p2
+                        { 405 , 829 }      //p2
                 },
+
+                { //sala 03
+                        { 405 , 744 } ,    //p1
+                        { 405 , 612 }      //p2
+                }
 
 
         };
@@ -281,7 +286,12 @@ void CriaPortas( Jogo *jogo)
 
                 { //sala 02
                         { 405 , 1219 } ,    //p1
-                        { 405 , 750 }     //p2
+                        { 405 , 744 }     //p2
+                },
+
+                { //sala 03
+                        { 405 , 1222 } ,    //p1
+                        { 405 , 1 }     //p2
                 }
 
         };
@@ -304,11 +314,12 @@ void CriaPortas( Jogo *jogo)
         jogo->salas[ 0 ].qtdPortas =  2;
         jogo->salas[ 1 ].qtdPortas =  1;
         jogo->salas[ 2 ].qtdPortas =  2;
+        jogo->salas[ 3 ].qtdPortas =  2;
 
 
         //Atribuindo Valores
 //        for( i = 0 ; i < QTDSALAS ; i++)
-        for( i = 0 ; i < 3 ; i++)
+        for( i = 0 ; i < 4 ; i++)
                 for( j = 0 ; j < jogo->salas[ i ].qtdPortas; j++)
                 {
                         jogo->salas[ i ].portas[ j ].pos.x = pos[ i ][ j ][ 0 ];

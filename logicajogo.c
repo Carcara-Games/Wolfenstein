@@ -136,11 +136,10 @@ BOOL ChecaPortas( Jogo jogo )
                                         if( jogo.jogador.PosMundo.y <= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y + tol  &&  jogo.jogador.PosMundo.y >= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y - tol   )
                                                 if( jogo.jogador.PosMundo.x == jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x )
                                                         return i;
-                        }
-                        else
-                                        if( jogo.jogador.PosMundo.x <= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x + tol  &&  jogo.jogador.PosMundo.x >= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x - tol   )
-                                                if( jogo.jogador.PosMundo.y == jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y )
-                                                        return i;
+                        }else
+                                if( jogo.jogador.PosMundo.x <= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x + tol  &&  jogo.jogador.PosMundo.x >= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x - tol   )
+                                        if( jogo.jogador.PosMundo.y == jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y )
+                                                return i;
                 }
 
         return -1;

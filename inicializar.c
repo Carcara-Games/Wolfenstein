@@ -263,7 +263,7 @@ void CriaPortas( Jogo *jogo)
 
                 { //sala 02
                         { 405 , 1123 } ,    //p1
-                        { 405 , 41444444445 }      //p2
+                        { 405 , 41444444 }      //p2
                 },
 
 
@@ -301,7 +301,7 @@ void CriaPortas( Jogo *jogo)
         };
 
         //Quantidade de portas de cada sala
-        jogo->salas[ 0 ].qtdPortas =  3;
+        jogo->salas[ 0 ].qtdPortas =  2;
         jogo->salas[ 1 ].qtdPortas =  1;
         jogo->salas[ 2 ].qtdPortas =  2;
 

@@ -70,17 +70,17 @@
 	"structsgraficos.h"
 	"definicoes.h"
 
-1619040671 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\structsgraficos.h
+1619119084 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\structsgraficos.h
 	"raylib.h"
 	"definicoes.h"
 
-1618983269 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\definicoes.h
+1619119698 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\definicoes.h
 	<math.h>
 	<stdio.h>
 	<time.h>
 	<stdlib.h>
 
-1619050785 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhajogo.c
+1619120050 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhajogo.c
 	"desenhajogo.h"
 	"definicoes.h"
 
@@ -99,20 +99,21 @@
 1618336920 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicamenu.h
 	"raylib.h"
 
-1619049876 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\inicializar.c
+1619119035 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\inicializar.c
 	"inicializar.h"
 	"definicoes.h"
+	<string.h>
 
-1619036184 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\inicializar.h
+1619115834 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\inicializar.h
 	"structsgraficos.h"
 	"definicoes.h"
 
-1619051035 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.c
+1619119914 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.c
 	"logicajogo.h"
 	"definicoes.h"
 	<math.h>
 
-1619040542 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.h
+1619119672 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.h
 	"structsgraficos.h"
 
 1618973042 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicamenu.c

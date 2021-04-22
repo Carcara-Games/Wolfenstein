@@ -4,6 +4,7 @@
         #include "raylib.h"
         #include "definicoes.h"
 
+        typedef int BOOL;
          typedef struct
          {
                 float esq;
@@ -12,6 +13,17 @@
                 float sup;
          }RecLim;
 
+
+        typedef struct
+        {
+                 int QTD_STATUS[QTD_ARMAS] ;  // QTD de status para cada arma
+                //[1°] codigo da arma :    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
+
+                 int QTD_FRAMES[QTD_ARMAS][QTD_STATUS_MAX] ;  // QTD de iamgens disponiveis para status de cada arma
+                //[1°] codigo da arma :    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
+                //[2°] codigo do status :  repouso 0 , movimento 1 , atirando 2 , coronhada 3 , recarregando 4
+
+        }ArmasDef;
 
         typedef struct
         {
@@ -24,7 +36,15 @@
                 Texture2D FundoLevel1;
                 Texture2D Mapa;  // Imagem do mapa
                 Texture2D Portas;  // Imagem das portas
-                Texture2D Per;  // Personagem
+
+                Texture2D Per[ QTD_ARMAS ][ QTD_STATUS_MAX ][100];  // Personagem [1°][2°][3°]
+                //[1°] codigo da arma atual:    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
+                //[2°] codigo do status atual:  repouso 0 , movimento 1 , atirando 2 , coronhada 3 , recarregando 4
+                //[3°] codigo do frame atual
+
+                Texture2D Pes[5][100];  // Pernas e pes do Personagem [1°][2°]
+                //[1°] codigo do status atual:  repouso 0 , movimento 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
+                //[3°] codigo do frame atual
 
         }Recursos;
 
@@ -77,21 +97,21 @@
                 int qtdInimT2;  // Quantidade de inimigos tipo 2 que precisarao ser abatidos para que algum inimigo drope uma uma chave
         }Sala;
 
-        typedef int BOOL;
-
-
         typedef struct
         {
                 char *nome;
                 Rectangle PosTela;              //Posicionamento do jogador na tela
                 Vector2 Origin;                 //Centro de rotacao na tela do personagem ?????porque nao funciona como o esperado?
-                Vector2 PosMundo;          //Posicionamento do jogador no mundo
                 float Rotac;
                 float mousex;
                 float mousey;
+
+                Rectangle Src;          //Retangulo de extracao da textura com as dimensoes da mesma
+
+                Vector2 PosMundo;          //Posicionamento do jogador no mundo
                 unsigned FACA : 1;
                 unsigned PISTOLA : 1;
-                unsigned ESPINGARDA : 1;
+                unsigned SMG : 1;
                 int PistolaMun;
                 int RifleMun;
                 int pontos;  //Pontuacao do jogador
@@ -99,11 +119,14 @@
                 int saude;  //Pontos de saude. Quantidade a definir.
                 int missaoCumprida;
                 unsigned VIVO : 1;
+
+                int atualArma;
+                int atualStatus;
+                int atualFrame;
         }Jogador;
 
         typedef struct
         {
-                Recursos Res;  //Recursos do jogo
                 int NivelMenu;  //Nivel atual do menu( 0->Principal , 1- Algum dos secundarios , 2->Menu interno do jogo , 3 - Jogando)
                 unsigned FECHAR : 1;
                 unsigned VOLTARMENU : 1;
@@ -111,6 +134,7 @@
 
                 DadosLevel dadosLevel;
                 int Level;
+
                 int atualSala;
                 Sala salas[ QTDSALAS ];
                 Rectangle tela;
@@ -118,7 +142,10 @@
                 Vector2 MapaTamanho;
                 Rectangle MapaDesenho;
 
+                Recursos Res;  //Recursos do jogo
+
                 unsigned PASSAGEM : 1;        //Indica se esta atravessando alguma porta
+                ArmasDef armasDef;
         }Jogo;
 
         typedef struct  //Tipo um tem 1 ponto de saude
@@ -154,6 +181,7 @@
                 float px;
                 float py;
         }Faca;
+
 
 
 #endif // __STRUCTSGRAFICOS_H_

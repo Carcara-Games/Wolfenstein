@@ -13,6 +13,8 @@
         #define MAXLEVEL 3
 
         #define FPS 30
+        #define DIV_FPS_PER 2
+
         #define EXITKEY KEY_BACKSLASH
         //#define EXITKEY KEY_ESCAPE
 
@@ -20,6 +22,16 @@
 
         #define ESCALA 4.5
 
-        #define QTDSALAS 12
+        #define QTDSALAS 15 + 01
+
+        ///ARMAS
+//        #define QTD_ARMAS 5
+        #define QTD_ARMAS 1
+        #define QTD_STATUS_MAX 7
+
+        ///Personagem
+        #define ESC_PER 1
+
+
 
 #endif // __DEFINICOES_H_

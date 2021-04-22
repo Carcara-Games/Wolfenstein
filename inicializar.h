@@ -10,5 +10,9 @@
         void CriaSalas( Jogo *jogo);
         void CriaZonas( Jogo *jogo);
         void CriaPortas( Jogo *jogo);
+        void CarregarPersonagemImagens( Jogo *jogo );
+        void IntParaString( int nmr , char *str );
+        void InverteStr( char *str );
+
 
 #endif // __INICIALIZAR_H_

@@ -19,7 +19,10 @@ void DesenhaMapa( Jogo jogo)
     */
 void DesenhaJogador( Jogo jogo)
 {
-        DrawRectanglePro( jogo.jogador.PosTela , jogo.jogador.Origin , /*jogo.jogador.Rotac*/0 , BLUE );
+//        DrawRectanglePro( jogo.jogador.PosTela , jogo.jogador.Origin , /*jogo.jogador.Rotac*/0 , BLUE );
+//        DrawRectanglePro( jogo.jogador.PosTela , /*jogo.jogador.Origin*/ (Vector2){ 0 , 0 } , /*jogo.jogador.Rotac*/0 , BLUE );
+//        DrawTexturePro( jogo.Res.Per[0][0][0] , jogo.jogador.Src , jogo.jogador.PosTela , jogo.jogador.Origin , jogo.jogador.Rotac , WHITE );
+        DrawTexturePro( jogo.Res.Per[0][1][ jogo.jogador.atualFrame ] , jogo.jogador.Src , jogo.jogador.PosTela , jogo.jogador.Origin , jogo.jogador.Rotac , WHITE );
 }
 //##############################################################################
 
@@ -76,7 +79,7 @@ void PassagemPorta( void )
 //##############################################################################
 
 
-///Função DeenhaDebug
+///Função DesenhaDebug
 
 void DesenhaDebug( Jogo jogo )
 {
@@ -85,20 +88,23 @@ void DesenhaDebug( Jogo jogo )
         Color cor;
         char stt[] = {"\0"};
 
-        DrawText( TextFormat("( %.2f , %.2f)" , jogo.jogador.PosMundo.x , jogo.jogador.PosMundo.y ) , 10 , 10 , 60 , MAROON );
+        DrawText( TextFormat("( %.2f , %.2f)" , jogo.jogador.PosMundo.x , jogo.jogador.PosMundo.y ) , 10 , 10 , 60 , RAYWHITE );
         DrawText( TextFormat("( atual sala : %d)" , jogo.atualSala ) , 10 , 100 , 60 , SKYBLUE );
 
         //Portas entrada -> destino
         for( i = 0 ; i < jogo.salas[ jogo.atualSala ].qtdPortas ; i++ ){
 
-                DrawText( TextFormat("p%d=(%.0f,%.0f)->(%.0f,%.0f)", i + 1 , jogo.salas[ jogo.atualSala ].portas[ i ] .entrada.x , jogo.salas[ jogo.atualSala ].portas[ i ] .entrada.y  , jogo.salas[ jogo.atualSala ].portas[ i ] .destino.x , jogo.salas[ jogo.atualSala ].portas[ i ] .destino.y ) , 25 , 180 + 40 * i , 25 , YELLOW );
+                DrawText( TextFormat("p%d=(%.0f  ,  %.0f)->(%.0f  ,  %.0f)", i + 1 , jogo.salas[ jogo.atualSala ].portas[ i ] .entrada.x , jogo.salas[ jogo.atualSala ].portas[ i ] .entrada.y  , jogo.salas[ jogo.atualSala ].portas[ i ] .destino.x , jogo.salas[ jogo.atualSala ].portas[ i ] .destino.y ) , 25 , 180 + 40 * i , 25 , YELLOW );
 
                 TextCopy( stt , ( ( jogo.salas[ jogo.atualSala ].portas[ i ].DESTRANCADA )  ?  "D" : "T" ) );
 
                 cor = ( jogo.salas[ jogo.atualSala ].portas[ i ].DESTRANCADA )  ?  GREEN : RED ;
                 DrawText( TextFormat(stt, i + 1 , jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x , jogo.salas[ jogo.atualSala ].portas[ i ] .entrada.y  , jogo.salas[ jogo.atualSala ].portas[ i ] .destino.x , jogo.salas[ jogo.atualSala ].portas[ i ] .destino.y ) , 1 , 180 + 40 * i , 25 , cor );
 
-                DrawText( TextFormat("s%d" , jogo.salas[ jogo.atualSala ].portas[ i ].alteraPSala ) , 400 , 180 + 40 * i , 25 , PURPLE );
+                DrawText( TextFormat("s%d" , jogo.salas[ jogo.atualSala ].portas[ i ].alteraPSala ) , 420 , 180 + 40 * i , 25 , PURPLE );
+
+                DrawText( TextFormat("STATUS %d" , jogo.jogador.atualStatus ) , 20 , 500 , 50 , YELLOW );
+                DrawText( TextFormat("FRAME_PER %d" , jogo.jogador.atualFrame ) , 20 , 550 , 25 , YELLOW );
 
         }
 

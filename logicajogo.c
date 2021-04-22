@@ -10,9 +10,11 @@ void AtualizaLevel( Jogo *jogo)
 //        AtualizaObjetos( &jogo );
 //        AtualizaFundo( &jogo );
         AtualizaPosicao( jogo );
-        EntraEmPortas( jogo );
-//        AtualizaMira( jogo );
         AtualizaMapa( jogo );
+        AtualizaOrigin( jogo );
+        EntraEmPortas( jogo );
+        AtualizaMira( jogo );
+        AtualizaFrameJogador( jogo );
 //        AtualizaTiroERecarga( &jogo );
 //        AtualizaArma( &jogo );
 //        AtualizaInimigosT1( &jogo );
@@ -28,29 +30,35 @@ void AtualizaPosicao( Jogo *jogo)
 {
 //        float ESC = 1; // Razao entre o deslocamento na tela e no mapa
 
-
+        jogo->jogador.atualStatus = 0;
         //Alterando posicao global no mapa
         if( IsKeyDown( KEY_W ) )
                 if( ChecaMov( *jogo , 0 , -PASSO ) )
-                        jogo->jogador.PosMundo.y -= PASSO;
+                        jogo->jogador.PosMundo.y -= PASSO  ,  jogo->jogador.atualStatus = 1;
 
         if( IsKeyDown( KEY_S ) )
                 if( ChecaMov( *jogo , 0 , PASSO ) )
-                        jogo->jogador.PosMundo.y += PASSO;
+                        jogo->jogador.PosMundo.y += PASSO , jogo->jogador.atualStatus = 1;
 
         if( IsKeyDown( KEY_D ) )
                 if( ChecaMov( *jogo , PASSO , 0 ) )
-                        jogo->jogador.PosMundo.x += PASSO;
+                        jogo->jogador.PosMundo.x += PASSO , jogo->jogador.atualStatus = 1;
 
         if( IsKeyDown( KEY_A ) )
                 if( ChecaMov( *jogo , -PASSO , 0 ) )
-                        jogo->jogador.PosMundo.x -= PASSO;
+                        jogo->jogador.PosMundo.x -= PASSO , jogo->jogador.atualStatus = 1;
 
+//        //Alterando posicao na tela
+//        if( 1 )
+//        {
+//                jogo->jogador.PosTela.x = ( jogo->tela.width - jogo->jogador.PosTela.width) / 2;
+//                jogo->jogador.PosTela.y = ( jogo->tela.height  -  jogo->jogador.PosTela.height ) / 2;
+//        }
         //Alterando posicao na tela
         if( 1 )
         {
-                jogo->jogador.PosTela.x = ( jogo->tela.width - jogo->jogador.PosTela.width) / 2;
-                jogo->jogador.PosTela.y = ( jogo->tela.height  -  jogo->jogador.PosTela.height ) / 2;
+                jogo->jogador.PosTela.x = jogo->tela.width / 2;
+                jogo->jogador.PosTela.y = jogo->tela.height / 2;
         }
 }
 //##############################################################################
@@ -130,17 +138,6 @@ BOOL ChecaPortas( Jogo jogo )
         int i;
         int tol = 3 ;
 
-//        for( i = 0 ; i < jogo.salas[ jogo.atualSala ].qtdPortas ; i++ )
-//                if( jogo.salas[ jogo.atualSala ].portas[ i ].DESTRANCADA ){
-//                        if( fabs( jogo.salas[ jogo.atualSala ].portas[ i ].rotac ) == 90  ){
-//                                        if( jogo.jogador.PosMundo.y <= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y + tol  &&  jogo.jogador.PosMundo.y >= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y - tol   )
-//                                                if( jogo.jogador.PosMundo.x == jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x )
-//                                                        return i;
-//                        }else
-//                                if( jogo.jogador.PosMundo.x <= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x + tol  &&  jogo.jogador.PosMundo.x >= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x - tol   )
-//                                        if( jogo.jogador.PosMundo.y == jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y )
-//                                                return i;
-//                }
         for( i = 0 ; i < jogo.salas[ jogo.atualSala ].qtdPortas ; i++ )
                 if( jogo.salas[ jogo.atualSala ].portas[ i ].DESTRANCADA )
                         if( jogo.jogador.PosMundo.y <= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y + tol  &&  jogo.jogador.PosMundo.y >= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y - tol   )
@@ -167,10 +164,47 @@ void pausa( int tempo)
 
 
 
+///
+void AtualizaOrigin( Jogo *jogo )
+{
+//        jogo->jogador.Origin.x = jogo->jogador.PosTela.x + jogo->jogador.PosTela.width / 2;
+//        jogo->jogador.Origin.y = jogo->jogador.PosTela.y + jogo->jogador.PosTela.height / 2;
+        jogo->jogador.Origin.x = jogo->jogador.PosTela.width / 2;
+        jogo->jogador.Origin.y = jogo->jogador.PosTela.height / 2;
+//        jogo->jogador.Origin.x = 0;
+//        jogo->jogador.Origin.y = 0;
+
+
+}
 
 
 
+void AtualizaFrameJogador( Jogo *jogo )
+{
+        static int aux = 0;
+        static int frame = 0;
+        static int antStatus = 0;
 
+        if( jogo->jogador.atualStatus != antStatus )
+        {
+                aux = 0;
+                frame = 0;
+        }
+
+
+        aux++;
+
+        if( aux == DIV_FPS_PER)
+        {
+                aux = 0;
+                frame++;
+                if( frame == jogo->armasDef.QTD_FRAMES[ jogo->jogador.atualArma ][ jogo->jogador.atualStatus ] - 1 )
+                        frame = 0;
+        }
+
+        jogo->jogador.atualFrame = frame;
+        antStatus = jogo->jogador.atualStatus;
+}
 
 
 

@@ -1,0 +1,7 @@
+0    	repouso 
+1	movimento
+2	atirando
+3	coronhada
+4	recarregando
+
+

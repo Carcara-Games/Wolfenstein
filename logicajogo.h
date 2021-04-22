@@ -11,6 +11,8 @@
         int ChecaPortas( Jogo jogo );
         void EntraEmPortas( Jogo *jogo );
         void pausa( int tempo);
+        void AtualizaOrigin( Jogo *jogo );
+        void AtualizaFrameJogador( Jogo *jogo );
 
 
 

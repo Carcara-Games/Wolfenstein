@@ -37,7 +37,7 @@ void DesenhaLevel( Jogo jogo)
 
         EndDrawing();
 
-        //if( jogo.PASSAGEM ) PassagemPorta();
+        if( jogo.PASSAGEM ) PassagemPorta();
 }
 //##############################################################################
 

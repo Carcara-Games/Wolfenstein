@@ -123,6 +123,8 @@
                 int atualArma;
                 int atualStatus;
                 int atualFrame;
+
+                int pesatualStatus;
         }Jogador;
 
         typedef struct

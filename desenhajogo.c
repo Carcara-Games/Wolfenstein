@@ -22,7 +22,7 @@ void DesenhaJogador( Jogo jogo)
 //        DrawRectanglePro( jogo.jogador.PosTela , jogo.jogador.Origin , /*jogo.jogador.Rotac*/0 , BLUE );
 //        DrawRectanglePro( jogo.jogador.PosTela , /*jogo.jogador.Origin*/ (Vector2){ 0 , 0 } , /*jogo.jogador.Rotac*/0 , BLUE );
 //        DrawTexturePro( jogo.Res.Per[0][0][0] , jogo.jogador.Src , jogo.jogador.PosTela , jogo.jogador.Origin , jogo.jogador.Rotac , WHITE );
-        DrawTexturePro( jogo.Res.Per[0][1][ jogo.jogador.atualFrame ] , jogo.jogador.Src , jogo.jogador.PosTela , jogo.jogador.Origin , jogo.jogador.Rotac , WHITE );
+        DrawTexturePro( jogo.Res.Per[0][ jogo.jogador.atualStatus ][ jogo.jogador.atualFrame ] , jogo.jogador.Src , jogo.jogador.PosTela , jogo.jogador.Origin , jogo.jogador.Rotac , WHITE );
 }
 //##############################################################################
 
@@ -103,6 +103,7 @@ void DesenhaDebug( Jogo jogo )
 
                 DrawText( TextFormat("s%d" , jogo.salas[ jogo.atualSala ].portas[ i ].alteraPSala ) , 420 , 180 + 40 * i , 25 , PURPLE );
 
+                DrawText( TextFormat("ARMA %d" , jogo.jogador.atualArma ) , 20 , 430 , 50 , YELLOW );
                 DrawText( TextFormat("STATUS %d" , jogo.jogador.atualStatus ) , 20 , 500 , 50 , YELLOW );
                 DrawText( TextFormat("FRAME_PER %d" , jogo.jogador.atualFrame ) , 20 , 550 , 25 , YELLOW );
 

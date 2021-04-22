@@ -13,6 +13,7 @@
         void pausa( int tempo);
         void AtualizaOrigin( Jogo *jogo );
         void AtualizaFrameJogador( Jogo *jogo );
+        void AtualizaAtirar( Jogo *jogo );
 
 
 

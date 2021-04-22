@@ -14,10 +14,13 @@ void AtualizaLevel( Jogo *jogo)
         AtualizaOrigin( jogo );
         EntraEmPortas( jogo );
         AtualizaMira( jogo );
-        AtualizaFrameJogador( jogo );
-//        AtualizaTiroERecarga( &jogo );
+        AtualizaAtirar( jogo );
+//        AtualizaRecarga( &jogo );
+//        AtualizaTiros( &jogo );
 //        AtualizaArma( &jogo );
 //        AtualizaInimigosT1( &jogo );
+
+        AtualizaFrameJogador( jogo );
 
 }
 //##############################################################################
@@ -178,19 +181,44 @@ void AtualizaOrigin( Jogo *jogo )
 }
 
 
-
+///
 void AtualizaFrameJogador( Jogo *jogo )
 {
         static int aux = 0;
         static int frame = 0;
         static int antStatus = 0;
+        static int flagTiro = 0;
 
-        if( jogo->jogador.atualStatus != antStatus )
-        {
-                aux = 0;
-                frame = 0;
+        if( jogo->jogador.atualStatus == 2  || flagTiro){
+                if(  !flagTiro  ){
+                        flagTiro = 1;
+                        frame = 0;
+                        aux = 0;
+                }
+                else
+                        aux++;
+
+                if( aux == DIV_FPS_PER ){
+                        aux = 0;
+                        frame++;
+                }
+
+                jogo->jogador.atualFrame = frame;
+
+                if( frame == 2 ){
+                        frame = 0;
+                        flagTiro = 0;
+                        antStatus = jogo->jogador.atualStatus;
+                }
+
+                return;
         }
 
+
+        if( jogo->jogador.atualStatus != antStatus ){
+                        aux = 0;
+                        frame = 0;
+        }
 
         aux++;
 
@@ -198,13 +226,38 @@ void AtualizaFrameJogador( Jogo *jogo )
         {
                 aux = 0;
                 frame++;
+                jogo->jogador.atualFrame = frame;
                 if( frame == jogo->armasDef.QTD_FRAMES[ jogo->jogador.atualArma ][ jogo->jogador.atualStatus ] - 1 )
-                        frame = 0;
+                                frame = 0;
         }
 
-        jogo->jogador.atualFrame = frame;
         antStatus = jogo->jogador.atualStatus;
 }
+
+
+///
+void AtualizaAtirar( Jogo *jogo )
+{
+        //Pistola
+        if( jogo->jogador.atualArma == 0 )
+                if( IsMouseButtonPressed( MOUSE_LEFT_BUTTON) )
+                         jogo->jogador.atualStatus = 2;
+
+        //Smg
+        if( jogo->jogador.atualArma == 1 )
+                if( IsMouseButtonDown( MOUSE_LEFT_BUTTON) )
+                         jogo->jogador.atualStatus = 2;
+
+}
+
+
+
+
+
+
+
+
+
 
 
 

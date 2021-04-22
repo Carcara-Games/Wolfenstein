@@ -41,7 +41,7 @@ Jogo IniciaJogo( void )
         ///Personagem com armas e status
         //Inicial
         jogo.jogador.atualArma = 0;
-        jogo.jogador.atualStatus = 1;
+        jogo.jogador.atualStatus = 0;
         jogo.jogador.atualFrame = 0;
 
 

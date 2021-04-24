@@ -104,7 +104,7 @@
 
         typedef struct
         {
-                unsigned TERMINADO; //O level foi terminado
+                unsigned TERMINADO : 1; //O level foi terminado
 
         }DadosLevel;
 
@@ -116,7 +116,7 @@
                 RecLim zonas[20];    //Zonas da sala, por onde o jogador se locomove
 
                 int qtdBaus;  // Quantidade de baus
-                Bau baus[ 3 ];
+                Bau baus[ MAX_BAUS_SALA ];
 
                 int qtdPortas;  // Quantidade de portas iterativas para o jogador
                 Porta portas[ 10 ];
@@ -128,6 +128,7 @@
         typedef struct
         {
                 char *nome;
+
                 Vector2 PosMundo;          //Posicionamento do jogador no mundo
                 Rectangle PosTela;              //Posicionamento do jogador na tela
                 Rectangle PosTelaPes;              //Posicionamento do pes dp jogador na tela
@@ -142,15 +143,11 @@
                 int saude;              //Pontos de saude.
                 int vidas;               //Vidas gerais. Cada vez que saude zera perde uma vida.
 
-                unsigned VIVO : 1;
-
                 int atualArma;
                 int atualStatus;
                 int atualMovTipo;
 
-                int testeFlagTiro;      //excluir depois no final
-
-
+                /**   lembra de excluir    */int testeFlagTiro;      //excluir depois no final
         }Jogador;
 
         typedef struct
@@ -158,54 +155,56 @@
                 int NivelMenu;  //Nivel atual do menu( 0->Principal , 1- Algum dos secundarios , 2->Menu interno do jogo , 3 - Jogando)
                 unsigned FECHAR : 1;
                 unsigned VOLTARMENU : 1;
-                Jogador jogador;
 
-                DadosLevel dadosLevel;
-                int atualLevel;
-                int atualSala;
-
-                Sala salas[ QTDSALAS ];
-                Rectangle tela;
+                Rectangle tela;    //Resolucao da Tela do usuario
+                int regulagemTela;    //Se foi preciso deixar um espaco em cima 1 , nas laterais 2. Caso contrario 0
 
                 Vector2 MapaTamanho;
                 Rectangle MapaDesenho;
-
-                Recursos Res;  //Recursos do jogo
+                Sala salas[ QTDSALAS ];
 
                 unsigned PASSAGEM : 1;        //Indica se esta atravessando alguma porta
+                Jogador jogador;
+                int atualSala;
+
+//                int atualLevel;
+//                DadosLevel dadosLevel;
+
+
+                Recursos Res;  //Recursos do jogo
                 SpriteDef spriteDef;
         }Jogo;
 
-        typedef struct  //Tipo um tem 1 ponto de saude
-        {
-                float px;
-                float py;
-                float Rotac;
-                int dropXP;  // Quantidade de Xp que o jogador ganha ao eliminar o inimigo
-                unsigned VIVO : 1;
-        }InimT1;
+//        typedef struct  //Tipo um tem 1 ponto de saude
+//        {
+//                float px;
+//                float py;
+//                float Rotac;
+//                int dropXP;  // Quantidade de Xp que o jogador ganha ao eliminar o inimigo
+//                unsigned VIVO : 1;
+//        }InimT1;
+//
+//        typedef struct
+//        {
+//                float px;
+//                float py;
+//                float Rotac;
+//                unsigned VIVO : 1;
+//
+//        }InimT2;
+//
+//        typedef struct
+//        {
+//                float px;
+//                float py;
+//        }Municao;
 
-        typedef struct
-        {
-                float px;
-                float py;
-                float Rotac;
-                unsigned VIVO : 1;
-
-        }InimT2;
-
-        typedef struct
-        {
-                float px;
-                float py;
-        }Municao;
-
-         typedef struct
-        {
-                float px;
-                float py;
-        }Faca;
-
+//         typedef struct
+//        {
+//                float px;
+//                float py;
+//        }Faca;
+//
 
 
 #endif // __STRUCTSGRAFICOS_H_

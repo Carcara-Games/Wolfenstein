@@ -3,12 +3,12 @@
 
         #include "structsgraficos.h"
 
-        void DesenhaJogador( Jogo jogo);
-        void DesenhaMapa( Jogo jogo);
-        void DesenhaPortas( Jogo jogo);
-        void DesenhaLevel( Jogo jogo);
+        void DesenhaLevel( Jogo *jogo);
+        void DesenhaMapa( Jogo *jogo);
+        void DesenhaPes( Jogo *jogo);
+        void DesenhaJogador( Jogo *jogo);
+        void DesenhaPortas( Jogo *jogo);
+        void DesenhaDebug( Jogo *jogo );
         void PassagemPorta( void );
-        void DesenhaDebug( Jogo jogo );
-        void DesenhaPes( Jogo jogo);
 
 #endif // __DESENHAJOGO_H_

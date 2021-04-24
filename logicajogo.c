@@ -44,7 +44,7 @@ void AtualizaPosicao( Jogo *jogo)
         int movimentoTipo;
         int status = 0;
         int ang;        // Desvio entre a fronte do jogador e o sentido de deslocamento
-        const int tol = 20;        // Tolerancia angular para se considerar o movimento como lateral
+        const int tol = TOL_MOV_LATERAL;        // Tolerancia angular para se considerar o movimento como lateral
 
         //Velocidade - Se usuario pressionar ctrl a velocidade aumenta
         float passo = PASSO;

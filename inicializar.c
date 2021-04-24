@@ -8,15 +8,16 @@
 
 void IniciarJanela( void )
 {
+        ///Resolucao do Usuario
         int TelaLargura = GetMonitorWidth(0);
         int TelaAltura = GetMonitorHeight (0);
 
+        ///Confuguracao de Janela
         InitWindow( TelaLargura , TelaAltura , "WOLFENSTEIN" );
         SetTargetFPS( FPS );
         ToggleFullscreen();
         SetExitKey( EXITKEY );
 }
-
 
 
 /** Função  IniciaJogo() :
@@ -25,104 +26,132 @@ void IniciarJanela( void )
 Jogo IniciaJogo( void )
 {
         Jogo jogo;
-
-        jogo.Res.Logo =  LoadTexture("Logo/Logo.png");   // Imagem de fundo (Logo)
-        jogo.Res.MenuFundo =  LoadTexture("Menu_Imagens/MenuPrincipal.png");   // Imagem do plano de fundo
-        jogo.Res.TelaDeFundo =  LoadTexture("Menu_Imagens/FundoLimpo.png");
-        jogo.Res.fonteWolfen =    LoadFontEx("Fontes/ReturnToCastle-MZnx.ttf"  ,96 , 0 , 0);
-        jogo.Res.fonteWolfen2 =    LoadFontEx("Fontes/wolfenstein.ttf"  ,96 , 0 , 0);
-        jogo.Res.FundoConfirmarSair =    LoadTexture("Menu_Imagens/FundoConfirmarSair.png");
-        jogo.Res.Mapa =    LoadTexture("Mapa/Mapa.png");
-        jogo.Res.Portas =    LoadTexture("Mapa/Portas.png");
-
         jogo.FECHAR = 0;
 
-        ///Pes
-        CarregarPes( &jogo );
-
-        ///Personagem com armas e status
+        ///Armas iniciais e Status iniciais
         //Inicial
         jogo.jogador.atualArma = 0;
         jogo.jogador.atualStatus = 0;
         jogo.spriteDef.atualFrame = 0;
 
-
-
-        //Qtd status
+        ///QTD de status para cada arma
         jogo.spriteDef.QTD_STATUS[ 0 ] = 5;      //pistola
+        jogo.spriteDef.QTD_STATUS[ 0 ] = 5;      //SMG
 
-        //Qtd Frames
-        //Pistola
+                //Qtd de Frames para cada status de cada arma
+                        //Pistola
         jogo.spriteDef.QTD_FRAMES[ 0 ][ 0 ] = 20;
         jogo.spriteDef.QTD_FRAMES[ 0 ][ 1 ] = 20;
         jogo.spriteDef.QTD_FRAMES[ 0 ][ 2 ] = 3;
         jogo.spriteDef.QTD_FRAMES[ 0 ][ 3 ] = 16;
         jogo.spriteDef.QTD_FRAMES[ 0 ][ 4 ] = 15;
 
+        ///QTD de Frame para cada tipo de movimento
+        jogo.spriteDef.QTD_FRAMES_PES[ 0 ] = 1;        //Repouso
+        jogo.spriteDef.QTD_FRAMES_PES[ 1 ] = 20;       //Andando
+        jogo.spriteDef.QTD_FRAMES_PES[ 2 ] = 20;       //Correndo
+        jogo.spriteDef.QTD_FRAMES_PES[ 3 ] = 20;       //Movimento lateral para a esquerda
+        jogo.spriteDef.QTD_FRAMES_PES[ 4 ] = 20;       //Movimento lateral para a direita
 
-//        jogo->spriteDef.QTD_STATUS[ 1 ] = 5;
-        CarregarPersonagemImagens( &jogo);
+        ///Carregar Texturas e Fontes
+        carregarTexturasFontes( &jogo );
 
-        //Tela
+        ///Tela
         jogo.tela.x = 0;
         jogo.tela.y = 0;
-        jogo.tela.width = GetScreenWidth();
-        jogo.tela.height = GetScreenHeight();
 
-        //Posição Jogador Tela
-        ///Per
-        jogo.jogador.PosTela.width =  130;
-        jogo.jogador.PosTela.height =  115;
-//        jogo.jogador.PosTela.x =  ( jogo.tela.width - jogo.jogador.PosTela.width) / 2;
-//        jogo.jogador.PosTela.y =  ( jogo.tela.height  -  jogo.jogador.PosTela.height ) / 2;
-        jogo.jogador.PosTela.x =  jogo.tela.width / 2;
-        jogo.jogador.PosTela.y =  jogo.tela.height / 2;
+        if( GetScreenWidth() / (float)GetScreenHeight() == REF_TELA_LARG / (float)REF_TELA_ALT ){
+                        jogo.tela.width = REF_TELA_LARG;        // A tela deve ficar cheia em largura
+                        jogo.tela.height = REF_TELA_ALT;        // A altura deve ser regulada para manter a proporcao
+                        jogo.regulagemTela = 0;
+        }else{
+                if( GetScreenWidth() / (float)GetScreenHeight() > REF_TELA_LARG / (float)REF_TELA_ALT ){         //A largura e proporionalmente maior
+                        jogo.tela.width = GetScreenWidth();        // A tela deve ficar cheia em largura
+                        jogo.tela.height = REF_TELA_ALT * jogo.tela.width / REF_TELA_LARG ;        // A altura deve ser regulada para manter a proporcao
+                        jogo.regulagemTela = 1;
+                }else{          // Nesse caso a altura e proporcionalmente maior
+                        jogo.tela.height = GetScreenHeight();        // A tela deve ficar cheia em altura
+                        jogo.tela.width =  REF_TELA_LARG * jogo.tela.height / REF_TELA_ALT ;        // A largura deve ser regulada para manter a proporcao
+                        jogo.regulagemTela = 2;
+                }
+        }
 
-        ///Pes
-        jogo.jogador.PosTelaPes.width =  2 * jogo.jogador.PosTela.width / 3;
-        jogo.jogador.PosTelaPes.height =  2 * jogo.jogador.PosTela.height / 3;
 
-//        jogo.jogador.PosTelaPes.width =  jogo.jogador.PosTela.width * 132 / 253.0;
-//        jogo.jogador.PosTelaPes.height =  jogo.jogador.PosTela.height * 155 / 216.0;
-        jogo.jogador.PosTelaPes.x =  jogo.jogador.PosTela.x;
-        jogo.jogador.PosTelaPes.y =  jogo.jogador.PosTela.y;
+        ///Posicao Jogador Tela
+                ///Per
+                jogo.jogador.PosTela.width =  LARG_PADRAO * jogo.tela.width / REF_TELA_LARG;
+                jogo.jogador.PosTela.height =  jogo.jogador.PosTela.width * ALT_PADRAO / LARG_PADRAO;   //Altura Dependente da largura
+                jogo.jogador.PosTela.x =  jogo.tela.width / 2;
+                jogo.jogador.PosTela.y =  jogo.tela.height / 2;
+        //        jogo.jogador.PosTela.x =  ( jogo.tela.width - jogo.jogador.PosTela.width) / 2;
+        //        jogo.jogador.PosTela.y =  ( jogo.tela.height  -  jogo.jogador.PosTela.height ) / 2;
 
-        //Origin
-        jogo.spriteDef.Origin.x = 0;
-        jogo.spriteDef.Origin.y = 0;
+                ///Pes
+                jogo.jogador.PosTelaPes.width =  ESC_PES * jogo.jogador.PosTela.width;
+                jogo.jogador.PosTelaPes.height =  ESC_PES* jogo.jogador.PosTela.height;
+                jogo.jogador.PosTelaPes.x =  jogo.jogador.PosTela.x;
+                jogo.jogador.PosTelaPes.y =  jogo.jogador.PosTela.y;
 
-        jogo.spriteDef.OriginPes.x = 0;
-        jogo.spriteDef.OriginPes.y = 0;
-
-        //Posicao Jogador Mundo
+        ///Posicao Jogador No Mundo
         jogo.jogador.PosMundo.x = 102;
         jogo.jogador.PosMundo.y = 603;
 
-        //Ajuste do Mapa do Jogo
-        jogo.MapaTamanho.x = jogo.Res.Mapa.width;
-        jogo.MapaTamanho.y = jogo.Res.Mapa.height;
+        ///Ajuste do Mapa do Jogo
+                ///Tamanho Da Textura MAPA
+                jogo.MapaTamanho.x = jogo.Res.Mapa.width;
+                jogo.MapaTamanho.y = jogo.Res.Mapa.height;
 
-        jogo.MapaDesenho.width = jogo.tela.width / ESCALA;
-        jogo.MapaDesenho.height = jogo.tela.height / ESCALA;
+                ///Area de Extracao ( FIXA )
+                jogo.MapaDesenho.width = PIXEL_LARGURA_MAPA;
+                jogo.MapaDesenho.height = PIXEL_ALTURA_MAPA;
 
-        //Sala inicial
+        ///Sala inicial
         jogo.atualSala = 0;
 
-        //Criar Salas e zonas
+        ///Criar Salas e zonas
         CriaSalas( &jogo );
 
-        //Cria Portas
+        ///Cria Portas
         CriaPortas( &jogo );
 
-        //Passagem de portas
+        ///Passagem de portas
         jogo.PASSAGEM = 0;
+
+        ///Retorno
         return jogo;
 }
+//##############################################################################
+
+
+
+/** Função  carregarTexturasFontes() :
+    */
+
+void carregarTexturasFontes( Jogo *jogo )
+{
+        ///Texturas  Gerais
+        jogo->Res.Logo =  LoadTexture("Logo/Logo.png");   // Imagem de fundo (Logo)
+        jogo->Res.MenuFundo =  LoadTexture("Menu_Imagens/MenuPrincipal.png");   // Imagem do plano de fundo
+        jogo->Res.TelaDeFundo =  LoadTexture("Menu_Imagens/FundoLimpo.png");
+        jogo->Res.FundoConfirmarSair =    LoadTexture("Menu_Imagens/FundoConfirmarSair.png");
+        jogo->Res.Mapa =    LoadTexture("Mapa/Mapa.png");
+        jogo->Res.Portas =    LoadTexture("Mapa/Portas.png");
+
+        ///Fontes
+        jogo->Res.fonteWolfen =    LoadFontEx("Fontes/ReturnToCastle-MZnx.ttf"  ,96 , 0 , 0);
+        jogo->Res.fonteWolfen2 =    LoadFontEx("Fontes/wolfenstein.ttf"  ,96 , 0 , 0);
+
+        ///Sprites
+        CarregarPersonagemImagens( jogo);      //Jogador
+        CarregarPes( jogo );           //Pes do jogador
+}
+//##############################################################################
 
 
 
 /**     Funcao CarregarLevel(): Carrega os levels
     */
+
 void CarregarLevel( Jogo *jogo)
 {
 //        int i;
@@ -741,12 +770,6 @@ void CarregarPersonagemImagens( Jogo *jogo )
 ///
 void CarregarPes( Jogo *jogo )
 {
-        jogo->spriteDef.QTD_FRAMES_PES[ 0 ] = 1;
-        jogo->spriteDef.QTD_FRAMES_PES[ 1 ] = 20;
-        jogo->spriteDef.QTD_FRAMES_PES[ 2 ] = 20;
-        jogo->spriteDef.QTD_FRAMES_PES[ 3 ] = 20;
-        jogo->spriteDef.QTD_FRAMES_PES[ 4 ] = 20;
-
         int status , frame;
         char nmr[10];
         const char comum[] = "Sprites/Personagem/Pes/";

@@ -6,7 +6,7 @@
 
 BOOL IsGameOver( Jogo jogo )
 {
-        if( !jogo.jogador.vidas && !jogo.jogador.VIVO )
+        if( !jogo.jogador.vidas )
         {
                 return SIM;
         }
@@ -20,15 +20,15 @@ BOOL IsGameOver( Jogo jogo )
 /**     Funcao IsEndGame(): Retorn TRUE se jogador recebeu zerou o jogo
     */
 
-BOOL IsEndGame( Jogo jogo )
-{
-        if( jogo.atualLevel > MAXLEVEL )
-        {
-                return SIM;
-        }
-        else
-                return NAO;
-}
+//BOOL IsEndGame( Jogo jogo )
+//{
+//        if( jogo.atualLevel > MAXLEVEL )
+//        {
+//                return SIM;
+//        }
+//        else
+//                return NAO;
+//}
 //##############################################################################
 
 
@@ -52,15 +52,15 @@ BOOL IsVoltarMenu( Jogo jogo )
 /**     Funcao IsLevelEnd(): Retorn TRUE se jogador terminou level
     */
 
-BOOL IsLevelEnd( Jogo jogo )
-{
-        if( jogo.dadosLevel.TERMINADO )
-        {
-                return SIM;
-        }
-        else
-                return NAO;
-}
+//BOOL IsLevelEnd( Jogo jogo )
+//{
+//        if( jogo.dadosLevel.TERMINADO )
+//        {
+//                return SIM;
+//        }
+//        else
+//                return NAO;
+//}
 //##############################################################################
 
 

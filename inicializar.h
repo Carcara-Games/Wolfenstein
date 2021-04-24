@@ -7,6 +7,7 @@
         void IniciarJanela( void );
         Jogo IniciaJogo( void );
         void CarregarLevel( Jogo *jogo);
+        void carregarTexturasFontes( Jogo *jogo );
         void CriaSalas( Jogo *jogo);
         void CriaZonas( Jogo *jogo);
         void CriaPortas( Jogo *jogo);

@@ -83,11 +83,9 @@
         typedef struct
         {
                 Vector2 pos;            // Posicao de desenho
-                Vector2 entrada;        // Ponto de entrada
-                Vector2 destino;        //Ponto de destino
+                float rotac;            // Angulo de rotacao
 
                 int alteraPSala;        // Sala de destino
-                float rotac;            // Angulo de rotacao
 
                 unsigned DESTRANCADA : 1;       // Se esta destrancada == 1 , se nao == 0
         }Porta;
@@ -112,8 +110,8 @@
         {
                 RecLim LimCam;  // Limites de deslocamento da camera aerea na sala
 
+                Rectangle zonas[ QTD_ZONAS_MAX ];    //Zonas da sala, por onde o jogador se locomove
                 int qtdZonas;
-                RecLim zonas[20];    //Zonas da sala, por onde o jogador se locomove
 
                 int qtdBaus;  // Quantidade de baus
                 Bau baus[ MAX_BAUS_SALA ];

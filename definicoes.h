@@ -18,7 +18,7 @@
         #define MAXLEVEL 3
 
         ///FPS
-        #define FPS 30
+        #define FPS 50
         #define DIV_FPS_PER 2
 
         ///TELA
@@ -28,14 +28,16 @@
         ///JOGADOR
         #define LARG_PADRAO 130
         #define ALT_PADRAO 115
+        #define RAZAO_SOLID_JOGADOR 10
+
 
         ///EXIT
         #define EXITKEY KEY_BACKSLASH
         //#define EXITKEY KEY_ESCAPE
 
         ///MOVIMENTO DO JOGADOR
-        #define PASSO 3
-        #define PASSO_CORRENDO 3.7
+        #define PASSO 2
+        #define PASSO_CORRENDO 2.4
         #define TOL_MOV_LATERAL 20      //Angulo de tolerancia para se considerar o movimento do jogador perpendicular aa mira ( lateral )
 
         ///MAPA
@@ -44,7 +46,10 @@
         #define ESCALA 4.5
 
         ///SALAS
-        #define QTDSALAS 15 + 01
+        #define QTDSALAS 16
+        #define QTD_ZONAS_MAX 10
+
+
 
         ///ARMAS
 //        #define QTD_ARMAS 5
@@ -62,6 +67,9 @@
         #define QTD_DROP_MAX_BAUS 3             //Quantidade maxima de itens que os baus podem chegar a dropar( fornecer )
         #define MAX_BAUS_SALA 3
 
+        ///PORTAS
+        #define TOL_ENTRAR_PORTAS 10
+        #define SALTO_PORTA 105
 
 
 #endif // __DEFINICOES_H_

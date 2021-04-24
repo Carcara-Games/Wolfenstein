@@ -43,7 +43,7 @@ Jogo IniciaJogo( void )
         jogo.spriteDef.QTD_FRAMES[ 0 ][ 0 ] = 20;
         jogo.spriteDef.QTD_FRAMES[ 0 ][ 1 ] = 20;
         jogo.spriteDef.QTD_FRAMES[ 0 ][ 2 ] = 3;
-        jogo.spriteDef.QTD_FRAMES[ 0 ][ 3 ] = 16;
+        jogo.spriteDef.QTD_FRAMES[ 0 ][ 3 ] = 15;
         jogo.spriteDef.QTD_FRAMES[ 0 ][ 4 ] = 15;
 
         ///QTD de Frame para cada tipo de movimento
@@ -94,7 +94,7 @@ Jogo IniciaJogo( void )
 
         ///Posicao Jogador No Mundo
         jogo.jogador.PosMundo.x = 102;
-        jogo.jogador.PosMundo.y = 603;
+        jogo.jogador.PosMundo.y = 633;
 
         ///Ajuste do Mapa do Jogo
                 ///Tamanho Da Textura MAPA
@@ -214,161 +214,129 @@ void CriaSalas( Jogo *jogo)
 void CriaZonas( Jogo *jogo)
 {
         int i , j;
-        int limites[ QTDSALAS ][ 20 ][ 4 ] = {           //Os limites de deslocamento(esq - 0 , sup - 1 , dir - 2 , inf - 3 ) de cada zona de cada sala
+        /// Retangulos dos limites de deslocamento de cada zona de cada sala( 0-x , 1-y , 2-width , 3-height )
+        int limites[ QTDSALAS ][ QTD_ZONAS_MAX][ 4 ] = {
                 { //sala 00
-                        { 74 , 597 , 131 ,  1452 } ,    //z0
-                        { 219 , 648 , 288 , 730 } ,     //z1
-                        { 129 , 675 , 219 , 702 } ,      //z2
-                        { 129 , 946 , 159 , 1008} ,     //z3
-                        { 219 , 1224 , 288 , 1308 } ,    //z4
-                        { 129 , 1254 , 219 , 1278 } ,   //z5
-                        { 129 , 1398 , 660 , 1452 } ,   //z6
-                        { 378 , 1219 , 432 , 1399 },     //z7
-                        { 93 , 591 , 111 , 597 },    //p0
-                        { 660 , 1416 , 669 , 1434 },    //p1
-                        { 399 , 1215 , 414 , 1221 }     //p2
+                        { 62 , 586 , 79 ,  878 } ,    //z0
+                        { 206 , 633 , 95 , 111 } ,     //z1
+                        { 62 , 665 , 239 , 47 } ,      //z2
+                        { 62 , 937 , 110 , 79 } ,     //z3
+                        { 206 , 1210 , 96 , 110 } ,    //z4
+                        { 62 , 1241 , 240 , 47 } ,   //z5
+                        { 62 , 1386 , 607 , 78 } ,   //z6
+                        { 367 , 1209 , 79 , 254 }     //z7
                 },
 
                 { //sala 01
-                        { 765 , 1398 , 879 , 1452 },    //z0
-                        { 753 , 1416 , 765 , 1437 }    //p1
+                        { 750 , 1386 , 143 , 78 }    //z0
                 },
 
                 { //sala 02
-                        { 267 , 830 , 546 ,  1116 } ,    //z0
-                        { 396 , 1113 , 417 , 1125 } ,     //p1
-                        { 396 , 828 , 417 , 834 }       //p2
+                        { 255 , 826 , 303 , 303 }     //z0
                 },
 
                 { //sala 03
-                        { 381 , 612 , 432 ,  732 } ,    //z0
-                        { 396 , 732 , 414 , 754 } ,     //p1
-                        { 396 , 593 , 417 , 629 }       //p2
+                        { 366 , 601 , 80 ,  144 }     //z0
                 },
 
 
                 { //sala 04
-                        { 267 , 327 , 543 ,  507 } ,    //z0
-                        { 396 , 497 , 414 , 520 } ,     //p1
-                        { 526 , 408 , 568 , 426 }       //p2
+                        { 255 , 314 , 303 ,  207 }     //z0
                 },
 
                 { //sala 05
-                        { 651 , 390 , 831 ,  444 } ,    //z0
-                        { 717 , 231 , 771 , 390 } ,     //z1
-                        { 771 , 231 , 960 , 282 } ,      //z3
-                        { 960 , 246 , 975 , 267} ,     //p1
-                        { 619 , 408 , 674 , 426 }    //p2
+                        { 638 , 378 , 206 ,  79 } ,    //z0
+                        { 702 , 218 , 78 , 239 } ,     //z1
+                        { 702 , 218 , 272 , 78 }       //z3
                 },
 
                 { //sala 06
-                        { 1065 , 171 , 1460 ,  342 } ,    //z0
-                        { 1056 , 246 , 1071 , 267 } ,     //p1
-                        { 1456 , 249 , 1477 , 273 } ,     //p2
-                        { 1251 , 299 , 1275 , 374 }       //p3
+                        { 1055 , 162 , 413 ,  191 }     //z0
                 },
 
                 { //sala 07
-                        { 1560 , 231 , 1617 ,  285 } ,    //z0
-                        { 1519 , 249 , 1577 , 267 }      //p1
+                        { 1550 , 217 , 79 ,  80 } ,    //z0
                 },
 
                 { //sala 08
-                        { 1236 , 447 , 1290 ,  852 } ,    //z0
-                        { 1134 , 624 , 1368 ,  645 } ,    //z1
-                        { 1251 , 420 , 1272 , 447 } ,     //p1
-                        { 1116 , 627 , 1134 , 639 } ,     //p2
-                        { 1251 , 852 , 1272 , 870 }       //p3
+                        { 1222 , 434 , 80 ,  431 } ,    //z0
+                        { 1126 , 610 , 271 ,  46 }    //z1
                 },
 
                 { //sala 09
-                        { 990 , 618 , 1038 ,  792 } ,    //z0
-                        { 1032 , 627 , 1050 , 639 }     //p1
+                        { 982 , 610 , 64 ,  191 }    //z0
                 },
 
                 { //sala 10
-                        { 981 , 993 , 1542 ,  1236 } ,    //z0
-                        { 1179 , 960 , 1338 ,  1266 } ,    //z1
-                        { 1542 , 1080 , 1575 ,  1146 } ,    //z2
-                        { 1251 , 936 , 1269 , 964 } ,     //p1
-                        { 1575 , 1104 , 1593 , 1122 } ,     //p2
-                        { 1251 , 1263 , 1272 , 1287 }       //p3
+                        { 965 , 978 , 592 ,  271 } ,    //z0
+                        { 1172 , 945 , 177 ,  336 } ,    //z1
+                        { 1311 , 1073 , 278 ,  80 }     //z2
                 },
 
                 { //sala 11
-                        { 1677 , 1083 , 2028 ,  1143 } ,    //z0
-                        { 1770 , 1140 , 1869 ,  1176 } ,    //z1
-                        { 1806 , 1161 , 1836 ,  1545 } ,    //z2
-                        { 1827 , 1482 , 1869 , 1545 } ,      //z3
-                        { 1659 , 1110 , 1680 , 1119 } ,     //p1
-                        { 2025 , 1110 , 2040 , 1116 } ,     //p2
-                        { 1863 , 1509 , 1887 , 1518 }       //p3
+                        { 1669 , 1073 , 368 ,  80 } ,    //z0
+                        { 1765 , 1120 , 112 ,  65 } ,    //z1
+                        { 1797 , 1073 , 48 ,  480 } ,    //z2
+                        { 1797 , 1473 , 80 , 80 }       //z3
                 },
 
                 { //sala 12
-                        { 2127 , 972 , 2427 ,  1272 } ,    //z0
-                        { 2199 , 1272 , 2229 ,  1305 } ,    //z1
-                        { 2325 , 1272 , 2358 ,  1305 } ,    //z2
-                        { 2115 , 1110 , 2124 , 1119 }      //p1
+                        { 2117 , 961 , 321 ,  320 } ,    //z0
+                        { 2189 , 1217 , 48 ,  96 } ,    //z1
+                        { 2317 , 1222 , 47 ,  91 }     //z2
                 },
 
                 { //sala 13
-                        { 1965 , 1482 , 2397 ,  1545 } ,    //z0
-                        { 1998 , 1449 , 2028 ,  1576 } ,    //z1
-                        { 2109 , 1449 , 2142 ,  1576 } ,    //z2
-                        { 2223 , 1449 , 2253 ,  1576 } ,    //z3
-                        { 2334 , 1449 , 2364 ,  1576 } ,    //z4
-                        { 1959 , 1497 , 1965 , 1518 }      //p1
+                        { 1957 , 1473 , 448 ,  80 } ,    //z0
+                        { 1989 , 1441 , 48 ,  144 } ,    //z1
+                        { 2101 , 1441 , 48 ,  144 } ,    //z2
+                        { 2213 , 1441 , 48 ,  144 } ,    //z3
+                        { 2325 , 1441 , 48 ,  144 }    //z4
                 },
 
                 { //sala 14
-                        { 1230 , 1371 , 1293 ,  1722 } ,    //z0
-                        { 1254 , 1356 , 1266 , 1368 }  ,    //p1
-                        { 1254 , 1716 , 1266 , 1731 }      //p2
+                        { 1221 , 1361 , 80 ,  368 }     //z0
                 },
 
                 { //sala 15
-                        { 1230 , 1818 , 1293 ,  2232 } ,    //z0
-                        { 1053 , 2169 , 1467 , 2232 } ,    //p1
-                        { 1056 , 1851 , 1467 , 1911 } ,    //z2
-                        { 1053 , 1911 , 1149 ,  1944 } ,    //z3
-                        { 1374 , 1911 , 1467 ,  1944 } ,    //z4
-                        { 1053 , 2028 , 1467 , 2088 } ,    //z5
-                        { 1254 , 1803 , 1266 , 1815 }     //p1
+                        { 1221 , 1809 , 80 ,  432 } ,    //z0
+                        { 1045 , 1841 , 112 , 61 } ,    //z1
+                        { 1365 , 1881 , 112 ,  72 } ,    //z2
+                        { 1045 , 2017 , 432 ,  80 } ,    //z3
+                        { 1045 , 2161 , 432 , 80 }    //z4
                 }
 
         };
 
         //Quantidade de zonas de cada sala
-        jogo->salas[ 0 ].qtdZonas =  12;
-        jogo->salas[ 1 ].qtdZonas =  2;
-        jogo->salas[ 2 ].qtdZonas =  3;
-        jogo->salas[ 3 ].qtdZonas =  3;
-        jogo->salas[ 4 ].qtdZonas =  3;
-        jogo->salas[ 5 ].qtdZonas =  5;
-        jogo->salas[ 6 ].qtdZonas =  4;
-        jogo->salas[ 7 ].qtdZonas =  2;
-        jogo->salas[ 8 ].qtdZonas =  5;
-        jogo->salas[ 9 ].qtdZonas =  2;
-        jogo->salas[ 10 ].qtdZonas =  6;
-        jogo->salas[ 11 ].qtdZonas =  7;
-        jogo->salas[ 12 ].qtdZonas =  4;
-        jogo->salas[ 13 ].qtdZonas =  6;
-        jogo->salas[ 14 ].qtdZonas =  3;
-        jogo->salas[ 15 ].qtdZonas =  7;
+        jogo->salas[ 0 ].qtdZonas =  8;
+        jogo->salas[ 1 ].qtdZonas =  1;
+        jogo->salas[ 2 ].qtdZonas =  1;
+        jogo->salas[ 3 ].qtdZonas =  1;
+        jogo->salas[ 4 ].qtdZonas =  1;
+        jogo->salas[ 5 ].qtdZonas =  3;
+        jogo->salas[ 6 ].qtdZonas =  1;
+        jogo->salas[ 7 ].qtdZonas =  1;
+        jogo->salas[ 8 ].qtdZonas =  2;
+        jogo->salas[ 9 ].qtdZonas =  1;
+        jogo->salas[ 10 ].qtdZonas =  3;
+        jogo->salas[ 11 ].qtdZonas =  4;
+        jogo->salas[ 12 ].qtdZonas =  3;
+        jogo->salas[ 13 ].qtdZonas =  5;
+        jogo->salas[ 14 ].qtdZonas =  1;
+        jogo->salas[ 15 ].qtdZonas =  5;
 
 
         //Atribuindo Limites
         for( i = 0 ; i < QTDSALAS ; i++)
-                for( j = 0 ; j < jogo->salas[ i ].qtdZonas; j++)
-                {
-                        jogo->salas[ i ].zonas[ j ].esq = limites[ i ][ j ][ 0 ];
-                        jogo->salas[ i ].zonas[ j ].sup = limites[ i ][ j ][ 1 ];
-                        jogo->salas[ i ].zonas[ j ].dir = limites[ i ][ j ][ 2 ];
-                        jogo->salas[ i ].zonas[ j ].inf = limites[ i ][ j ][ 3 ];
-
+                for( j = 0 ; j < jogo->salas[ i ].qtdZonas; j++){
+                        jogo->salas[ i ].zonas[ j ].x = limites[ i ][ j ][ 0 ] + jogo->jogador.PosTela.width / ( 2.0 * RAZAO_SOLID_JOGADOR );
+                        jogo->salas[ i ].zonas[ j ].y = limites[ i ][ j ][ 1 ] + jogo->jogador.PosTela.height / ( 2.0 * RAZAO_SOLID_JOGADOR );
+                        jogo->salas[ i ].zonas[ j ].width = limites[ i ][ j ][ 2 ] - jogo->jogador.PosTela.width / RAZAO_SOLID_JOGADOR;
+                        jogo->salas[ i ].zonas[ j ].height = limites[ i ][ j ][ 3 ] - jogo->jogador.PosTela.height / RAZAO_SOLID_JOGADOR;
                 }
 }
+
 
 
 /**     Função CriaPortas() : Crias as portas da sala , definindo posicao de entrada e posicao de destino
@@ -380,267 +348,105 @@ void CriaPortas( Jogo *jogo)
         int i , j;
         int pos[ QTDSALAS ][ 10 ][ 2 ] = {           //As posicoes  das portas ( x-0 , y - 1 ) de cada porta de cada sala
                 { //sala 00
-                        { 669 , 1425 },    //p1
-                        { 405 , 1215 }      //p2
+                        { 670 , 1425 },    //p1
+                        { 406 , 1208 }      //p2
                 },
 
                 { //sala 01
-                        { 753 , 1425 }      //p1
+                        { 749 , 1424 }      //p1
                 },
 
                 { //sala 02
-                        { 405 , 1123 },   //p1
-                        { 405 , 841 }      //p2
+                        { 405 , 1129 },   //p1
+                        { 406 , 825 }      //p2
                 },
 
                 { //sala 03
-                        { 405 , 747 },    //p1
-                        { 405 , 603 }      //p2
+                        { 405 , 745 },    //p1
+                        { 406 , 600 }      //p2
                 },
 
                 { //sala 04
-                        { 405 , 522 },    //p1
-                        { 557 , 417 }      //p2
+                        { 405 , 521 },    //p1
+                        { 558 , 417 }      //p2
                 },
 
                 { //sala 05
-                        { 633 , 417 },      //p1
-                        { 981 , 258 }    //p2
+                        { 637 , 416 },      //p1
+                        { 974 , 257 }    //p2
                 },
 
                 { //sala 06
-                        { 1055 , 258 },    //p1
-                        { 1476 , 258 },    //p2
-                        { 1263 , 357 }      //p3
+                        { 1053 , 256 },    //p1
+                        { 1470 , 257 },    //p2
+                        { 1261 , 353 }      //p3
                 },
 
                 { //sala 07
-                        { 1551 , 258 }    //p1
+                        { 1549 , 256 }    //p1
                 },
 
                 { //sala 08
-                        { 1263 , 429 },    //p1
-                        { 1190 , 633 },    //p2
-                        { 1263 , 870 }    //p3
+                        { 1262 , 432 },    //p1
+                        { 1125 , 633 },    //p2         //PORTA ESPECIAL PENSAR EM ALGO DEPOIS
+                        { 1261 , 865 }    //p3
                 },
 
                 { //sala 09
-                        { 1128 , 633 }    //p1
+                        { 1046 , 632 }    //p1          //Porta Especial
                 },
 
                 { //sala 10
-                        { 1260 , 939 },    //p1
-                        { 1596 , 1113 },    //p2
-                        { 1260 , 1284 }    //p3
+                        { 1259 , 944 },    //p1
+                        { 1589 , 1113 },    //p2
+                        { 1260 , 1281 }    //p3
                 },
 
                 { //sala 11
-                        { 1665 , 1113 },    //p1
-                        { 2043 , 1113 },    //p2
-                        { 1881 , 1512 }    //p3
+                        { 1668 , 1112 },    //p1
+                        { 2037 , 1113 },    //p2
+                        { 1887 , 1513 }    //p3
                 },
 
                 { //sala 12
-                        { 2112 , 1113 },    //p1
+                        { 2116 , 1112 },    //p1
                 },
 
                 { //sala 13
-                        { 1953 , 1512 },    //p1
+                        { 1956 , 1513 },    //p1
                 },
 
                 { //sala 14
-                        { 1260 , 1356 },    //p1
-                        { 1260 , 1734 }     //p2
+                        { 1261 , 1360 },    //p1
+                        { 1260 , 1729 }     //p2
                 },
 
                 { //sala 15
-                        { 1260 , 1803 },    //p1
+                        { 1261 , 1808 },    //p1
                 }
 
         };
-//        float rotac[ QTDSALAS ][ 10 ] = {           //A rotacao das portas ( x-0 , y - 1 ) de cada porta de cada sala
-//                {  0 /*p1*/ , -90/*p2*/ } ,     //sala00
-//                {  90 /*p1*/ } ,     //sala01
-//                {  180 /*p1*/ , 0/*p2*/ } ,     //sala03
-//                {  180 /*p1*/ , -90/*p2*/ } ,     //sala04
-//                {  90 /*p1*/ , -90/*p2*/ } ,     //sala05
-//                {  90 /*p1*/ , -90/*p2*/ , 180/*p3*/ } ,     //sala06
-//                {  90 /*p1*/ } ,     //sala07
-//                {  0 /*p1*/ , 90/*p2*/ , 180/*p3*/ } ,     //sala08
-//                {  -90 /*p1*/ } ,     //sala09
-//                {  0 /*p1*/ , -90/*p2*/ , 180/*p3*/ } ,     //sala10
-//                {  90 /*p1*/ , -90/*p2*/ , -90/*p3*/ } ,     //sala11
-//                {  -90 /*p1*/ } ,     //sala12
-//                {  -90 /*p1*/ } ,     //sala13
-//                {  0 /*p1*/ , 180/*p2*/ } ,     //sala14
-//                {  0 /*p1*/ } ,     //sala15
-//
-//        };
-
-        int entrada[ QTDSALAS ][ 10 ][ 2 ] = {           //As coordenadas de entrada das portas ( x-0 , y - 1 ) de cada porta de cada sala
-                { //sala 00
-                        { 669 , 1425 },    //p1
-                        { 405 , 1215 }      //p2
-                },
-
-                { //sala 01
-                        { 753 , 1425 }      //p1
-                },
-
-                { //sala 02
-                        { 405 , 1123 },   //p1
-                        { 405 , 828 }      //p2
-                },
-
-                { //sala 03
-                        { 405 , 747 },    //p1
-                        { 405 , 600 }      //p2
-                },
-
-                { //sala 04
-                        { 405 , 522 },    //p1
-                        { 556 , 417 }      //p2
-                },
-
-                { //sala 05
-                        { 639 , 417 },      //p1
-                        { 975 , 258 }    //p2
-                },
-
-                { //sala 06
-                        { 1055 , 258 },    //p1
-                        { 1476 , 258 },    //p2
-                        { 1263 , 357 }      //p3
-                },
-
-                { //sala 07
-                        { 1545 , 258 }    //p1
-                },
-
-                { //sala 08
-                        { 1263 , 429 },    //p1
-                        { 1128 , 633 },    //p2
-                        { 1263 , 870 }    //p3
-                },
-
-                { //sala 09
-                        { 1050 , 633 }    //p1
-                },
-
-                { //sala 10
-                        { 1260 , 939 },    //p1
-                        { 1596 , 1113 },    //p2
-                        { 1260 , 1284 }    //p3
-                },
-
-                { //sala 11
-                        { 1665 , 1113 },    //p1
-                        { 2043 , 1113 },    //p2
-                        { 1881 , 1512 }    //p3
-                },
-
-                { //sala 12
-                        { 2112 , 1113 }    //p1
-                },
-
-                { //sala 13
-                        { 1957 , 1512 }    //p1
-                },
-
-                { //sala 14
-                        { 1260 , 1356 },    //p1
-                        { 1260 , 1734 }     //p2
-                },
-
-                { //sala 15
-                        { 1260 , 1803 }    //p1
-                }
-
-        };
-
-        int destino[ QTDSALAS ][ 10 ][ 2 ] = {           //As coordenadas de destino das portas ( x-0 , y - 1 ) de cada porta de cada sala
-                { //sala 00
-                        { 756 , 1425 },     //p1
-                        { 405 , 1120 }      //p2
-                },
-
-                { //sala 01
-                        { 663+3 , 1425 },     //p1
-                },
-
-                { //sala 02
-                        { 405 , 1219 } ,    //p1
-                        { 405 , 738 }     //p2
-                },
-
-                { //sala 03
-                        { 405 , 837 } ,    //p1
-                        { 405 , 510 }     //p2
-                },
-
-                { //sala 04
-                        { 405 , 612 },    //p1
-                        { 651 , 417 }      //p2
-                },
-
-                { //sala 05
-                        { 546 , 417 },      //p1
-                        { 1065 , 258 }    //p2
-                },
-
-                { //sala 06
-                        { 963 , 258 },    //p1
-                        { 1563 , 258 },    //p2
-                        { 1263 , 444 }      //p3
-                },
-
-                { //sala 07
-                        { 1461 , 258 }    //p1
-                },
-
-                { //sala 08
-                        { 1263 , 342 },    //p1
-                        { 1035 , 633 },    //p2
-                        { 1263 , 957 }    //p3
-                },
-
-                { //sala 09
-                        { 1137 , 633 }    //p1
-                },
-
-                { //sala 10
-                        { 1260 , 855 },    //p1
-                        { 1680 , 1113 },    //p2
-                        { 1260 , 1371 }    //p3
-                },
-
-                { //sala 11
-                        { 1578 , 1113 },    //p1
-                        { 2130 , 1113 },    //p2
-                        { 1968 , 1512 }    //p3
-                },
-
-                { //sala 12
-                        { 2028 , 1113 }    //p1
-                },
-
-                { //sala 13
-                        { 1866 , 1512 }    //p1
-                },
-
-                { //sala 14
-                        { 1260 , 1271 },    //p1
-                        { 1260 , 1818 }     //p2
-                },
-
-                { //sala 15
-                        { 1260 , 1716 }    //p1
-                }
+        float rotac[ QTDSALAS ][ 10 ] = {           //A rotacao das portas ( x-0 , y - 1 ) de cada porta de cada sala
+                {  -90 /*p1*/ , 0/*p2*/ } ,     //sala00
+                {  90 /*p1*/ } ,     //sala01
+                {  180 /*p1*/ , 0/*p2*/ } ,     //sala02
+                {  180 /*p1*/ , -90/*p2*/ } ,     //sala03
+                {  90 /*p1*/ , -90/*p2*/ } ,     //sala04
+                {  90 /*p1*/ , -90/*p2*/ , 180/*p3*/ } ,     //sala05
+                {  90 /*p1*/ } ,     //sala06
+                {  0 /*p1*/ , 90/*p2*/ , 180/*p3*/ } ,     //sala07
+                {  -90 /*p1*/ } ,     //sala08
+                {  0 /*p1*/ , -90/*p2*/ , 180/*p3*/ } ,     //sala09
+                {  90 /*p1*/ , -90/*p2*/ , -90/*p3*/ } ,     //sala10
+                {  -90 /*p1*/ } ,     //sala11
+                {  -90 /*p1*/ } ,     //sala12
+                {  0 /*p1*/ , 180/*p2*/ } ,     //sala13
+                {  0 /*p1*/ } ,     //sala14
 
         };
 
         int status[ QTDSALAS ][ 10 ] = {           //O status de trancada/destrancada das portas ( destrancada=1 , trancada = 0 ) de cada porta de cada sala
-                {  1 /*p1*/ , 1/*p2*/ },      //sala00
+                {  0 /*p1*/ , 0/*p2*/ },     //sala00
                 {  1 /*p1*/ },      //sala01
                 {  1 /*p1*/ , 1/*p2*/ },      //sala02
                 {  1 /*p1*/ , 1/*p2*/ },      //sala03
@@ -660,7 +466,7 @@ void CriaPortas( Jogo *jogo)
 
 
         int alterarPSala[ QTDSALAS ][ 10 ] = {           //A sala para qual as portas levam
-                {  1 /*p1*/ , 2/*p2*/ },      //sala00
+                {  1 /*p1*/ , 2/*p2*/ },     //sala00
                 {  0 /*p1*/ },      //sala01
                 {  0 /*p1*/ , 3/*p2*/ },      //sala02
                 {  2 /*p1*/ , 4/*p2*/ },      //sala03
@@ -705,16 +511,10 @@ void CriaPortas( Jogo *jogo)
                         jogo->salas[ i ].portas[ j ].pos.x = pos[ i ][ j ][ 0 ];
                         jogo->salas[ i ].portas[ j ].pos.y = pos[ i ][ j ][ 1 ];
 
-                        jogo->salas[ i ].portas[ j ].entrada.x = entrada[ i ][ j ][ 0 ];
-                        jogo->salas[ i ].portas[ j ].entrada.y = entrada[ i ][ j ][ 1 ];
-
-                        jogo->salas[ i ].portas[ j ].destino.x = destino[ i ][ j ][ 0 ];
-                        jogo->salas[ i ].portas[ j ].destino.y = destino[ i ][ j ][ 1 ];
+                        jogo->salas[ i ].portas[ j ].rotac = rotac[ i ][ j ];
 
                         jogo->salas[ i ].portas[ j ].DESTRANCADA = status[ i ][ j ];
                         jogo->salas[ i ].portas[ j ].alteraPSala = alterarPSala[ i ][ j ];
-
-
                 }
 }
 

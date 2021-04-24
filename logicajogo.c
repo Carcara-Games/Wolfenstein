@@ -223,11 +223,14 @@ void AtualizaMapa( Jogo *jogo)
 BOOL ChecaMov( Jogo jogo , int varx , int vary )
 {
         int i;
+        Vector2 destino;
+        destino.x = jogo.jogador.PosMundo.x + varx;
+        destino.y = jogo.jogador.PosMundo.y + vary;
 
         for( i = 0 ; i < jogo.salas[ jogo.atualSala ].qtdZonas ; i++ )
-                if( jogo.jogador.PosMundo.x + varx <= jogo.salas[ jogo.atualSala ].zonas[ i ].dir  &&  jogo.jogador.PosMundo.x + varx >= jogo.salas[ jogo.atualSala ].zonas[ i ].esq   )
-                        if( jogo.jogador.PosMundo.y + vary <= jogo.salas[ jogo.atualSala ].zonas[ i ].inf  &&  jogo.jogador.PosMundo.y + vary >= jogo.salas[ jogo.atualSala ].zonas[ i ].sup )
-                                return 1;
+                if( CheckCollisionPointRec( destino , jogo.salas[ jogo.atualSala ].zonas[ i ] ) )
+                        return 1;
+
 
         return 0;
 }
@@ -244,8 +247,11 @@ void EntraEmPortas( Jogo *jogo )
 
         if( porta != -1 )
         {
-                jogo->jogador.PosMundo.x = jogo->salas[ jogo->atualSala ].portas[ porta ].destino.x;
-                jogo->jogador.PosMundo.y = jogo->salas[ jogo->atualSala ].portas[ porta ].destino.y;
+                int addX = - SALTO_PORTA *  sin( ( PI / 180 ) * jogo->salas[ jogo->atualSala ].portas[ porta ].rotac );
+                int addY = - SALTO_PORTA * cos( ( PI / 180 ) * jogo->salas[ jogo->atualSala ].portas[ porta ].rotac );
+
+                jogo->jogador.PosMundo.x = jogo->salas[ jogo->atualSala ].portas[ porta ].pos.x + addX;
+                jogo->jogador.PosMundo.y = jogo->salas[ jogo->atualSala ].portas[ porta ].pos.y + addY;
                 jogo->atualSala = jogo->salas[ jogo->atualSala ].portas[ porta ].alteraPSala;
                 jogo->PASSAGEM = 1;
         }
@@ -260,12 +266,11 @@ void EntraEmPortas( Jogo *jogo )
 BOOL ChecaPortas( Jogo jogo )
 {
         int i;
-        int tol = 3 ;
 
         for( i = 0 ; i < jogo.salas[ jogo.atualSala ].qtdPortas ; i++ )
                 if( jogo.salas[ jogo.atualSala ].portas[ i ].DESTRANCADA )
-                        if( jogo.jogador.PosMundo.y <= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y + tol  &&  jogo.jogador.PosMundo.y >= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.y - tol   )
-                                if( jogo.jogador.PosMundo.x <= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x + tol  &&  jogo.jogador.PosMundo.x >= jogo.salas[ jogo.atualSala ].portas[ i ].entrada.x - tol   )
+                        if( jogo.jogador.PosMundo.y <= jogo.salas[ jogo.atualSala ].portas[ i ].pos.y + TOL_ENTRAR_PORTAS  &&  jogo.jogador.PosMundo.y >= jogo.salas[ jogo.atualSala ].portas[ i ].pos.y - TOL_ENTRAR_PORTAS   )
+                                if( jogo.jogador.PosMundo.x <= jogo.salas[ jogo.atualSala ].portas[ i ].pos.x + TOL_ENTRAR_PORTAS  &&  jogo.jogador.PosMundo.x >= jogo.salas[ jogo.atualSala ].portas[ i ].pos.x - TOL_ENTRAR_PORTAS   )
                                                 return i;
 
         return -1;

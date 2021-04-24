@@ -18,7 +18,9 @@
         #define EXITKEY KEY_BACKSLASH
         //#define EXITKEY KEY_ESCAPE
 
+        ///Velocidade
         #define PASSO 3
+        #define PASSO_CORRENDO 3.7
 
         #define ESCALA 4.5
 
@@ -28,9 +30,16 @@
 //        #define QTD_ARMAS 5
         #define QTD_ARMAS 1
         #define QTD_STATUS_MAX 7
+        #define DESVIO_MIRA 5
 
-        ///Personagem
+        ///PERSONAGEM PRINCIPAL - JOGADOR
         #define ESC_PER 1
+        #define QTD_STATUS_PES 5
+        #define DELTA_PES 50
+
+        ///BAUS
+        #define QTD_DROP_MAX_BAUS 3             //Quantidade maxima de itens que os baus podem chegar a dropar( fornecer )
+
 
 
 

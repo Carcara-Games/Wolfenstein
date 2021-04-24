@@ -7,20 +7,29 @@
     */
 void AtualizaLevel( Jogo *jogo)
 {
-//        AtualizaObjetos( &jogo );
-//        AtualizaFundo( &jogo );
+//        AtualizaArma( &jogo );
+
+        AtualizaMira( jogo );
+
+//        AtualizaTiros( &jogo );
+//        AtualizaRecarga( &jogo );
+
         AtualizaPosicao( jogo );
         AtualizaMapa( jogo );
+
+//        AtualizaSrcPer( jogo );
+        AtualizaSrcPes( jogo );
         AtualizaOrigin( jogo );
+        AtualizaOriginPes( jogo );
+
         EntraEmPortas( jogo );
-        AtualizaMira( jogo );
         AtualizaAtirar( jogo );
-//        AtualizaRecarga( &jogo );
-//        AtualizaTiros( &jogo );
-//        AtualizaArma( &jogo );
-//        AtualizaInimigosT1( &jogo );
 
         AtualizaFrameJogador( jogo );
+        AtualizaFramePes( jogo );
+
+//        AtualizaObjetos( &jogo );
+//        AtualizaInimigosT1( &jogo );
 
 }
 //##############################################################################
@@ -31,25 +40,67 @@ void AtualizaLevel( Jogo *jogo)
 
 void AtualizaPosicao( Jogo *jogo)
 {
-//        float ESC = 1; // Razao entre o deslocamento na tela e no mapa
+        Vector2 desloc = (Vector2){ 0 , 0 };      // Deslocamento
+        int movimentoTipo;
+        int status = 0;
+        int ang;        // Desvio entre a fronte do jogador e o sentido de deslocamento
+        const int tol = 20;        // Tolerancia angular para se considerar o movimento como lateral
 
-        jogo->jogador.atualStatus = 0;
+        //Velocidade - Se usuario pressionar ctrl a velocidade aumenta
+        float passo = PASSO;
+
+        if( IsKeyDown( KEY_LEFT_CONTROL ) ){
+                passo = PASSO_CORRENDO;
+                movimentoTipo = 2;
+        }
+        else{
+                status = 1;
+                movimentoTipo = 1;
+        }
+
         //Alterando posicao global no mapa
         if( IsKeyDown( KEY_W ) )
-                if( ChecaMov( *jogo , 0 , -PASSO ) )
-                        jogo->jogador.PosMundo.y -= PASSO  ,  jogo->jogador.atualStatus = 1;
+                if( ChecaMov( *jogo , 0 , -passo ) )
+                        desloc.y -= passo;
 
         if( IsKeyDown( KEY_S ) )
-                if( ChecaMov( *jogo , 0 , PASSO ) )
-                        jogo->jogador.PosMundo.y += PASSO , jogo->jogador.atualStatus = 1;
+                if( ChecaMov( *jogo , 0 , passo ) )
+                        desloc.y += passo;
 
         if( IsKeyDown( KEY_D ) )
-                if( ChecaMov( *jogo , PASSO , 0 ) )
-                        jogo->jogador.PosMundo.x += PASSO , jogo->jogador.atualStatus = 1;
+                if( ChecaMov( *jogo , passo , 0 ) )
+                        desloc.x += passo;
 
         if( IsKeyDown( KEY_A ) )
-                if( ChecaMov( *jogo , -PASSO , 0 ) )
-                        jogo->jogador.PosMundo.x -= PASSO , jogo->jogador.atualStatus = 1;
+                if( ChecaMov( *jogo , -passo , 0 ) )
+                        desloc.x -= passo;
+
+
+        ang = argVector( desloc ) - jogo->jogador.Rotac;
+        // Calculando tipo de movimento
+        if( !modVector( desloc ) ){
+                jogo->jogador.atualStatus = 0;
+                jogo->jogador.atualMovTipo = 0;
+                return;
+        }else{
+                if( ang >= -90 - tol  &&  ang <= -90 + tol )
+                        movimentoTipo = 3;              // Movimento Lateral para a Esquerda
+                if( ang >= 90 - tol  &&  ang <= 90 + tol )
+                        movimentoTipo = 4;              // Movimento Lateral para a Direita
+        }
+
+        //Corrigindo movimento diagonal
+        if( modVector( desloc ) > passo ){
+                desloc.x /= sqrt( 2 );
+                desloc.y /= sqrt( 2 );
+        }
+
+        // Atribuicao
+        jogo->jogador.PosMundo = SomaVectores( jogo->jogador.PosMundo , desloc );
+        jogo->jogador.atualStatus = status;
+        jogo->jogador.atualMovTipo = movimentoTipo;
+
+
 
 //        //Alterando posicao na tela
 //        if( 1 )
@@ -60,19 +111,89 @@ void AtualizaPosicao( Jogo *jogo)
         //Alterando posicao na tela
         if( 1 )
         {
+                ///Personagem
                 jogo->jogador.PosTela.x = jogo->tela.width / 2;
                 jogo->jogador.PosTela.y = jogo->tela.height / 2;
+
+
+
+                ///Pes
+//                jogo->jogador.PosTelaPes.x =  ( jogo->jogador.PosTela.x - jogo->jogador.PosTelaPes.width ) / 2;
+//                jogo->jogador.PosTelaPes.y =  ( jogo->jogador.PosTela.y -  jogo->jogador.PosTelaPes.height ) / 2;
+//                jogo->jogador.PosTelaPes.x =  jogo->jogador.PosTela.x + DELTA_PES * cos( jogo->jogador.Rotac );
+//                jogo->jogador.PosTelaPes.y =  jogo->jogador.PosTela.y - DELTA_PES * sin( jogo->jogador.Rotac);
+//
+                jogo->jogador.PosTelaPes.x =  jogo->jogador.PosTela.x;
+                jogo->jogador.PosTelaPes.y =  jogo->jogador.PosTela.y;
+
+
+
         }
 }
 //##############################################################################
+float modVector( Vector2 vet )
+{
+        return sqrt( pow( vet.x , 2) + pow( vet.y , 2 ) );
+}
 
+float argVector( Vector2 vet )
+{
+        return (180 / PI ) * atan2( vet.y , vet.x );
+}
+
+void IncrementaPosicao( Vector2 *pos , int addX , int addY )
+{
+        pos->x += addX;
+        pos->y += addY;
+}
+
+Vector2 SomaVectores( Vector2 vet1 , Vector2 vet2 )
+{
+        return (Vector2){ vet1.x + vet2.x , vet1.y + vet2.y };
+}
+
+float Deslocamento( Vector2 posInicial ,  Vector2 posFinal )
+{
+        int deslocX , deslocY;
+
+        deslocX = posFinal.x -  posInicial.x;
+        deslocY = posFinal.y -  posInicial.y;
+
+        return sqrt( pow( deslocX , 2) + pow( deslocY , 2 ) );
+}
 
 /**     Funcao AtualizaMira():
     */
 
+
 void AtualizaMira( Jogo *jogo)
 {
+        //O angulo formado entre a linha imaginaria do centro de rotacao do personagem e o centro de mira que fica na ponta da arma
+//        const int delta[ 3/*QTD_ARMAS*/ ] = { 00 , 25 };
+//
+//        // A distancia horizontal entre o centro de rotacao e o centro de mira
+//        const int deltaX[ 3/*QTD_ARMAS*/ ] = { jogo->Res.Per[0][0][0].width/ DESVIO_MIRA , jogo->Res.Per[1][0][0].width / DESVIO_MIRA , 0};
+//
+//         // A distancia horizontal entre o centro de rotacao e o centro de mira
+//        const int deltaY[ 3/*QTD_ARMAS*/ ] = { jogo->Res.Per[0][0][0].height / DESVIO_MIRA ,  jogo->Res.Per[1][0][0].height / DESVIO_MIRA,0 };
+//        const int arm = jogo->jogador.atualArma;
+//        const int angulo =  jogo->jogador.Rotac;
+//
+//        Vector2 CENTRO_DE_MIRA; // CENTRO_DE_MIRA do PERSONAGEM no mapa que varia com a rotacao inclusive
+//        int difY; // Diferenca em distancia de tela do ponto CENTRO_DE_MIRA do PERSONAGEM no mapa e o ponteiro do mouse
+//        int difX;
+
+//        CENTRO_DE_MIRA.x =
+//        CENTRO_DE_MIRA.y =
+//
+//        difX =
+//        difY =
+//        const int tanangulo = ( 180 / PI ) * tan( jogo->jogador.Rotac );
+
         jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y ) ,  ( GetMouseX() - jogo->jogador.PosTela.x ) );
+//        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y - deltaY[ arm ] ) ,  ( GetMouseX() - jogo->jogador.PosTela.x - deltaX[ arm ] ) ) - delta[ arm ];
+//        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y + deltaY[ arm ] ) ,  ( GetMouseX() - jogo->jogador.PosTela.x + deltaX[ arm ] ) );
+//        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y + deltaY[ arm ] * tanangulo ) ,  ( GetMouseX() - jogo->jogador.PosTela.x + deltaX[ arm ] * tanangulo ) ) - delta[ arm ] ;
 }
 //##############################################################################
 
@@ -170,13 +291,25 @@ void pausa( int tempo)
 ///
 void AtualizaOrigin( Jogo *jogo )
 {
-//        jogo->jogador.Origin.x = jogo->jogador.PosTela.x + jogo->jogador.PosTela.width / 2;
-//        jogo->jogador.Origin.y = jogo->jogador.PosTela.y + jogo->jogador.PosTela.height / 2;
-        jogo->jogador.Origin.x = jogo->jogador.PosTela.width / 2;
-        jogo->jogador.Origin.y = jogo->jogador.PosTela.height / 2;
-//        jogo->jogador.Origin.x = 0;
-//        jogo->jogador.Origin.y = 0;
+        if( jogo->jogador.atualArma == 0 ){
+                jogo->spriteDef.Origin.x = jogo->jogador.PosTela.width / 2;
+                jogo->spriteDef.Origin.y = jogo->jogador.PosTela.height / 2;
+        }
 
+        if( jogo->jogador.atualArma == 1 ){
+                jogo->spriteDef.Origin.x = 2 * jogo->jogador.PosTela.width / 3;
+                jogo->spriteDef.Origin.y = 2 * jogo->jogador.PosTela.height / 3;
+        }
+}
+
+
+///
+void AtualizaOriginPes( Jogo *jogo )
+{
+        /*if( jogo->jogador.atualMovTipo == 0 )*/{
+                jogo->spriteDef.OriginPes.x = jogo->jogador.PosTelaPes.width / 2;
+                jogo->spriteDef.OriginPes.y = jogo->jogador.PosTelaPes.height / 2;
+        }
 
 }
 
@@ -189,7 +322,11 @@ void AtualizaFrameJogador( Jogo *jogo )
         static int antStatus = 0;
         static int flagTiro = 0;
 
-        if( jogo->jogador.atualStatus == 2  || flagTiro){
+        //Teste Para Debug
+        jogo->jogador.testeFlagTiro = flagTiro;
+
+        //Caso atire e preciso terminar o ciclo dos frames
+        if( jogo->jogador.atualStatus == 2    ||   flagTiro ){
                 if(  !flagTiro  ){
                         flagTiro = 1;
                         frame = 0;
@@ -198,19 +335,20 @@ void AtualizaFrameJogador( Jogo *jogo )
                 else
                         aux++;
 
+                jogo->jogador.atualStatus = 2;
+
                 if( aux == DIV_FPS_PER ){
                         aux = 0;
                         frame++;
                 }
 
-                jogo->jogador.atualFrame = frame;
+                jogo->spriteDef.atualFrame = frame;
 
                 if( frame == 2 ){
                         frame = 0;
                         flagTiro = 0;
-                        antStatus = jogo->jogador.atualStatus;
                 }
-
+                antStatus = jogo->jogador.atualStatus;
                 return;
         }
 
@@ -222,16 +360,47 @@ void AtualizaFrameJogador( Jogo *jogo )
 
         aux++;
 
-        if( aux == DIV_FPS_PER)
-        {
+        if( aux == DIV_FPS_PER){
                 aux = 0;
                 frame++;
-                jogo->jogador.atualFrame = frame;
-                if( frame == jogo->armasDef.QTD_FRAMES[ jogo->jogador.atualArma ][ jogo->jogador.atualStatus ] - 1 )
+                jogo->spriteDef.atualFrame = frame;
+                if( frame == jogo->spriteDef.QTD_FRAMES[ jogo->jogador.atualArma ][ jogo->jogador.atualStatus ] - 1 )
                                 frame = 0;
         }
 
         antStatus = jogo->jogador.atualStatus;
+}
+
+
+///
+void AtualizaFramePes( Jogo *jogo )
+{
+        static int aux = 0;
+        static int frame = 0;
+        static int antTipoMovimento = 0;
+
+
+        //Reniciar ciclo se alterar tipo de movimento
+        if( jogo->jogador.atualMovTipo != antTipoMovimento ){
+                aux = 0;
+                frame = 0;
+        }
+
+        aux++;
+
+        if( aux == DIV_FPS_PER){
+                aux = 0;
+                frame++;
+
+                if( frame == jogo->spriteDef.QTD_FRAMES_PES[ jogo->jogador.atualMovTipo ] )
+                        frame = 0;
+
+        }
+
+        //Atribuicao
+        jogo->spriteDef.atualFramePes = frame;
+
+        antTipoMovimento = jogo->jogador.atualMovTipo;
 }
 
 
@@ -251,8 +420,19 @@ void AtualizaAtirar( Jogo *jogo )
 }
 
 
+void AtualizaSrcPes( Jogo *jogo )
+{
+        jogo->spriteDef.SrcPes.width = jogo->Res.Pes[ jogo->jogador.atualMovTipo][0].width;
+        jogo->spriteDef.SrcPes.height = jogo->Res.Pes[ jogo->jogador.atualMovTipo][0].height;
 
 
+}
+
+void AtualizaSrcPer( Jogo *jogo )
+{
+        jogo->jogador.PosTela.width = jogo->Res.Per[ jogo->jogador.atualArma ][ jogo->jogador.atualStatus ][ 0 ].width;
+        jogo->jogador.PosTela.height = jogo->Res.Per[ jogo->jogador.atualArma ][ jogo->jogador.atualStatus ][ 0 ].height;
+}
 
 
 

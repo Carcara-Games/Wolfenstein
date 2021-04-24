@@ -9,5 +9,6 @@
         void DesenhaLevel( Jogo jogo);
         void PassagemPorta( void );
         void DesenhaDebug( Jogo jogo );
+        void DesenhaPes( Jogo jogo);
 
 #endif // __DESENHAJOGO_H_

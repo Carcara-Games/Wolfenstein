@@ -7,6 +7,7 @@
 #include "raylib.h"
 
 #include "structsgraficos.h"
+#include "definicoes.h"
 #include "inicializar.h"
 
 #include "logicamenu.h"
@@ -14,7 +15,6 @@
 
 #include "desenhamenu.h"
 #include "desenhajogo.h"
-#include "definicoes.h"
 
 ///Protótipos
 void NovoJogo( Jogo *jogo );
@@ -72,7 +72,7 @@ void NovoJogo( Jogo *jogo )
                                         AtualizaLevel( jogo );
                                         DesenhaLevel( *jogo );
                                 }
-                                jogo->Level++;
+                                jogo->atualLevel++;
                         }
                 }
         }

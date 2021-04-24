@@ -5,7 +5,8 @@
         #include "definicoes.h"
 
         typedef int BOOL;
-         typedef struct
+
+         typedef struct         //Um retangulo definido pelos limites( Facilita na funcao criar zonas )
          {
                 float esq;
                 float dir;
@@ -13,65 +14,93 @@
                 float sup;
          }RecLim;
 
-
         typedef struct
         {
+                ///Sprites do corpo do personagem com armas
                  int QTD_STATUS[QTD_ARMAS] ;  // QTD de status para cada arma
                 //[1°] codigo da arma :    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
 
                  int QTD_FRAMES[QTD_ARMAS][QTD_STATUS_MAX] ;  // QTD de iamgens disponiveis para status de cada arma
                 //[1°] codigo da arma :    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
                 //[2°] codigo do status :  repouso 0 , movimento 1 , atirando 2 , coronhada 3 , recarregando 4
+                int atualFrame;         //Frame atual do personagem
 
-        }ArmasDef;
+                ///Sprite dos pes do personagem
+                int QTD_FRAMES_PES[ QTD_STATUS_PES ];   // Quantidade de frames para pes de cada status
+                //[1°] codigo do status :  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
+                int atualFramePes;      //Frame atual dos pes
+
+                ///
+                Rectangle Src;          //Retangulo de extracao da textura com as dimensoes da mesma do personagem
+                Rectangle SrcPes;          //Retangulo de extracao da textura com as dimensoes da mesma do pes do personagem
+                Vector2 Origin;         // O deslocamento entre a quina superior esquerda da textura PersonagemPrincipal e o centro de rotacao
+                Vector2 OriginPes;
+
+
+        }SpriteDef;
 
         typedef struct
         {
+                ///Menus
                 Texture2D MenuFundo;    // Imagem do plano de fundo principal
+                Texture2D TelaDeFundo;  //Tela de fundo somente cores
+                Texture2D FundoConfirmarSair;  //Janela de fundo da confirmacao de saida
                 Texture2D Logo;    // Imagem de fundo (Logo)
                 Font fonteWolfen;  // Fonte Estilizada Wolfenstein
                 Font fonteWolfen2;  // Fonte Estilizada Wolfenstein 2
-                Texture2D TelaDeFundo;  //Tela de fundo somente cores
-                Texture2D FundoConfirmarSair;  //Janela de fundo da confirmacao de saida
-                Texture2D FundoLevel1;
+
+                ///Mapa
                 Texture2D Mapa;  // Imagem do mapa
+
+                ///Objetos do Jogo
                 Texture2D Portas;  // Imagem das portas
 
+                ///Imagens do Personagem
                 Texture2D Per[ QTD_ARMAS ][ QTD_STATUS_MAX ][100];  // Personagem [1°][2°][3°]
                 //[1°] codigo da arma atual:    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
                 //[2°] codigo do status atual:  repouso 0 , movimento 1 , atirando 2 , coronhada 3 , recarregando 4
                 //[3°] codigo do frame atual
 
-                Texture2D Pes[5][100];  // Pernas e pes do Personagem [1°][2°]
-                //[1°] codigo do status atual:  repouso 0 , movimento 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
-                //[3°] codigo do frame atual
+                ///Imagens dos pes/pernas do personagem
+                Texture2D Pes[ QTD_STATUS_PES ][ 100 ];  // Pernas e pes do Personagem [1°][2°]
+                //[1°] codigo do status atual:  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
+                //[2°] codigo do frame atual
 
         }Recursos;
 
 
         typedef struct
         {
-                int KitMedicoP;  //Cura metade da saude
-                int KitMedicoG;  //Cura saude completamente
-                int vidaUp;  //Aumenta em 1 a quantidade de vidas
-                int XP;
-                int MunPistola;
-                int MunEspingarda;
+                Vector2 pos;            // Posicao
+                float Rotac;            // Angulo de rotacao
 
-                Vector2 pos;
-                float Rotac;
+                int QtdItens;                                          // A quantidade de itens que o bau fornecera. Por isso e a quantidade de elementos do array CodItens
+                int CodItens[ QTD_DROP_MAX_BAUS ];       // Codigo definidos randomicamente na criacao do bau que estabelecerao os itens fornecidos
+
                 unsigned ABERTO : 1;
         }Bau;
 
         typedef struct
         {
-                Vector2 pos;
-                float rotac;
-                unsigned DESTRANCADA : 1;
-                Vector2 entrada;
-                Vector2 destino;
-                int alteraPSala;
+                Vector2 pos;            // Posicao de desenho
+                Vector2 entrada;        // Ponto de entrada
+                Vector2 destino;        //Ponto de destino
+
+                int alteraPSala;        // Sala de destino
+                float rotac;            // Angulo de rotacao
+
+                unsigned DESTRANCADA : 1;       // Se esta destrancada == 1 , se nao == 0
         }Porta;
+
+        typedef struct
+        {
+                Vector2 pos;            // Posicao
+                float rotac;            // Angulo de rotacao
+
+                int inimigoTipo;        // Tipo de inimigo que ele spawna
+
+                unsigned ATIVO : 1;       // Se esta ativo == 1 , se nao == 0
+        }Spawn;
 
         typedef struct
         {
@@ -81,9 +110,10 @@
 
         typedef struct
         {
-                RecLim LimCam;  // Limites de deslocamento da camera aerea
-                RecLim zonas[20];    //Zonas da sala, por onde o jogador se locomove
+                RecLim LimCam;  // Limites de deslocamento da camera aerea na sala
+
                 int qtdZonas;
+                RecLim zonas[20];    //Zonas da sala, por onde o jogador se locomove
 
                 int qtdBaus;  // Quantidade de baus
                 Bau baus[ 3 ];
@@ -91,40 +121,36 @@
                 int qtdPortas;  // Quantidade de portas iterativas para o jogador
                 Porta portas[ 10 ];
 
-                int qtdSpawnsT1;  //Quantidade de portas ou outro marco de onde brotam inimigos tipos 1
-                int qtdSpawnsT2;  //Quantidade de portas ou outro marco de onde brotam inimigos tipos 2
-                int qtdInimT1;  // Quantidade de inimigos tipo 1 que precisarao ser abatidos para que algum inimigo drope uma uma chave
-                int qtdInimT2;  // Quantidade de inimigos tipo 2 que precisarao ser abatidos para que algum inimigo drope uma uma chave
+                int qtdSpawns;  //Quantidade de portas ou outro marco de onde brotam inimigos tipos 1
+                Spawn spawns[ 10 ];
         }Sala;
 
         typedef struct
         {
                 char *nome;
-                Rectangle PosTela;              //Posicionamento do jogador na tela
-                Vector2 Origin;                 //Centro de rotacao na tela do personagem ?????porque nao funciona como o esperado?
-                float Rotac;
-                float mousex;
-                float mousey;
-
-                Rectangle Src;          //Retangulo de extracao da textura com as dimensoes da mesma
-
                 Vector2 PosMundo;          //Posicionamento do jogador no mundo
-                unsigned FACA : 1;
-                unsigned PISTOLA : 1;
-                unsigned SMG : 1;
-                int PistolaMun;
-                int RifleMun;
-                int pontos;  //Pontuacao do jogador
-                int vidas;  //Vidas gerais. Cada vez que saude zera perde uma vida.
-                int saude;  //Pontos de saude. Quantidade a definir.
-                int missaoCumprida;
+                Rectangle PosTela;              //Posicionamento do jogador na tela
+                Rectangle PosTelaPes;              //Posicionamento do pes dp jogador na tela
+                float Rotac;    //Rotacao
+
+                Vector2 posMouse;   // Posicao do mouse
+
+                BOOL armasDisp[ QTD_ARMAS ];            //Se o jogador ja tem determinada arma
+                int municao[ QTD_ARMAS ];               //A quantidade de municao de cada tipo de arma
+
+                int pontos;             //Pontuacao do jogador
+                int saude;              //Pontos de saude.
+                int vidas;               //Vidas gerais. Cada vez que saude zera perde uma vida.
+
                 unsigned VIVO : 1;
 
                 int atualArma;
                 int atualStatus;
-                int atualFrame;
+                int atualMovTipo;
 
-                int pesatualStatus;
+                int testeFlagTiro;      //excluir depois no final
+
+
         }Jogador;
 
         typedef struct
@@ -135,9 +161,9 @@
                 Jogador jogador;
 
                 DadosLevel dadosLevel;
-                int Level;
-
+                int atualLevel;
                 int atualSala;
+
                 Sala salas[ QTDSALAS ];
                 Rectangle tela;
 
@@ -147,7 +173,7 @@
                 Recursos Res;  //Recursos do jogo
 
                 unsigned PASSAGEM : 1;        //Indica se esta atravessando alguma porta
-                ArmasDef armasDef;
+                SpriteDef spriteDef;
         }Jogo;
 
         typedef struct  //Tipo um tem 1 ponto de saude
@@ -164,10 +190,6 @@
                 float px;
                 float py;
                 float Rotac;
-                int saude;  // T2 comeca com 2 de pontos de saude
-                int dropXP;  // Quantidade de Xp que o jogador ganha ao eliminar o inimigo
-                int dropMun;  // Quantidade de municao que o jogador ganha ao eliminar o inimigo
-                int dropMunTipo;  // Tipo de municao que o jogador ganha ao eliminar o inimigo
                 unsigned VIVO : 1;
 
         }InimT2;
@@ -187,3 +209,25 @@
 
 
 #endif // __STRUCTSGRAFICOS_H_
+
+/*
+                int KitMedicoP;  //Cura metade da saude
+                int KitMedicoG;  //Cura saude completamente
+                int vidaUp;  //Aumenta em 1 a quantidade de vidas
+                int XP;
+                int MunPistola;
+                int MunEspingarda;
+
+
+                                int saude;  // T2 comeca com 2 de pontos de saude
+                int dropXP;  // Quantidade de Xp que o jogador ganha ao eliminar o inimigo
+                int dropMun;  // Quantidade de municao que o jogador ganha ao eliminar o inimigo
+                int dropMunTipo;  // Tipo de municao que o jogador ganha ao eliminar o inimigo
+
+                                int qtdSpawnsT2;  //Quantidade de portas ou outro marco de onde brotam inimigos tipos 2
+                int qtdInimT1;  // Quantidade de inimigos tipo 1 que precisarao ser abatidos para que algum inimigo drope uma uma chave
+                int qtdInimT2;  // Quantidade de inimigos tipo 2 que precisarao ser abatidos para que algum inimigo drope uma uma chave
+
+
+
+*/

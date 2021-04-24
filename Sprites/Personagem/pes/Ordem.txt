@@ -1,0 +1,5 @@
+0	repouso
+1	andando
+2	correndo
+3	lateralEsquerda
+4	lateralDireita

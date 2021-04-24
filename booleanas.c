@@ -22,7 +22,7 @@ BOOL IsGameOver( Jogo jogo )
 
 BOOL IsEndGame( Jogo jogo )
 {
-        if( jogo.Level > MAXLEVEL )
+        if( jogo.atualLevel > MAXLEVEL )
         {
                 return SIM;
         }

@@ -15,7 +15,6 @@ void IniciarJanela( void )
         SetTargetFPS( FPS );
         ToggleFullscreen();
         SetExitKey( EXITKEY );
-//        DisableCursor(); Its a Top Down Shooter game, so I will need my mouse
 }
 
 
@@ -38,27 +37,30 @@ Jogo IniciaJogo( void )
 
         jogo.FECHAR = 0;
 
+        ///Pes
+        CarregarPes( &jogo );
+
         ///Personagem com armas e status
         //Inicial
         jogo.jogador.atualArma = 0;
         jogo.jogador.atualStatus = 0;
-        jogo.jogador.atualFrame = 0;
+        jogo.spriteDef.atualFrame = 0;
 
 
 
         //Qtd status
-        jogo.armasDef.QTD_STATUS[ 0 ] = 5;      //pistola
+        jogo.spriteDef.QTD_STATUS[ 0 ] = 5;      //pistola
 
         //Qtd Frames
         //Pistola
-        jogo.armasDef.QTD_FRAMES[ 0 ][ 0 ] = 20;
-        jogo.armasDef.QTD_FRAMES[ 0 ][ 1 ] = 20;
-        jogo.armasDef.QTD_FRAMES[ 0 ][ 2 ] = 3;
-        jogo.armasDef.QTD_FRAMES[ 0 ][ 3 ] = 16;
-        jogo.armasDef.QTD_FRAMES[ 0 ][ 4 ] = 15;
+        jogo.spriteDef.QTD_FRAMES[ 0 ][ 0 ] = 20;
+        jogo.spriteDef.QTD_FRAMES[ 0 ][ 1 ] = 20;
+        jogo.spriteDef.QTD_FRAMES[ 0 ][ 2 ] = 3;
+        jogo.spriteDef.QTD_FRAMES[ 0 ][ 3 ] = 16;
+        jogo.spriteDef.QTD_FRAMES[ 0 ][ 4 ] = 15;
 
 
-//        jogo->armasDef.QTD_STATUS[ 1 ] = 5;
+//        jogo->spriteDef.QTD_STATUS[ 1 ] = 5;
         CarregarPersonagemImagens( &jogo);
 
         //Tela
@@ -68,22 +70,35 @@ Jogo IniciaJogo( void )
         jogo.tela.height = GetScreenHeight();
 
         //Posição Jogador Tela
+        ///Per
         jogo.jogador.PosTela.width =  130;
         jogo.jogador.PosTela.height =  115;
-        jogo.jogador.PosTela.x =  ( jogo.tela.width - jogo.jogador.PosTela.width) / 2;
-        jogo.jogador.PosTela.y =  ( jogo.tela.height  -  jogo.jogador.PosTela.height ) / 2;
+//        jogo.jogador.PosTela.x =  ( jogo.tela.width - jogo.jogador.PosTela.width) / 2;
+//        jogo.jogador.PosTela.y =  ( jogo.tela.height  -  jogo.jogador.PosTela.height ) / 2;
+        jogo.jogador.PosTela.x =  jogo.tela.width / 2;
+        jogo.jogador.PosTela.y =  jogo.tela.height / 2;
 
-//        jogo.jogador.Origin.x = jogo.jogador.PosTela.x + jogo.jogador.PosTela.width / 2;
-//        jogo.jogador.Origin.y = jogo.jogador.PosTela.y + jogo.jogador.PosTela.height / 2;
-        jogo.jogador.Origin.x = 0;
-        jogo.jogador.Origin.y = 0;
+        ///Pes
+        jogo.jogador.PosTelaPes.width =  2 * jogo.jogador.PosTela.width / 3;
+        jogo.jogador.PosTelaPes.height =  2 * jogo.jogador.PosTela.height / 3;
+
+//        jogo.jogador.PosTelaPes.width =  jogo.jogador.PosTela.width * 132 / 253.0;
+//        jogo.jogador.PosTelaPes.height =  jogo.jogador.PosTela.height * 155 / 216.0;
+        jogo.jogador.PosTelaPes.x =  jogo.jogador.PosTela.x;
+        jogo.jogador.PosTelaPes.y =  jogo.jogador.PosTela.y;
+
+        //Origin
+        jogo.spriteDef.Origin.x = 0;
+        jogo.spriteDef.Origin.y = 0;
+
+        jogo.spriteDef.OriginPes.x = 0;
+        jogo.spriteDef.OriginPes.y = 0;
 
         //Posicao Jogador Mundo
         jogo.jogador.PosMundo.x = 102;
         jogo.jogador.PosMundo.y = 603;
 
         //Ajuste do Mapa do Jogo
-
         jogo.MapaTamanho.x = jogo.Res.Mapa.width;
         jogo.MapaTamanho.y = jogo.Res.Mapa.height;
 
@@ -198,15 +213,15 @@ void CriaZonas( Jogo *jogo)
 
                 { //sala 03
                         { 381 , 612 , 432 ,  732 } ,    //z0
-                        { 396 , 732 , 414 , 744 } ,     //p1
-                        { 396 , 603 , 417 , 609 }       //p2
+                        { 396 , 732 , 414 , 754 } ,     //p1
+                        { 396 , 593 , 417 , 629 }       //p2
                 },
 
 
                 { //sala 04
                         { 267 , 327 , 543 ,  507 } ,    //z0
-                        { 396 , 507 , 414 , 520 } ,     //p1
-                        { 546 , 408 , 558 , 426 }       //p2
+                        { 396 , 497 , 414 , 520 } ,     //p1
+                        { 526 , 408 , 568 , 426 }       //p2
                 },
 
                 { //sala 05
@@ -214,19 +229,19 @@ void CriaZonas( Jogo *jogo)
                         { 717 , 231 , 771 , 390 } ,     //z1
                         { 771 , 231 , 960 , 282 } ,      //z3
                         { 960 , 246 , 975 , 267} ,     //p1
-                        { 639 , 408 , 654 , 426 }    //p2
+                        { 619 , 408 , 674 , 426 }    //p2
                 },
 
                 { //sala 06
                         { 1065 , 171 , 1460 ,  342 } ,    //z0
                         { 1056 , 246 , 1071 , 267 } ,     //p1
                         { 1456 , 249 , 1477 , 273 } ,     //p2
-                        { 1251 , 339 , 1275 , 354 }       //p3
+                        { 1251 , 299 , 1275 , 374 }       //p3
                 },
 
                 { //sala 07
                         { 1560 , 231 , 1617 ,  285 } ,    //z0
-                        { 1539 , 249 , 1557 , 267 }      //p1
+                        { 1519 , 249 , 1577 , 267 }      //p1
                 },
 
                 { //sala 08
@@ -356,7 +371,7 @@ void CriaPortas( Jogo *jogo)
 
                 { //sala 04
                         { 405 , 522 },    //p1
-                        { 561 , 417 }      //p2
+                        { 557 , 417 }      //p2
                 },
 
                 { //sala 05
@@ -455,7 +470,7 @@ void CriaPortas( Jogo *jogo)
 
                 { //sala 04
                         { 405 , 522 },    //p1
-                        { 561 , 417 }      //p2
+                        { 556 , 417 }      //p2
                 },
 
                 { //sala 05
@@ -701,8 +716,8 @@ void CarregarPersonagemImagens( Jogo *jogo )
         char arquivo[100];
 
         for( arma = 0 ; arma < QTD_ARMAS ; arma++ )
-                for( status = 0 ;status < jogo->armasDef.QTD_STATUS[ arma ] ; status++ )
-                        for( frame = 0 ; frame < jogo->armasDef.QTD_FRAMES[ arma ][ status ] ; frame++ )
+                for( status = 0 ;status < jogo->spriteDef.QTD_STATUS[ arma ] ; status++ )
+                        for( frame = 0 ; frame < jogo->spriteDef.QTD_FRAMES[ arma ][ status ] ; frame++ )
                         {
                                 TextCopy( arquivo , comum );
                                 strcat( arquivo , pasta[arma] );
@@ -717,10 +732,54 @@ void CarregarPersonagemImagens( Jogo *jogo )
                         }
 
         //Jogador extracao de textura
-        jogo->jogador.Src.height = jogo->Res.Per[0][0][0].height;
-        jogo->jogador.Src.width = jogo->Res.Per[0][0][0].width;
-        jogo->jogador.Src.x = 0;
-        jogo->jogador.Src.y = 0;
+        jogo->spriteDef.Src.height = jogo->Res.Per[0][0][0].height;
+        jogo->spriteDef.Src.width = jogo->Res.Per[0][0][0].width;
+        jogo->spriteDef.Src.x = 0;
+        jogo->spriteDef.Src.y = 0;
+}
+
+///
+void CarregarPes( Jogo *jogo )
+{
+        jogo->spriteDef.QTD_FRAMES_PES[ 0 ] = 1;
+        jogo->spriteDef.QTD_FRAMES_PES[ 1 ] = 20;
+        jogo->spriteDef.QTD_FRAMES_PES[ 2 ] = 20;
+        jogo->spriteDef.QTD_FRAMES_PES[ 3 ] = 20;
+        jogo->spriteDef.QTD_FRAMES_PES[ 4 ] = 20;
+
+        int status , frame;
+        char nmr[10];
+        const char comum[] = "Sprites/Personagem/Pes/";
+        char pasta[][100] = {
+                "repouso/",
+                "andando/",
+                "correndo/",
+                "lateralEsquerda/",
+                "lateralDireita/"
+        };
+
+        char fim[] = ".png";
+        char arquivo[100];
+
+                for( status = 0 ; status < QTD_STATUS_PES ; status++ )
+                        for( frame = 0 ; frame < jogo->spriteDef.QTD_FRAMES_PES[ status ] ; frame++ )
+                        {
+                                TextCopy( arquivo , comum );
+                                strcat( arquivo , pasta[status] );
+
+                                IntParaString( frame , nmr );
+                                strcat( arquivo , nmr );
+
+                                strcat( arquivo , fim );
+
+                                jogo->Res.Pes[status][frame] = LoadTexture( arquivo );
+                        }
+
+        //Jogador extracao de textura
+        jogo->spriteDef.SrcPes.height = jogo->Res.Pes[0][0].height;
+        jogo->spriteDef.SrcPes.width = jogo->Res.Pes[0][0].width;
+        jogo->spriteDef.SrcPes.x = 0;
+        jogo->spriteDef.SrcPes.y = 0;
 }
 
 

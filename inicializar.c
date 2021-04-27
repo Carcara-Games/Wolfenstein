@@ -28,6 +28,13 @@ Jogo IniciaJogo( void )
         Jogo jogo;
         jogo.FECHAR = 0;
 
+        ///SPAWN
+//        inicializarSpawns();
+//
+      ///BAUS
+//        inicializarBaus();
+
+
         ///Armas iniciais e Status iniciais
         //Inicial
         jogo.jogador.atualArma = 0;
@@ -633,6 +640,35 @@ void InverteStr( char *str )
                 str[ i ] =  str[ j ];
                 str[ j] =  temp;
         }
-
-
 }
+
+
+
+void inicializarSpawns(){
+//        int sala;
+//
+//        for( sala = 0 ; sala < QTDSALAS ; sala++ ){
+//
+//
+//
+//        }
+//
+//
+//
+}
+
+
+void inicializarBaus( Jogo *jogo ){}
+//        int sala;
+//
+//        for( sala = 0 ; sala < QTDSALAS ; sala++ ){
+//
+//
+//
+//        }
+//
+//
+//
+}
+
+

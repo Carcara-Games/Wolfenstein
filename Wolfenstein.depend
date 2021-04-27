@@ -70,17 +70,17 @@
 	"structsgraficos.h"
 	"definicoes.h"
 
-1619290861 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\structsgraficos.h
+1619559991 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\structsgraficos.h
 	"raylib.h"
 	"definicoes.h"
 
-1619292113 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\definicoes.h
+1619309752 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\definicoes.h
 	<math.h>
 	<stdio.h>
 	<time.h>
 	<stdlib.h>
 
-1619294606 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhajogo.c
+1619309752 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhajogo.c
 	"desenhajogo.h"
 	"definicoes.h"
 
@@ -108,7 +108,7 @@
 	"structsgraficos.h"
 	"definicoes.h"
 
-1619292077 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.c
+1619559950 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.c
 	"logicajogo.h"
 	"definicoes.h"
 	<math.h>
@@ -119,7 +119,7 @@
 1618973042 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicamenu.c
 	"logicamenu.h"
 
-1619272329 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\main.c
+1619559950 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\main.c
 	"raylib.h"
 	"OpcoesDoMenu.h"
 

@@ -20,7 +20,7 @@ void IniciarJanela( void )
 }
 
 
-/** Função  IniciaJogo() :
+/** Funï¿½ï¿½o  IniciaJogo() :
     */
 
 Jogo IniciaJogo( void )
@@ -124,7 +124,7 @@ Jogo IniciaJogo( void )
 
 
 
-/** Função  carregarTexturasFontes() :
+/** Funï¿½ï¿½o  carregarTexturasFontes() :
     */
 
 void carregarTexturasFontes( Jogo *jogo )
@@ -159,7 +159,7 @@ void CarregarLevel( Jogo *jogo)
 //        switch( jogo->Level )
         {
 //                case 1:
-                        // Definindo Informações do level
+                        // Definindo Informaï¿½ï¿½es do level
 //                        jogo->dadosLevel.TERMINADO = 0 ;
 //                        jogo->dadosLevel.qtdBaus = 1 ;//alet md
 //                        jogo->dadosLevel.qtdInimT1 = 1 ;//alet md
@@ -167,7 +167,7 @@ void CarregarLevel( Jogo *jogo)
 //                        jogo->dadosLevel.qtdPortas = 1 ;//alet md
 //                        jogo->dadosLevel.qtdSpawnsT1 = 2 ;//alet md
 
-                        // Definindo Baús
+                        // Definindo Baï¿½s
 //                        jogo->dadosLevel.baus = (Bau *)malloc( jogo->dadosLevel.qtdBaus * sizeof( Bau) );  // Alocando dinamicamente array dos baus
 
                         //Itens
@@ -197,7 +197,7 @@ void CarregarLevel( Jogo *jogo)
 
 
 
-/**     Função CriaSalas() : Crias as salas do jogo , definindo posição de portas e de baús , limites de vizualização ,  etc
+/**     Funï¿½ï¿½o CriaSalas() : Crias as salas do jogo , definindo posiï¿½ï¿½o de portas e de baï¿½s , limites de vizualizaï¿½ï¿½o ,  etc
    */
 
 void CriaSalas( Jogo *jogo)
@@ -208,7 +208,7 @@ void CriaSalas( Jogo *jogo)
 }
 
 
-/**     Função CriaZonas() : Crias as zonas da sala , definindo limites de deslocamento
+/**     Funï¿½ï¿½o CriaZonas() : Crias as zonas da sala , definindo limites de deslocamento
    */
 
 void CriaZonas( Jogo *jogo)
@@ -339,7 +339,7 @@ void CriaZonas( Jogo *jogo)
 
 
 
-/**     Função CriaPortas() : Crias as portas da sala , definindo posicao de entrada e posicao de destino
+/**     Funï¿½ï¿½o CriaPortas() : Crias as portas da sala , definindo posicao de entrada e posicao de destino
    *                    obs: Portas se comportam como teleportes - alteram posicao do jogado e eventualmente atualSala
    */
 

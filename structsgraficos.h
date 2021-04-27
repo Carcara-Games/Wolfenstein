@@ -173,15 +173,16 @@
                 SpriteDef spriteDef;
         }Jogo;
 
-//        typedef struct  //Tipo um tem 1 ponto de saude
-//        {
-//                float px;
-//                float py;
-//                float Rotac;
-//                int dropXP;  // Quantidade de Xp que o jogador ganha ao eliminar o inimigo
-//                unsigned VIVO : 1;
-//        }InimT1;
-//
+        typedef struct  //Tipo um tem 1 ponto de saude
+        {
+                Vector2 pos;    //posicao
+                float Rotac;
+
+                int codItem;  // Codigo do item
+
+                unsigned VIVO : 1;
+        }InimT1;
+
 //        typedef struct
 //        {
 //                float px;

@@ -25,7 +25,7 @@ int main()
                 AtualizaMenu( &selecaoMenu , 7 );   // Retorna opção que jogador apertou enter. 7 é o número de opções do menu principal
 
                 if (IsKeyPressed(KEY_ENTER))
-                        opcao[ selecaoMenu]( &jogo);
+                        opcao[ selecaoMenu ]( &jogo);
         }
 //        DesenharObrigado();
         CloseWindow();

@@ -11,6 +11,7 @@ void AtualizaLevel( Jogo *jogo)
 
         AtualizaMira( jogo );
 
+
 //        AtualizaTiros( &jogo );
 //        AtualizaRecarga( &jogo );
 
@@ -29,7 +30,7 @@ void AtualizaLevel( Jogo *jogo)
         AtualizaFramePes( jogo );
 
 //        AtualizaObjetos( &jogo );
-//        AtualizaInimigosT1( &jogo );
+//        AtualizaInimigosT1( &jogo );####
 
 }
 //##############################################################################
@@ -330,6 +331,7 @@ void AtualizaFrameJogador( Jogo *jogo )
         //Teste Para Debug
         jogo->jogador.testeFlagTiro = flagTiro;
 
+        //melhorar depois
         //Caso atire e preciso terminar o ciclo dos frames
         if( jogo->jogador.atualStatus == 2    ||   flagTiro ){
                 if(  !flagTiro  ){
@@ -365,7 +367,7 @@ void AtualizaFrameJogador( Jogo *jogo )
 
         aux++;
 
-        if( aux == DIV_FPS_PER){
+        if( aux == DIV_FPS_PER ){
                 aux = 0;
                 frame++;
                 jogo->spriteDef.atualFrame = frame;
@@ -440,7 +442,12 @@ void AtualizaSrcPer( Jogo *jogo )
 }
 
 
+void AtualizaInimigosT1( Jogo *jogo ){
 
+
+
+
+}
 
 
 

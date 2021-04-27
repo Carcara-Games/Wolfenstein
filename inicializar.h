@@ -16,6 +16,8 @@
         void IntParaString( int nmr , char *str );
         void InverteStr( char *str );
         void CarregarPes( Jogo *jogo );
+        void inicializarSpawns( Jogo *jogo );
+        void inicializarBaus( Jogo *jogo );
 
 
 #endif // __INICIALIZAR_H_

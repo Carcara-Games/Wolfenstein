@@ -663,8 +663,8 @@ void InverteStr(char *str)
 void inicializarSpawns(Jogo *jogo)
 {
         int salas[QTD_SALAS_SPAWN] = {0, 2, 4, 5, 6, 8, 10, 12, 13};
-        int locais[7][2] =
-            {
+        int locais[QTD_SALAS_SPAWN][7][2] =
+        {
                 {// sala 0
                  {148, 978},
                  {230, 1240},
@@ -712,8 +712,7 @@ void inicializarSpawns(Jogo *jogo)
                 {// sala 13
                  {2150, 1515},
                  {2350, 1515}}
-
-            };
+        };
 
         for (int i = 0; i < QTD_SALAS_SPAWN; i++)
         {

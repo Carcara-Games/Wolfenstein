@@ -48,6 +48,7 @@
         ///SALAS
         #define QTDSALAS 16
         #define QTD_ZONAS_MAX 10
+        #define QTD_SALAS_SPAWN 9
 
 
 

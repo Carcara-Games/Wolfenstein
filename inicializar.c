@@ -2,38 +2,35 @@
 #include "inicializar.h"
 #include "definicoes.h"
 
-
 /**     Funcao IniciarJanela() : Inicia janela do jogo
     */
 
-void IniciarJanela( void )
+void IniciarJanela(void)
 {
         ///Resolucao do Usuario
         int TelaLargura = GetMonitorWidth(0);
-        int TelaAltura = GetMonitorHeight (0);
+        int TelaAltura = GetMonitorHeight(0);
 
         ///Confuguracao de Janela
-        InitWindow( TelaLargura , TelaAltura , "WOLFENSTEIN" );
-        SetTargetFPS( FPS );
+        InitWindow(TelaLargura, TelaAltura, "WOLFENSTEIN");
+        SetTargetFPS(FPS);
         ToggleFullscreen();
-        SetExitKey( EXITKEY );
+        SetExitKey(EXITKEY);
 }
-
 
 /** Fun��o  IniciaJogo() :
     */
 
-Jogo IniciaJogo( void )
+Jogo IniciaJogo(void)
 {
         Jogo jogo;
         jogo.FECHAR = 0;
 
         ///SPAWN
-//        inicializarSpawns();
-//
-      ///BAUS
-//        inicializarBaus();
-
+        //        inicializarSpawns();
+        //
+        ///BAUS
+        //        inicializarBaus();
 
         ///Armas iniciais e Status iniciais
         //Inicial
@@ -42,84 +39,89 @@ Jogo IniciaJogo( void )
         jogo.spriteDef.atualFrame = 0;
 
         ///QTD de status para cada arma
-        jogo.spriteDef.QTD_STATUS[ 0 ] = 5;      //pistola
-        jogo.spriteDef.QTD_STATUS[ 0 ] = 5;      //SMG
+        jogo.spriteDef.QTD_STATUS[0] = 5; //pistola
+        jogo.spriteDef.QTD_STATUS[0] = 5; //SMG
 
-                //Qtd de Frames para cada status de cada arma
-                        //Pistola
-        jogo.spriteDef.QTD_FRAMES[ 0 ][ 0 ] = 20;
-        jogo.spriteDef.QTD_FRAMES[ 0 ][ 1 ] = 20;
-        jogo.spriteDef.QTD_FRAMES[ 0 ][ 2 ] = 3;
-        jogo.spriteDef.QTD_FRAMES[ 0 ][ 3 ] = 15;
-        jogo.spriteDef.QTD_FRAMES[ 0 ][ 4 ] = 15;
+        //Qtd de Frames para cada status de cada arma
+        //Pistola
+        jogo.spriteDef.QTD_FRAMES[0][0] = 20;
+        jogo.spriteDef.QTD_FRAMES[0][1] = 20;
+        jogo.spriteDef.QTD_FRAMES[0][2] = 3;
+        jogo.spriteDef.QTD_FRAMES[0][3] = 15;
+        jogo.spriteDef.QTD_FRAMES[0][4] = 15;
 
         ///QTD de Frame para cada tipo de movimento
-        jogo.spriteDef.QTD_FRAMES_PES[ 0 ] = 1;        //Repouso
-        jogo.spriteDef.QTD_FRAMES_PES[ 1 ] = 20;       //Andando
-        jogo.spriteDef.QTD_FRAMES_PES[ 2 ] = 20;       //Correndo
-        jogo.spriteDef.QTD_FRAMES_PES[ 3 ] = 20;       //Movimento lateral para a esquerda
-        jogo.spriteDef.QTD_FRAMES_PES[ 4 ] = 20;       //Movimento lateral para a direita
+        jogo.spriteDef.QTD_FRAMES_PES[0] = 1;  //Repouso
+        jogo.spriteDef.QTD_FRAMES_PES[1] = 20; //Andando
+        jogo.spriteDef.QTD_FRAMES_PES[2] = 20; //Correndo
+        jogo.spriteDef.QTD_FRAMES_PES[3] = 20; //Movimento lateral para a esquerda
+        jogo.spriteDef.QTD_FRAMES_PES[4] = 20; //Movimento lateral para a direita
 
         ///Carregar Texturas e Fontes
-        carregarTexturasFontes( &jogo );
+        carregarTexturasFontes(&jogo);
 
         ///Tela
         jogo.tela.x = 0;
         jogo.tela.y = 0;
 
-        if( GetScreenWidth() / (float)GetScreenHeight() == REF_TELA_LARG / (float)REF_TELA_ALT ){
-                        jogo.tela.width = REF_TELA_LARG;        // A tela deve ficar cheia em largura
-                        jogo.tela.height = REF_TELA_ALT;        // A altura deve ser regulada para manter a proporcao
-                        jogo.regulagemTela = 0;
-        }else{
-                if( GetScreenWidth() / (float)GetScreenHeight() > REF_TELA_LARG / (float)REF_TELA_ALT ){         //A largura e proporionalmente maior
-                        jogo.tela.width = GetScreenWidth();        // A tela deve ficar cheia em largura
-                        jogo.tela.height = REF_TELA_ALT * jogo.tela.width / REF_TELA_LARG ;        // A altura deve ser regulada para manter a proporcao
+        if (GetScreenWidth() / (float)GetScreenHeight() == REF_TELA_LARG / (float)REF_TELA_ALT)
+        {
+                jogo.tela.width = REF_TELA_LARG; // A tela deve ficar cheia em largura
+                jogo.tela.height = REF_TELA_ALT; // A altura deve ser regulada para manter a proporcao
+                jogo.regulagemTela = 0;
+        }
+        else
+        {
+                if (GetScreenWidth() / (float)GetScreenHeight() > REF_TELA_LARG / (float)REF_TELA_ALT)
+                {                                                                          //A largura e proporionalmente maior
+                        jogo.tela.width = GetScreenWidth();                                // A tela deve ficar cheia em largura
+                        jogo.tela.height = REF_TELA_ALT * jogo.tela.width / REF_TELA_LARG; // A altura deve ser regulada para manter a proporcao
                         jogo.regulagemTela = 1;
-                }else{          // Nesse caso a altura e proporcionalmente maior
-                        jogo.tela.height = GetScreenHeight();        // A tela deve ficar cheia em altura
-                        jogo.tela.width =  REF_TELA_LARG * jogo.tela.height / REF_TELA_ALT ;        // A largura deve ser regulada para manter a proporcao
+                }
+                else
+                {                                                                          // Nesse caso a altura e proporcionalmente maior
+                        jogo.tela.height = GetScreenHeight();                              // A tela deve ficar cheia em altura
+                        jogo.tela.width = REF_TELA_LARG * jogo.tela.height / REF_TELA_ALT; // A largura deve ser regulada para manter a proporcao
                         jogo.regulagemTela = 2;
                 }
         }
 
-
         ///Posicao Jogador Tela
-                ///Per
-                jogo.jogador.PosTela.width =  LARG_PADRAO * jogo.tela.width / REF_TELA_LARG;
-                jogo.jogador.PosTela.height =  jogo.jogador.PosTela.width * ALT_PADRAO / LARG_PADRAO;   //Altura Dependente da largura
-                jogo.jogador.PosTela.x =  jogo.tela.width / 2;
-                jogo.jogador.PosTela.y =  jogo.tela.height / 2;
+        ///Per
+        jogo.jogador.PosTela.width = LARG_PADRAO * jogo.tela.width / REF_TELA_LARG;
+        jogo.jogador.PosTela.height = jogo.jogador.PosTela.width * ALT_PADRAO / LARG_PADRAO; //Altura Dependente da largura
+        jogo.jogador.PosTela.x = jogo.tela.width / 2;
+        jogo.jogador.PosTela.y = jogo.tela.height / 2;
         //        jogo.jogador.PosTela.x =  ( jogo.tela.width - jogo.jogador.PosTela.width) / 2;
         //        jogo.jogador.PosTela.y =  ( jogo.tela.height  -  jogo.jogador.PosTela.height ) / 2;
 
-                ///Pes
-                jogo.jogador.PosTelaPes.width =  ESC_PES * jogo.jogador.PosTela.width;
-                jogo.jogador.PosTelaPes.height =  ESC_PES* jogo.jogador.PosTela.height;
-                jogo.jogador.PosTelaPes.x =  jogo.jogador.PosTela.x;
-                jogo.jogador.PosTelaPes.y =  jogo.jogador.PosTela.y;
+        ///Pes
+        jogo.jogador.PosTelaPes.width = ESC_PES * jogo.jogador.PosTela.width;
+        jogo.jogador.PosTelaPes.height = ESC_PES * jogo.jogador.PosTela.height;
+        jogo.jogador.PosTelaPes.x = jogo.jogador.PosTela.x;
+        jogo.jogador.PosTelaPes.y = jogo.jogador.PosTela.y;
 
         ///Posicao Jogador No Mundo
         jogo.jogador.PosMundo.x = 102;
         jogo.jogador.PosMundo.y = 633;
 
         ///Ajuste do Mapa do Jogo
-                ///Tamanho Da Textura MAPA
-                jogo.MapaTamanho.x = jogo.Res.Mapa.width;
-                jogo.MapaTamanho.y = jogo.Res.Mapa.height;
+        ///Tamanho Da Textura MAPA
+        jogo.MapaTamanho.x = jogo.Res.Mapa.width;
+        jogo.MapaTamanho.y = jogo.Res.Mapa.height;
 
-                ///Area de Extracao ( FIXA )
-                jogo.MapaDesenho.width = PIXEL_LARGURA_MAPA;
-                jogo.MapaDesenho.height = PIXEL_ALTURA_MAPA;
+        ///Area de Extracao ( FIXA )
+        jogo.MapaDesenho.width = PIXEL_LARGURA_MAPA;
+        jogo.MapaDesenho.height = PIXEL_ALTURA_MAPA;
 
         ///Sala inicial
         jogo.atualSala = 0;
 
         ///Criar Salas e zonas
-        CriaSalas( &jogo );
+        CriaSalas(&jogo);
 
         ///Cria Portas
-        CriaPortas( &jogo );
+        CriaPortas(&jogo);
 
         ///Passagem de portas
         jogo.PASSAGEM = 0;
@@ -129,442 +131,459 @@ Jogo IniciaJogo( void )
 }
 //##############################################################################
 
-
-
 /** Fun��o  carregarTexturasFontes() :
     */
 
-void carregarTexturasFontes( Jogo *jogo )
+void carregarTexturasFontes(Jogo *jogo)
 {
         ///Texturas  Gerais
-        jogo->Res.Logo =  LoadTexture("Logo/Logo.png");   // Imagem de fundo (Logo)
-        jogo->Res.MenuFundo =  LoadTexture("Menu_Imagens/MenuPrincipal.png");   // Imagem do plano de fundo
-        jogo->Res.TelaDeFundo =  LoadTexture("Menu_Imagens/FundoLimpo.png");
-        jogo->Res.FundoConfirmarSair =    LoadTexture("Menu_Imagens/FundoConfirmarSair.png");
-        jogo->Res.Mapa =    LoadTexture("Mapa/Mapa.png");
-        jogo->Res.Portas =    LoadTexture("Mapa/Portas.png");
+        jogo->Res.Logo = LoadTexture("Logo/Logo.png");                       // Imagem de fundo (Logo)
+        jogo->Res.MenuFundo = LoadTexture("Menu_Imagens/MenuPrincipal.png"); // Imagem do plano de fundo
+        jogo->Res.TelaDeFundo = LoadTexture("Menu_Imagens/FundoLimpo.png");
+        jogo->Res.FundoConfirmarSair = LoadTexture("Menu_Imagens/FundoConfirmarSair.png");
+        jogo->Res.Mapa = LoadTexture("Mapa/Mapa.png");
+        jogo->Res.Portas = LoadTexture("Mapa/Portas.png");
 
         ///Fontes
-        jogo->Res.fonteWolfen =    LoadFontEx("Fontes/ReturnToCastle-MZnx.ttf"  ,96 , 0 , 0);
-        jogo->Res.fonteWolfen2 =    LoadFontEx("Fontes/wolfenstein.ttf"  ,96 , 0 , 0);
+        jogo->Res.fonteWolfen = LoadFontEx("Fontes/ReturnToCastle-MZnx.ttf", 96, 0, 0);
+        jogo->Res.fonteWolfen2 = LoadFontEx("Fontes/wolfenstein.ttf", 96, 0, 0);
 
         ///Sprites
-        CarregarPersonagemImagens( jogo);      //Jogador
-        CarregarPes( jogo );           //Pes do jogador
+        CarregarPersonagemImagens(jogo); //Jogador
+        CarregarPes(jogo);               //Pes do jogador
 }
 //##############################################################################
-
-
 
 /**     Funcao CarregarLevel(): Carrega os levels
     */
 
-void CarregarLevel( Jogo *jogo)
+void CarregarLevel(Jogo *jogo)
 {
-//        int i;
+        //        int i;
 
-//        switch( jogo->Level )
+        //        switch( jogo->Level )
         {
-//                case 1:
-                        // Definindo Informa��es do level
-//                        jogo->dadosLevel.TERMINADO = 0 ;
-//                        jogo->dadosLevel.qtdBaus = 1 ;//alet md
-//                        jogo->dadosLevel.qtdInimT1 = 1 ;//alet md
-//                        jogo->dadosLevel.qtdInimT2 = 0 ;//alet md
-//                        jogo->dadosLevel.qtdPortas = 1 ;//alet md
-//                        jogo->dadosLevel.qtdSpawnsT1 = 2 ;//alet md
+                //                case 1:
+                // Definindo Informa��es do level
+                //                        jogo->dadosLevel.TERMINADO = 0 ;
+                //                        jogo->dadosLevel.qtdBaus = 1 ;//alet md
+                //                        jogo->dadosLevel.qtdInimT1 = 1 ;//alet md
+                //                        jogo->dadosLevel.qtdInimT2 = 0 ;//alet md
+                //                        jogo->dadosLevel.qtdPortas = 1 ;//alet md
+                //                        jogo->dadosLevel.qtdSpawnsT1 = 2 ;//alet md
 
-                        // Definindo Ba�s
-//                        jogo->dadosLevel.baus = (Bau *)malloc( jogo->dadosLevel.qtdBaus * sizeof( Bau) );  // Alocando dinamicamente array dos baus
+                // Definindo Ba�s
+                //                        jogo->dadosLevel.baus = (Bau *)malloc( jogo->dadosLevel.qtdBaus * sizeof( Bau) );  // Alocando dinamicamente array dos baus
 
-                        //Itens
-//                        for( i = 0 ; i < jogo->dadosLevel.qtdBaus ; i++ )
-//                        {
-//                                jogo->dadosLevel.baus[ i ].ABERTO = 0 ;
-//                                jogo->dadosLevel.baus[ i ].KitMedicoP = 1;
-//                                jogo->dadosLevel.baus[ i ].KitMedicoG = 0;
-//                                jogo->dadosLevel.baus[ i ].MunEspingarda = 0;
-//                                jogo->dadosLevel.baus[ i ].MunGranada = 1;
-//                                jogo->dadosLevel.baus[ i ].MunPistola = GetRandomValue( 10 , 20) ;
-//                                jogo->dadosLevel.baus[ i ].MunRifle = 0;
-//                                jogo->dadosLevel.baus[ i ].vidaUp = 0 ;
-//                                jogo->dadosLevel.baus[ i ].XP = GetRandomValue( 10 , 100);
-//                        }
+                //Itens
+                //                        for( i = 0 ; i < jogo->dadosLevel.qtdBaus ; i++ )
+                //                        {
+                //                                jogo->dadosLevel.baus[ i ].ABERTO = 0 ;
+                //                                jogo->dadosLevel.baus[ i ].KitMedicoP = 1;
+                //                                jogo->dadosLevel.baus[ i ].KitMedicoG = 0;
+                //                                jogo->dadosLevel.baus[ i ].MunEspingarda = 0;
+                //                                jogo->dadosLevel.baus[ i ].MunGranada = 1;
+                //                                jogo->dadosLevel.baus[ i ].MunPistola = GetRandomValue( 10 , 20) ;
+                //                                jogo->dadosLevel.baus[ i ].MunRifle = 0;
+                //                                jogo->dadosLevel.baus[ i ].vidaUp = 0 ;
+                //                                jogo->dadosLevel.baus[ i ].XP = GetRandomValue( 10 , 100);
+                //                        }
 
-                        //Posicionamento
-//                        jogo->dadosLevel.baus->Rotac = 1 ;//alet md
-//                        jogo->dadosLevel.baus->px = 15 ;  //alet md
-//                        jogo->dadosLevel.baus->py = 15;  //alet md
-//                        break;;
-
+                //Posicionamento
+                //                        jogo->dadosLevel.baus->Rotac = 1 ;//alet md
+                //                        jogo->dadosLevel.baus->px = 15 ;  //alet md
+                //                        jogo->dadosLevel.baus->py = 15;  //alet md
+                //                        break;;
         }
-
 }
 //##############################################################################
-
-
 
 /**     Fun��o CriaSalas() : Crias as salas do jogo , definindo posi��o de portas e de ba�s , limites de vizualiza��o ,  etc
    */
 
-void CriaSalas( Jogo *jogo)
+void CriaSalas(Jogo *jogo)
 {
-        CriaZonas( jogo );
-//        CriaPortas( jogo );
-
+        CriaZonas(jogo);
+        //        CriaPortas( jogo );
 }
-
 
 /**     Fun��o CriaZonas() : Crias as zonas da sala , definindo limites de deslocamento
    */
 
-void CriaZonas( Jogo *jogo)
+void CriaZonas(Jogo *jogo)
 {
-        int i , j;
+        int i, j;
         /// Retangulos dos limites de deslocamento de cada zona de cada sala( 0-x , 1-y , 2-width , 3-height )
-        int limites[ QTDSALAS ][ QTD_ZONAS_MAX][ 4 ] = {
-                { //sala 00
-                        { 62 , 586 , 79 ,  878 } ,    //z0
-                        { 206 , 633 , 95 , 111 } ,     //z1
-                        { 62 , 665 , 239 , 47 } ,      //z2
-                        { 62 , 937 , 110 , 79 } ,     //z3
-                        { 206 , 1210 , 96 , 110 } ,    //z4
-                        { 62 , 1241 , 240 , 47 } ,   //z5
-                        { 62 , 1386 , 607 , 78 } ,   //z6
-                        { 367 , 1209 , 79 , 254 }     //z7
-                },
+        int limites[QTDSALAS][QTD_ZONAS_MAX][4] = {
+            {
+                //sala 00
+                {62, 586, 79, 878},   //z0
+                {206, 633, 95, 111},  //z1
+                {62, 665, 239, 47},   //z2
+                {62, 937, 110, 79},   //z3
+                {206, 1210, 96, 110}, //z4
+                {62, 1241, 240, 47},  //z5
+                {62, 1386, 607, 78},  //z6
+                {367, 1209, 79, 254}  //z7
+            },
 
-                { //sala 01
-                        { 750 , 1386 , 143 , 78 }    //z0
-                },
+            {
+                //sala 01
+                {750, 1386, 143, 78} //z0
+            },
 
-                { //sala 02
-                        { 255 , 826 , 303 , 303 }     //z0
-                },
+            {
+                //sala 02
+                {255, 826, 303, 303} //z0
+            },
 
-                { //sala 03
-                        { 366 , 601 , 80 ,  144 }     //z0
-                },
+            {
+                //sala 03
+                {366, 601, 80, 144} //z0
+            },
 
+            {
+                //sala 04
+                {255, 314, 303, 207} //z0
+            },
 
-                { //sala 04
-                        { 255 , 314 , 303 ,  207 }     //z0
-                },
+            {
+                //sala 05
+                {638, 378, 206, 79}, //z0
+                {702, 218, 78, 239}, //z1
+                {702, 218, 272, 78}  //z3
+            },
 
-                { //sala 05
-                        { 638 , 378 , 206 ,  79 } ,    //z0
-                        { 702 , 218 , 78 , 239 } ,     //z1
-                        { 702 , 218 , 272 , 78 }       //z3
-                },
+            {
+                //sala 06
+                {1055, 162, 413, 191} //z0
+            },
 
-                { //sala 06
-                        { 1055 , 162 , 413 ,  191 }     //z0
-                },
+            {
+                //sala 07
+                {1550, 217, 79, 80}, //z0
+            },
 
-                { //sala 07
-                        { 1550 , 217 , 79 ,  80 } ,    //z0
-                },
+            {
+                //sala 08
+                {1222, 434, 80, 431}, //z0
+                {1126, 610, 271, 46}  //z1
+            },
 
-                { //sala 08
-                        { 1222 , 434 , 80 ,  431 } ,    //z0
-                        { 1126 , 610 , 271 ,  46 }    //z1
-                },
+            {
+                //sala 09
+                {982, 610, 64, 191} //z0
+            },
 
-                { //sala 09
-                        { 982 , 610 , 64 ,  191 }    //z0
-                },
+            {
+                //sala 10
+                {965, 978, 592, 271},  //z0
+                {1172, 945, 177, 336}, //z1
+                {1311, 1073, 278, 80}  //z2
+            },
 
-                { //sala 10
-                        { 965 , 978 , 592 ,  271 } ,    //z0
-                        { 1172 , 945 , 177 ,  336 } ,    //z1
-                        { 1311 , 1073 , 278 ,  80 }     //z2
-                },
+            {
+                //sala 11
+                {1669, 1073, 368, 80}, //z0
+                {1765, 1120, 112, 65}, //z1
+                {1797, 1073, 48, 480}, //z2
+                {1797, 1473, 80, 80}   //z3
+            },
 
-                { //sala 11
-                        { 1669 , 1073 , 368 ,  80 } ,    //z0
-                        { 1765 , 1120 , 112 ,  65 } ,    //z1
-                        { 1797 , 1073 , 48 ,  480 } ,    //z2
-                        { 1797 , 1473 , 80 , 80 }       //z3
-                },
+            {
+                //sala 12
+                {2117, 961, 321, 320}, //z0
+                {2189, 1217, 48, 96},  //z1
+                {2317, 1222, 47, 91}   //z2
+            },
 
-                { //sala 12
-                        { 2117 , 961 , 321 ,  320 } ,    //z0
-                        { 2189 , 1217 , 48 ,  96 } ,    //z1
-                        { 2317 , 1222 , 47 ,  91 }     //z2
-                },
+            {
+                //sala 13
+                {1957, 1473, 448, 80}, //z0
+                {1989, 1441, 48, 144}, //z1
+                {2101, 1441, 48, 144}, //z2
+                {2213, 1441, 48, 144}, //z3
+                {2325, 1441, 48, 144}  //z4
+            },
 
-                { //sala 13
-                        { 1957 , 1473 , 448 ,  80 } ,    //z0
-                        { 1989 , 1441 , 48 ,  144 } ,    //z1
-                        { 2101 , 1441 , 48 ,  144 } ,    //z2
-                        { 2213 , 1441 , 48 ,  144 } ,    //z3
-                        { 2325 , 1441 , 48 ,  144 }    //z4
-                },
+            {
+                //sala 14
+                {1221, 1361, 80, 368} //z0
+            },
 
-                { //sala 14
-                        { 1221 , 1361 , 80 ,  368 }     //z0
-                },
-
-                { //sala 15
-                        { 1221 , 1809 , 80 ,  432 } ,    //z0
-                        { 1045 , 1841 , 112 , 61 } ,    //z1
-                        { 1365 , 1881 , 112 ,  72 } ,    //z2
-                        { 1045 , 2017 , 432 ,  80 } ,    //z3
-                        { 1045 , 2161 , 432 , 80 }    //z4
-                }
+            {
+                //sala 15
+                {1221, 1809, 80, 432}, //z0
+                {1045, 1841, 112, 61}, //z1
+                {1365, 1881, 112, 72}, //z2
+                {1045, 2017, 432, 80}, //z3
+                {1045, 2161, 432, 80}  //z4
+            }
 
         };
 
         //Quantidade de zonas de cada sala
-        jogo->salas[ 0 ].qtdZonas =  8;
-        jogo->salas[ 1 ].qtdZonas =  1;
-        jogo->salas[ 2 ].qtdZonas =  1;
-        jogo->salas[ 3 ].qtdZonas =  1;
-        jogo->salas[ 4 ].qtdZonas =  1;
-        jogo->salas[ 5 ].qtdZonas =  3;
-        jogo->salas[ 6 ].qtdZonas =  1;
-        jogo->salas[ 7 ].qtdZonas =  1;
-        jogo->salas[ 8 ].qtdZonas =  2;
-        jogo->salas[ 9 ].qtdZonas =  1;
-        jogo->salas[ 10 ].qtdZonas =  3;
-        jogo->salas[ 11 ].qtdZonas =  4;
-        jogo->salas[ 12 ].qtdZonas =  3;
-        jogo->salas[ 13 ].qtdZonas =  5;
-        jogo->salas[ 14 ].qtdZonas =  1;
-        jogo->salas[ 15 ].qtdZonas =  5;
-
+        jogo->salas[0].qtdZonas = 8;
+        jogo->salas[1].qtdZonas = 1;
+        jogo->salas[2].qtdZonas = 1;
+        jogo->salas[3].qtdZonas = 1;
+        jogo->salas[4].qtdZonas = 1;
+        jogo->salas[5].qtdZonas = 3;
+        jogo->salas[6].qtdZonas = 1;
+        jogo->salas[7].qtdZonas = 1;
+        jogo->salas[8].qtdZonas = 2;
+        jogo->salas[9].qtdZonas = 1;
+        jogo->salas[10].qtdZonas = 3;
+        jogo->salas[11].qtdZonas = 4;
+        jogo->salas[12].qtdZonas = 3;
+        jogo->salas[13].qtdZonas = 5;
+        jogo->salas[14].qtdZonas = 1;
+        jogo->salas[15].qtdZonas = 5;
 
         //Atribuindo Limites
-        for( i = 0 ; i < QTDSALAS ; i++)
-                for( j = 0 ; j < jogo->salas[ i ].qtdZonas; j++){
-                        jogo->salas[ i ].zonas[ j ].x = limites[ i ][ j ][ 0 ] + jogo->jogador.PosTela.width / ( 2.0 * RAZAO_SOLID_JOGADOR );
-                        jogo->salas[ i ].zonas[ j ].y = limites[ i ][ j ][ 1 ] + jogo->jogador.PosTela.height / ( 2.0 * RAZAO_SOLID_JOGADOR );
-                        jogo->salas[ i ].zonas[ j ].width = limites[ i ][ j ][ 2 ] - jogo->jogador.PosTela.width / RAZAO_SOLID_JOGADOR;
-                        jogo->salas[ i ].zonas[ j ].height = limites[ i ][ j ][ 3 ] - jogo->jogador.PosTela.height / RAZAO_SOLID_JOGADOR;
+        for (i = 0; i < QTDSALAS; i++)
+                for (j = 0; j < jogo->salas[i].qtdZonas; j++)
+                {
+                        jogo->salas[i].zonas[j].x = limites[i][j][0] + jogo->jogador.PosTela.width / (2.0 * RAZAO_SOLID_JOGADOR);
+                        jogo->salas[i].zonas[j].y = limites[i][j][1] + jogo->jogador.PosTela.height / (2.0 * RAZAO_SOLID_JOGADOR);
+                        jogo->salas[i].zonas[j].width = limites[i][j][2] - jogo->jogador.PosTela.width / RAZAO_SOLID_JOGADOR;
+                        jogo->salas[i].zonas[j].height = limites[i][j][3] - jogo->jogador.PosTela.height / RAZAO_SOLID_JOGADOR;
                 }
 }
-
-
 
 /**     Fun��o CriaPortas() : Crias as portas da sala , definindo posicao de entrada e posicao de destino
    *                    obs: Portas se comportam como teleportes - alteram posicao do jogado e eventualmente atualSala
    */
 
-void CriaPortas( Jogo *jogo)
+void CriaPortas(Jogo *jogo)
 {
-        int i , j;
-        int pos[ QTDSALAS ][ 10 ][ 2 ] = {           //As posicoes  das portas ( x-0 , y - 1 ) de cada porta de cada sala
-                { //sala 00
-                        { 670 , 1425 },    //p1
-                        { 406 , 1208 }      //p2
-                },
+        int i, j;
+        int pos[QTDSALAS][10][2] = {//As posicoes  das portas ( x-0 , y - 1 ) de cada porta de cada sala
+                                    {
+                                        //sala 00
+                                        {670, 1425}, //p1
+                                        {406, 1208}  //p2
+                                    },
 
-                { //sala 01
-                        { 749 , 1424 }      //p1
-                },
+                                    {
+                                        //sala 01
+                                        {749, 1424} //p1
+                                    },
 
-                { //sala 02
-                        { 405 , 1129 },   //p1
-                        { 406 , 825 }      //p2
-                },
+                                    {
+                                        //sala 02
+                                        {405, 1129}, //p1
+                                        {406, 825}   //p2
+                                    },
 
-                { //sala 03
-                        { 405 , 745 },    //p1
-                        { 406 , 600 }      //p2
-                },
+                                    {
+                                        //sala 03
+                                        {405, 745}, //p1
+                                        {406, 600}  //p2
+                                    },
 
-                { //sala 04
-                        { 405 , 521 },    //p1
-                        { 558 , 417 }      //p2
-                },
+                                    {
+                                        //sala 04
+                                        {405, 521}, //p1
+                                        {558, 417}  //p2
+                                    },
 
-                { //sala 05
-                        { 637 , 416 },      //p1
-                        { 974 , 257 }    //p2
-                },
+                                    {
+                                        //sala 05
+                                        {637, 416}, //p1
+                                        {974, 257}  //p2
+                                    },
 
-                { //sala 06
-                        { 1053 , 256 },    //p1
-                        { 1470 , 257 },    //p2
-                        { 1261 , 353 }      //p3
-                },
+                                    {
+                                        //sala 06
+                                        {1053, 256}, //p1
+                                        {1470, 257}, //p2
+                                        {1261, 353}  //p3
+                                    },
 
-                { //sala 07
-                        { 1549 , 256 }    //p1
-                },
+                                    {
+                                        //sala 07
+                                        {1549, 256} //p1
+                                    },
 
-                { //sala 08
-                        { 1262 , 432 },    //p1
-                        { 1125 , 633 },    //p2         //PORTA ESPECIAL PENSAR EM ALGO DEPOIS
-                        { 1261 , 865 }    //p3
-                },
+                                    {
+                                        //sala 08
+                                        {1262, 432}, //p1
+                                        {1125, 633}, //p2         //PORTA ESPECIAL PENSAR EM ALGO DEPOIS
+                                        {1261, 865}  //p3
+                                    },
 
-                { //sala 09
-                        { 1046 , 632 }    //p1          //Porta Especial
-                },
+                                    {
+                                        //sala 09
+                                        {1046, 632} //p1          //Porta Especial
+                                    },
 
-                { //sala 10
-                        { 1259 , 944 },    //p1
-                        { 1589 , 1113 },    //p2
-                        { 1260 , 1281 }    //p3
-                },
+                                    {
+                                        //sala 10
+                                        {1259, 944},  //p1
+                                        {1589, 1113}, //p2
+                                        {1260, 1281}  //p3
+                                    },
 
-                { //sala 11
-                        { 1668 , 1112 },    //p1
-                        { 2037 , 1113 },    //p2
-                        { 1887 , 1513 }    //p3
-                },
+                                    {
+                                        //sala 11
+                                        {1668, 1112}, //p1
+                                        {2037, 1113}, //p2
+                                        {1887, 1513}  //p3
+                                    },
 
-                { //sala 12
-                        { 2116 , 1112 },    //p1
-                },
+                                    {
+                                        //sala 12
+                                        {2116, 1112}, //p1
+                                    },
 
-                { //sala 13
-                        { 1956 , 1513 },    //p1
-                },
+                                    {
+                                        //sala 13
+                                        {1956, 1513}, //p1
+                                    },
 
-                { //sala 14
-                        { 1261 , 1360 },    //p1
-                        { 1260 , 1729 }     //p2
-                },
+                                    {
+                                        //sala 14
+                                        {1261, 1360}, //p1
+                                        {1260, 1729}  //p2
+                                    },
 
-                { //sala 15
-                        { 1261 , 1808 },    //p1
-                }
-
-        };
-        float rotac[ QTDSALAS ][ 10 ] = {           //A rotacao das portas ( x-0 , y - 1 ) de cada porta de cada sala
-                {  -90 /*p1*/ , 0/*p2*/ } ,     //sala00
-                {  90 /*p1*/ } ,     //sala01
-                {  180 /*p1*/ , 0/*p2*/ } ,     //sala02
-                {  180 /*p1*/ , -90/*p2*/ } ,     //sala03
-                {  90 /*p1*/ , -90/*p2*/ } ,     //sala04
-                {  90 /*p1*/ , -90/*p2*/ , 180/*p3*/ } ,     //sala05
-                {  90 /*p1*/ } ,     //sala06
-                {  0 /*p1*/ , 90/*p2*/ , 180/*p3*/ } ,     //sala07
-                {  -90 /*p1*/ } ,     //sala08
-                {  0 /*p1*/ , -90/*p2*/ , 180/*p3*/ } ,     //sala09
-                {  90 /*p1*/ , -90/*p2*/ , -90/*p3*/ } ,     //sala10
-                {  -90 /*p1*/ } ,     //sala11
-                {  -90 /*p1*/ } ,     //sala12
-                {  0 /*p1*/ , 180/*p2*/ } ,     //sala13
-                {  0 /*p1*/ } ,     //sala14
+                                    {
+                                        //sala 15
+                                        {1261, 1808}, //p1
+                                    }
 
         };
+        float rotac[QTDSALAS][10] = {
+            //A rotacao das portas ( x-0 , y - 1 ) de cada porta de cada sala
+            {-90 /*p1*/, 0 /*p2*/},              //sala00
+            {90 /*p1*/},                         //sala01
+            {180 /*p1*/, 0 /*p2*/},              //sala02
+            {180 /*p1*/, -90 /*p2*/},            //sala03
+            {90 /*p1*/, -90 /*p2*/},             //sala04
+            {90 /*p1*/, -90 /*p2*/, 180 /*p3*/}, //sala05
+            {90 /*p1*/},                         //sala06
+            {0 /*p1*/, 90 /*p2*/, 180 /*p3*/},   //sala07
+            {-90 /*p1*/},                        //sala08
+            {0 /*p1*/, -90 /*p2*/, 180 /*p3*/},  //sala09
+            {90 /*p1*/, -90 /*p2*/, -90 /*p3*/}, //sala10
+            {-90 /*p1*/},                        //sala11
+            {-90 /*p1*/},                        //sala12
+            {0 /*p1*/, 180 /*p2*/},              //sala13
+            {0 /*p1*/},                          //sala14
 
-        int status[ QTDSALAS ][ 10 ] = {           //O status de trancada/destrancada das portas ( destrancada=1 , trancada = 0 ) de cada porta de cada sala
-                {  0 /*p1*/ , 0/*p2*/ },     //sala00
-                {  1 /*p1*/ },      //sala01
-                {  1 /*p1*/ , 1/*p2*/ },      //sala02
-                {  1 /*p1*/ , 1/*p2*/ },      //sala03
-                {  1 /*p1*/ , 1/*p2*/ },      //sala04
-                {  1 /*p1*/ , 1/*p2*/ },      //sala05
-                {  1 /*p1*/ , 1/*p2*/ , 1/*p3*/ },      //sala06
-                {  1 /*p1*/ },      //sala07
-                {  1 /*p1*/ , 1/*p2*/ , 1/*p3*/ },      //sala08
-                {  1 /*p1*/ },      //sala09
-                {  1 /*p1*/ , 1/*p2*/ , 1/*p3*/ },      //sala10
-                {  1 /*p1*/ , 1/*p2*/ , 1/*p3*/ },      //sala11
-                {  1 /*p1*/ },      //sala12
-                {  1 /*p1*/ },      //sala13
-                {  1 /*p1*/ , 1/*p2*/ },      //sala14
-                {  1 /*p1*/ }      //sala15
         };
 
+        int status[QTDSALAS][10] = {
+            //O status de trancada/destrancada das portas ( destrancada=1 , trancada = 0 ) de cada porta de cada sala
+            {0 /*p1*/, 0 /*p2*/},           //sala00
+            {1 /*p1*/},                     //sala01
+            {1 /*p1*/, 1 /*p2*/},           //sala02
+            {1 /*p1*/, 1 /*p2*/},           //sala03
+            {1 /*p1*/, 1 /*p2*/},           //sala04
+            {1 /*p1*/, 1 /*p2*/},           //sala05
+            {1 /*p1*/, 1 /*p2*/, 1 /*p3*/}, //sala06
+            {1 /*p1*/},                     //sala07
+            {1 /*p1*/, 1 /*p2*/, 1 /*p3*/}, //sala08
+            {1 /*p1*/},                     //sala09
+            {1 /*p1*/, 1 /*p2*/, 1 /*p3*/}, //sala10
+            {1 /*p1*/, 1 /*p2*/, 1 /*p3*/}, //sala11
+            {1 /*p1*/},                     //sala12
+            {1 /*p1*/},                     //sala13
+            {1 /*p1*/, 1 /*p2*/},           //sala14
+            {1 /*p1*/}                      //sala15
+        };
 
-        int alterarPSala[ QTDSALAS ][ 10 ] = {           //A sala para qual as portas levam
-                {  1 /*p1*/ , 2/*p2*/ },     //sala00
-                {  0 /*p1*/ },      //sala01
-                {  0 /*p1*/ , 3/*p2*/ },      //sala02
-                {  2 /*p1*/ , 4/*p2*/ },      //sala03
-                {  3 /*p1*/ , 5/*p2*/ },      //sala04
-                {  4 /*p1*/ , 6/*p2*/ },      //sala05
-                {  5 /*p1*/ , 7/*p2*/ , 8/*p3*/ },      //sala06
-                {  6 /*p1*/ },      //sala07
-                {  6 /*p1*/ , 9/*p2*/ , 10/*p3*/ },      //sala08
-                {  8 /*p1*/ },      //sala09
-                {  8 /*p1*/ , 11/*p2*/ , 14/*p3*/ },      //sala10
-                {  10 /*p1*/ , 12/*p2*/ , 13/*p3*/ },      //sala11
-                {  11 /*p1*/ },      //sala12
-                {  11 /*p1*/ },      //sala13
-                {  10 /*p1*/ , 15/*p2*/ },      //sala14
-                {  14 /*p1*/ }      //sala15
+        int alterarPSala[QTDSALAS][10] = {
+            //A sala para qual as portas levam
+            {1 /*p1*/, 2 /*p2*/},              //sala00
+            {0 /*p1*/},                        //sala01
+            {0 /*p1*/, 3 /*p2*/},              //sala02
+            {2 /*p1*/, 4 /*p2*/},              //sala03
+            {3 /*p1*/, 5 /*p2*/},              //sala04
+            {4 /*p1*/, 6 /*p2*/},              //sala05
+            {5 /*p1*/, 7 /*p2*/, 8 /*p3*/},    //sala06
+            {6 /*p1*/},                        //sala07
+            {6 /*p1*/, 9 /*p2*/, 10 /*p3*/},   //sala08
+            {8 /*p1*/},                        //sala09
+            {8 /*p1*/, 11 /*p2*/, 14 /*p3*/},  //sala10
+            {10 /*p1*/, 12 /*p2*/, 13 /*p3*/}, //sala11
+            {11 /*p1*/},                       //sala12
+            {11 /*p1*/},                       //sala13
+            {10 /*p1*/, 15 /*p2*/},            //sala14
+            {14 /*p1*/}                        //sala15
 
         };
 
         //Quantidade de portas de cada sala
-        jogo->salas[ 0 ].qtdPortas =  2;
-        jogo->salas[ 1 ].qtdPortas =  1;
-        jogo->salas[ 2 ].qtdPortas =  2;
-        jogo->salas[ 3 ].qtdPortas =  2;
-        jogo->salas[ 4 ].qtdPortas =  2;
-        jogo->salas[ 5 ].qtdPortas =  2;
-        jogo->salas[ 6 ].qtdPortas =  3;
-        jogo->salas[ 7 ].qtdPortas =  1;
-        jogo->salas[ 8 ].qtdPortas =  3;
-        jogo->salas[ 9 ].qtdPortas =  1;
-        jogo->salas[ 10 ].qtdPortas =  3;
-        jogo->salas[ 11 ].qtdPortas =  3;
-        jogo->salas[ 12 ].qtdPortas =  1;
-        jogo->salas[ 13 ].qtdPortas =  1;
-        jogo->salas[ 14 ].qtdPortas =  2;
-        jogo->salas[ 15 ].qtdPortas =  1;
-
+        jogo->salas[0].qtdPortas = 2;
+        jogo->salas[1].qtdPortas = 1;
+        jogo->salas[2].qtdPortas = 2;
+        jogo->salas[3].qtdPortas = 2;
+        jogo->salas[4].qtdPortas = 2;
+        jogo->salas[5].qtdPortas = 2;
+        jogo->salas[6].qtdPortas = 3;
+        jogo->salas[7].qtdPortas = 1;
+        jogo->salas[8].qtdPortas = 3;
+        jogo->salas[9].qtdPortas = 1;
+        jogo->salas[10].qtdPortas = 3;
+        jogo->salas[11].qtdPortas = 3;
+        jogo->salas[12].qtdPortas = 1;
+        jogo->salas[13].qtdPortas = 1;
+        jogo->salas[14].qtdPortas = 2;
+        jogo->salas[15].qtdPortas = 1;
 
         //Atribuindo Valores
-        for( i = 0 ; i < QTDSALAS ; i++)
-                for( j = 0 ; j < jogo->salas[ i ].qtdPortas; j++)
+        for (i = 0; i < QTDSALAS; i++)
+                for (j = 0; j < jogo->salas[i].qtdPortas; j++)
                 {
-                        jogo->salas[ i ].portas[ j ].pos.x = pos[ i ][ j ][ 0 ];
-                        jogo->salas[ i ].portas[ j ].pos.y = pos[ i ][ j ][ 1 ];
+                        jogo->salas[i].portas[j].pos.x = pos[i][j][0];
+                        jogo->salas[i].portas[j].pos.y = pos[i][j][1];
 
-                        jogo->salas[ i ].portas[ j ].rotac = rotac[ i ][ j ];
+                        jogo->salas[i].portas[j].rotac = rotac[i][j];
 
-                        jogo->salas[ i ].portas[ j ].DESTRANCADA = status[ i ][ j ];
-                        jogo->salas[ i ].portas[ j ].alteraPSala = alterarPSala[ i ][ j ];
+                        jogo->salas[i].portas[j].DESTRANCADA = status[i][j];
+                        jogo->salas[i].portas[j].alteraPSala = alterarPSala[i][j];
                 }
 }
 
-
 #include <string.h>
 ///
-void CarregarPersonagemImagens( Jogo *jogo )
+void CarregarPersonagemImagens(Jogo *jogo)
 {
-        int arma , status , frame;
+        int arma, status, frame;
         char nmr[10];
         const char comum[] = "Sprites/Personagem/";
         char pasta[][100] = {
-                "pistola/",
-                "smg/",
-                " ",
-                " ",
-                " "
-        };
+            "pistola/",
+            "smg/",
+            " ",
+            " ",
+            " "};
 
         const char subpasta[][100] = {
-                "repouso/",
-                "movimento/",
-                "atirando/",
-                "coronhada/",
-                "recarregando/"
-        };
+            "repouso/",
+            "movimento/",
+            "atirando/",
+            "coronhada/",
+            "recarregando/"};
         char fim[] = ".png";
         char arquivo[100];
 
-        for( arma = 0 ; arma < QTD_ARMAS ; arma++ )
-                for( status = 0 ;status < jogo->spriteDef.QTD_STATUS[ arma ] ; status++ )
-                        for( frame = 0 ; frame < jogo->spriteDef.QTD_FRAMES[ arma ][ status ] ; frame++ )
+        for (arma = 0; arma < QTD_ARMAS; arma++)
+                for (status = 0; status < jogo->spriteDef.QTD_STATUS[arma]; status++)
+                        for (frame = 0; frame < jogo->spriteDef.QTD_FRAMES[arma][status]; frame++)
                         {
-                                TextCopy( arquivo , comum );
-                                strcat( arquivo , pasta[arma] );
-                                strcat( arquivo , subpasta[status] );
+                                TextCopy(arquivo, comum);
+                                strcat(arquivo, pasta[arma]);
+                                strcat(arquivo, subpasta[status]);
 
-                                IntParaString( frame , nmr );
-                                strcat( arquivo , nmr );
+                                IntParaString(frame, nmr);
+                                strcat(arquivo, nmr);
 
-                                strcat( arquivo , fim );
+                                strcat(arquivo, fim);
 
-                                jogo->Res.Per[arma][status][frame] = LoadTexture( arquivo );
+                                jogo->Res.Per[arma][status][frame] = LoadTexture(arquivo);
                         }
 
         //Jogador extracao de textura
@@ -575,35 +594,34 @@ void CarregarPersonagemImagens( Jogo *jogo )
 }
 
 ///
-void CarregarPes( Jogo *jogo )
+void CarregarPes(Jogo *jogo)
 {
-        int status , frame;
+        int status, frame;
         char nmr[10];
         const char comum[] = "Sprites/Personagem/Pes/";
         char pasta[][100] = {
-                "repouso/",
-                "andando/",
-                "correndo/",
-                "lateralEsquerda/",
-                "lateralDireita/"
-        };
+            "repouso/",
+            "andando/",
+            "correndo/",
+            "lateralEsquerda/",
+            "lateralDireita/"};
 
         char fim[] = ".png";
         char arquivo[100];
 
-                for( status = 0 ; status < QTD_STATUS_PES ; status++ )
-                        for( frame = 0 ; frame < jogo->spriteDef.QTD_FRAMES_PES[ status ] ; frame++ )
-                        {
-                                TextCopy( arquivo , comum );
-                                strcat( arquivo , pasta[status] );
+        for (status = 0; status < QTD_STATUS_PES; status++)
+                for (frame = 0; frame < jogo->spriteDef.QTD_FRAMES_PES[status]; frame++)
+                {
+                        TextCopy(arquivo, comum);
+                        strcat(arquivo, pasta[status]);
 
-                                IntParaString( frame , nmr );
-                                strcat( arquivo , nmr );
+                        IntParaString(frame, nmr);
+                        strcat(arquivo, nmr);
 
-                                strcat( arquivo , fim );
+                        strcat(arquivo, fim);
 
-                                jogo->Res.Pes[status][frame] = LoadTexture( arquivo );
-                        }
+                        jogo->Res.Pes[status][frame] = LoadTexture(arquivo);
+                }
 
         //Jogador extracao de textura
         jogo->spriteDef.SrcPes.height = jogo->Res.Pes[0][0].height;
@@ -612,63 +630,124 @@ void CarregarPes( Jogo *jogo )
         jogo->spriteDef.SrcPes.y = 0;
 }
 
-
-void IntParaString( int nmr , char *str )
+void IntParaString(int nmr, char *str)
 {
         int tam = 0;
         int cop = nmr;
 
-        do{
-                str[ tam ] = cop % 10 + 48;     //Para transformar digito decimal inteiro em digito em ASCII
-                str[ tam + 1] = '\0';
+        do
+        {
+                str[tam] = cop % 10 + 48; //Para transformar digito decimal inteiro em digito em ASCII
+                str[tam + 1] = '\0';
                 cop /= 10;
                 tam++;
-        }while( cop );
+        } while (cop);
 
-        InverteStr( str );
+        InverteStr(str);
 }
 
-void InverteStr( char *str )
+void InverteStr(char *str)
 {
-        int i , j;
+        int i, j;
         int temp;
-        int tam = strlen( str );
+        int tam = strlen(str);
 
-        for( i = 0 , j = tam - 1 ; i <= j ; i++ , j-- )
+        for (i = 0, j = tam - 1; i <= j; i++, j--)
         {
-                temp = str[ i ];
-                str[ i ] =  str[ j ];
-                str[ j] =  temp;
+                temp = str[i];
+                str[i] = str[j];
+                str[j] = temp;
         }
 }
 
+void inicializarSpawns(Jogo *jogo)
+{
+        int salas[QTD_SALAS_SPAWN] = {0, 2, 4, 5, 6, 8, 10, 12, 13};
+        int locais[7][2] =
+            {
+                {// sala 0
+                 {148, 978},
+                 {230, 1240},
+                 {270, 1300},
+                 {400, 1322},
+                 {540, 1425}},
 
+                {// sala 2
+                 {320, 880},
+                 {500, 880}},
 
-void inicializarSpawns(){
-//        int sala;
-//
-//        for( sala = 0 ; sala < QTDSALAS ; sala++ ){
-//
-//
-//
-//        }
-//
-//
-//
+                {// sala 4
+                 {300, 350},
+                 {520, 350}},
+
+                {// sala 5
+                 {800, 418},
+                 {850, 260}},
+
+                {// sala 6
+                 {1260, 200},
+                 {1380, 200},
+                 {1380, 270}},
+
+                {// sala 8
+                 {1260, 592},
+                 {1260, 730},
+                 {1380, 270}},
+
+                {// sala 10
+                 {1010, 1010},
+                 {1010, 1110},
+                 {1010, 1210},
+                 {1260, 1060},
+                 {1480, 1010},
+                 {1480, 1110},
+                 {1480, 1210}},
+
+                {// sala 12
+                 {2238, 1018},
+                 {2368, 1018},
+                 {2238, 1220},
+                 {2368, 1220}},
+
+                {// sala 13
+                 {2150, 1515},
+                 {2350, 1515}}
+
+            };
+
+        for (int i = 0; i < QTD_SALAS_SPAWN; i++)
+        {
+        }
+
+        //
+        //        for( sala = 0 ; sala < QTDSALAS ; sala++ ){
+        //
+        //
+        //
+        //        }
+        /*      sala 0 : {148, 978}, {230, 1240}, {270, 1300}, {400, 1322}, {540, 1425};
+        sala 2 : {320, 880}, {500, 880};
+        sala 4 : {300, 350}, {520, 350};
+        sala 5 : {800, 418}, {850, 260};
+        sala 6 : {1260, 200}, {1380, 200}, {1380, 270};       
+        sala 8 : {1260, 592}, {1260, 730}, {1380, 270};
+        sala 10 : {1010, 1010}, {1010, 1110}, {1010, 1210}, {1260, 1060}, {1480, 1010}, {1480, 1110}, {1480, 1210};
+        sala 12 : {2238, 1018}, {2368, 1018}, {2238, 1220}, {2368,1220};
+        sala 13 : {2150, 1515}, {2350, 1515};
+*/
+        //
 }
 
-
-void inicializarBaus( Jogo *jogo ){}
-//        int sala;
-//
-//        for( sala = 0 ; sala < QTDSALAS ; sala++ ){
-//
-//
-//
-//        }
-//
-//
-//
+void inicializarBaus(Jogo *jogo)
+{
+        //        int sala;
+        //
+        //        for( sala = 0 ; sala < QTDSALAS ; sala++ ){
+        //
+        //
+        //
+        //        }
+        //
+        //
+        //
 }
-
-

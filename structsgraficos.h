@@ -1,187 +1,193 @@
 #ifndef __STRUCTSGRAFICOS_H_
 #define __STRUCTSGRAFICOS_H_
 
-        #include "raylib.h"
-        #include "definicoes.h"
+#include "raylib.h"
+#include "definicoes.h"
 
-        typedef int BOOL;
+typedef int BOOL;
 
-         typedef struct         //Um retangulo definido pelos limites( Facilita na funcao criar zonas )
-         {
-                float esq;
-                float dir;
-                float inf;
-                float sup;
-         }RecLim;
+typedef struct //Um retangulo definido pelos limites( Facilita na funcao criar zonas )
+{
+        float esq;
+        float dir;
+        float inf;
+        float sup;
+} RecLim;
 
-        typedef struct
-        {
-                ///Sprites do corpo do personagem com armas
-                 int QTD_STATUS[QTD_ARMAS] ;  // QTD de status para cada arma
-                //[1°] codigo da arma :    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
+typedef struct
+{
+        ///Sprites do corpo do personagem com armas
+        int QTD_STATUS[QTD_ARMAS]; // QTD de status para cada arma
+                                   //[1ï¿½] codigo da arma :    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
 
-                 int QTD_FRAMES[QTD_ARMAS][QTD_STATUS_MAX] ;  // QTD de iamgens disponiveis para status de cada arma
-                //[1°] codigo da arma :    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
-                //[2°] codigo do status :  repouso 0 , movimento 1 , atirando 2 , coronhada 3 , recarregando 4
-                int atualFrame;         //Frame atual do personagem
+        int QTD_FRAMES[QTD_ARMAS][QTD_STATUS_MAX]; // QTD de iamgens disponiveis para status de cada arma
+        //[1ï¿½] codigo da arma :    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
+        //[2ï¿½] codigo do status :  repouso 0 , movimento 1 , atirando 2 , coronhada 3 , recarregando 4
+        int atualFrame; //Frame atual do personagem
 
-                ///Sprite dos pes do personagem
-                int QTD_FRAMES_PES[ QTD_STATUS_PES ];   // Quantidade de frames para pes de cada status
-                //[1°] codigo do status :  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
-                int atualFramePes;      //Frame atual dos pes
+        ///Sprite dos pes do personagem
+        int QTD_FRAMES_PES[QTD_STATUS_PES]; // Quantidade de frames para pes de cada status
+        //[1ï¿½] codigo do status :  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
+        int atualFramePes; //Frame atual dos pes
 
-                ///
-                Rectangle Src;          //Retangulo de extracao da textura com as dimensoes da mesma do personagem
-                Rectangle SrcPes;          //Retangulo de extracao da textura com as dimensoes da mesma do pes do personagem
-                Vector2 Origin;         // O deslocamento entre a quina superior esquerda da textura PersonagemPrincipal e o centro de rotacao
-                Vector2 OriginPes;
+        ///
+        Rectangle Src;    //Retangulo de extracao da textura com as dimensoes da mesma do personagem
+        Rectangle SrcPes; //Retangulo de extracao da textura com as dimensoes da mesma do pes do personagem
+        Vector2 Origin;   // O deslocamento entre a quina superior esquerda da textura PersonagemPrincipal e o centro de rotacao
+        Vector2 OriginPes;
 
+} SpriteDef;
 
-        }SpriteDef;
+typedef struct
+{
+        ///Menus
+        Texture2D MenuFundo;          // Imagem do plano de fundo principal
+        Texture2D TelaDeFundo;        //Tela de fundo somente cores
+        Texture2D FundoConfirmarSair; //Janela de fundo da confirmacao de saida
+        Texture2D Logo;               // Imagem de fundo (Logo)
+        Font fonteWolfen;             // Fonte Estilizada Wolfenstein
+        Font fonteWolfen2;            // Fonte Estilizada Wolfenstein 2
 
-        typedef struct
-        {
-                ///Menus
-                Texture2D MenuFundo;    // Imagem do plano de fundo principal
-                Texture2D TelaDeFundo;  //Tela de fundo somente cores
-                Texture2D FundoConfirmarSair;  //Janela de fundo da confirmacao de saida
-                Texture2D Logo;    // Imagem de fundo (Logo)
-                Font fonteWolfen;  // Fonte Estilizada Wolfenstein
-                Font fonteWolfen2;  // Fonte Estilizada Wolfenstein 2
+        ///Mapa
+        Texture2D Mapa; // Imagem do mapa
 
-                ///Mapa
-                Texture2D Mapa;  // Imagem do mapa
+        ///Objetos do Jogo
+        Texture2D Portas; // Imagem das portas
 
-                ///Objetos do Jogo
-                Texture2D Portas;  // Imagem das portas
+        ///Imagens do Personagem
+        Texture2D Per[QTD_ARMAS][QTD_STATUS_MAX][100]; // Personagem [1ï¿½][2ï¿½][3ï¿½]
+        //[1ï¿½] codigo da arma atual:    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
+        //[2ï¿½] codigo do status atual:  repouso 0 , movimento 1 , atirando 2 , coronhada 3 , recarregando 4
+        //[3ï¿½] codigo do frame atual
 
-                ///Imagens do Personagem
-                Texture2D Per[ QTD_ARMAS ][ QTD_STATUS_MAX ][100];  // Personagem [1°][2°][3°]
-                //[1°] codigo da arma atual:    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
-                //[2°] codigo do status atual:  repouso 0 , movimento 1 , atirando 2 , coronhada 3 , recarregando 4
-                //[3°] codigo do frame atual
+        ///Imagens dos pes/pernas do personagem
+        Texture2D Pes[QTD_STATUS_PES][100]; // Pernas e pes do Personagem [1ï¿½][2ï¿½]
+        //[1ï¿½] codigo do status atual:  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
+        //[2ï¿½] codigo do frame atual
 
-                ///Imagens dos pes/pernas do personagem
-                Texture2D Pes[ QTD_STATUS_PES ][ 100 ];  // Pernas e pes do Personagem [1°][2°]
-                //[1°] codigo do status atual:  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
-                //[2°] codigo do frame atual
+} Recursos;
 
-        }Recursos;
+typedef struct
+{
+        Vector2 pos; // Posicao
+        float Rotac; // Angulo de rotacao
 
+        int QtdItens;                    // A quantidade de itens que o bau fornecera. Por isso e a quantidade de elementos do array CodItens
+        int CodItens[QTD_DROP_MAX_BAUS]; // Codigo definidos randomicamente na criacao do bau que estabelecerao os itens fornecidos
 
-        typedef struct
-        {
-                Vector2 pos;            // Posicao
-                float Rotac;            // Angulo de rotacao
+        unsigned ABERTO : 1;
+} Bau;
 
-                int QtdItens;                                          // A quantidade de itens que o bau fornecera. Por isso e a quantidade de elementos do array CodItens
-                int CodItens[ QTD_DROP_MAX_BAUS ];       // Codigo definidos randomicamente na criacao do bau que estabelecerao os itens fornecidos
+typedef struct
+{
+        Vector2 pos; // Posicao de desenho
+        float rotac; // Angulo de rotacao
 
-                unsigned ABERTO : 1;
-        }Bau;
+        int alteraPSala; // Sala de destino
 
-        typedef struct
-        {
-                Vector2 pos;            // Posicao de desenho
-                float rotac;            // Angulo de rotacao
+        unsigned DESTRANCADA : 1; // Se esta destrancada == 1 , se nao == 0
+} Porta;
 
-                int alteraPSala;        // Sala de destino
+typedef struct
+{
+        Vector2 pos; // Posicao
+        float rotac; // Angulo de rotacao
 
-                unsigned DESTRANCADA : 1;       // Se esta destrancada == 1 , se nao == 0
-        }Porta;
+        int inimigoTipo; // Tipo de inimigo que ele spawna
 
-        typedef struct
-        {
-                Vector2 pos;            // Posicao
-                float rotac;            // Angulo de rotacao
+        unsigned ATIVO : 1; // Se esta ativo == 1 , se nao == 0
+} Spawn;
 
-                int inimigoTipo;        // Tipo de inimigo que ele spawna
+typedef struct
+{
+        unsigned TERMINADO : 1; //O level foi terminado
 
-                unsigned ATIVO : 1;       // Se esta ativo == 1 , se nao == 0
-        }Spawn;
+} DadosLevel;
 
-        typedef struct
-        {
-                unsigned TERMINADO : 1; //O level foi terminado
+typedef struct
+{
+        RecLim LimCam; // Limites de deslocamento da camera aerea na sala
 
-        }DadosLevel;
+        Rectangle zonas[QTD_ZONAS_MAX]; //Zonas da sala, por onde o jogador se locomove
+        int qtdZonas;
 
-        typedef struct
-        {
-                RecLim LimCam;  // Limites de deslocamento da camera aerea na sala
+        int qtdBaus; // Quantidade de baus
+        Bau baus[MAX_BAUS_SALA];
 
-                Rectangle zonas[ QTD_ZONAS_MAX ];    //Zonas da sala, por onde o jogador se locomove
-                int qtdZonas;
+        int qtdPortas; // Quantidade de portas iterativas para o jogador
+        Porta portas[10];
 
-                int qtdBaus;  // Quantidade de baus
-                Bau baus[ MAX_BAUS_SALA ];
+        int qtdSpawns; //Quantidade de portas ou outro marco de onde brotam inimigos tipos 1
+        Spawn spawns[10];
+} Sala;
 
-                int qtdPortas;  // Quantidade de portas iterativas para o jogador
-                Porta portas[ 10 ];
+typedef struct
+{
+        char *nome;
 
-                int qtdSpawns;  //Quantidade de portas ou outro marco de onde brotam inimigos tipos 1
-                Spawn spawns[ 10 ];
-        }Sala;
+        Vector2 PosMundo;     //Posicionamento do jogador no mundo
+        Rectangle PosTela;    //Posicionamento do jogador na tela
+        Rectangle PosTelaPes; //Posicionamento do pes dp jogador na tela
+        float Rotac;          //Rotacao
 
-        typedef struct
-        {
-                char *nome;
+        Vector2 posMouse; // Posicao do mouse
 
-                Vector2 PosMundo;          //Posicionamento do jogador no mundo
-                Rectangle PosTela;              //Posicionamento do jogador na tela
-                Rectangle PosTelaPes;              //Posicionamento do pes dp jogador na tela
-                float Rotac;    //Rotacao
+        BOOL armasDisp[QTD_ARMAS]; //Se o jogador ja tem determinada arma
+        int municao[QTD_ARMAS];    //A quantidade de municao de cada tipo de arma
 
-                Vector2 posMouse;   // Posicao do mouse
+        int pontos; //Pontuacao do jogador
+        int saude;  //Pontos de saude.
+        int vidas;  //Vidas gerais. Cada vez que saude zera perde uma vida.
 
-                BOOL armasDisp[ QTD_ARMAS ];            //Se o jogador ja tem determinada arma
-                int municao[ QTD_ARMAS ];               //A quantidade de municao de cada tipo de arma
+        int atualArma;
+        int atualStatus;
+        int atualMovTipo;
 
-                int pontos;             //Pontuacao do jogador
-                int saude;              //Pontos de saude.
-                int vidas;               //Vidas gerais. Cada vez que saude zera perde uma vida.
+        /**   lembra de excluir    */ int testeFlagTiro; //excluir depois no final
+} Jogador;
 
-                int atualArma;
-                int atualStatus;
-                int atualMovTipo;
+typedef struct
+{
+        int NivelMenu; //Nivel atual do menu( 0->Principal , 1- Algum dos secundarios , 2->Menu interno do jogo , 3 - Jogando)
+        unsigned FECHAR : 1;
+        unsigned VOLTARMENU : 1;
 
-                /**   lembra de excluir    */int testeFlagTiro;      //excluir depois no final
-        }Jogador;
+        Rectangle tela;    //Resolucao da Tela do usuario
+        int regulagemTela; //Se foi preciso deixar um espaco em cima 1 , nas laterais 2. Caso contrario 0
 
-        typedef struct
-        {
-                int NivelMenu;  //Nivel atual do menu( 0->Principal , 1- Algum dos secundarios , 2->Menu interno do jogo , 3 - Jogando)
-                unsigned FECHAR : 1;
-                unsigned VOLTARMENU : 1;
+        Vector2 MapaTamanho;
+        Rectangle MapaDesenho;
+        Sala salas[QTDSALAS];
 
-                Rectangle tela;    //Resolucao da Tela do usuario
-                int regulagemTela;    //Se foi preciso deixar um espaco em cima 1 , nas laterais 2. Caso contrario 0
+        unsigned PASSAGEM : 1; //Indica se esta atravessando alguma porta
+        Jogador jogador;
+        int atualSala;
 
-                Vector2 MapaTamanho;
-                Rectangle MapaDesenho;
-                Sala salas[ QTDSALAS ];
+        //                int atualLevel;
+        //                DadosLevel dadosLevel;
 
-                unsigned PASSAGEM : 1;        //Indica se esta atravessando alguma porta
-                Jogador jogador;
-                int atualSala;
+        Recursos Res; //Recursos do jogo
+        SpriteDef spriteDef;
+} Jogo;
 
-//                int atualLevel;
-//                DadosLevel dadosLevel;
+typedef struct //Tipo um tem 1 ponto de saude
+{
+        Vector2 pos; //posicao
+        float Rotac;
 
+        int codItem; // Codigo do item
 
-                Recursos Res;  //Recursos do jogo
-                SpriteDef spriteDef;
-        }Jogo;
+        unsigned VIVO : 1;
+} InimT1;
 
-        typedef struct  //Tipo um tem 1 ponto de saude
-        {
-                Vector2 pos;    //posicao
-                float Rotac;
+typedef struct
+{
+       Vector2 velocidade;
+       Vector2 pos;
+       bool ativo;
+       float Rotac; 
 
-                int codItem;  // Codigo do item
-
-                unsigned VIVO : 1;
-        }InimT1;
+} Tiro;
 
 //        typedef struct
 //        {
@@ -204,7 +210,6 @@
 //                float py;
 //        }Faca;
 //
-
 
 #endif // __STRUCTSGRAFICOS_H_
 

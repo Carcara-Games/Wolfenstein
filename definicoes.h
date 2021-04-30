@@ -67,7 +67,9 @@
 
         ///BAUS
         #define QTD_DROP_MAX_BAUS 3             //Quantidade maxima de itens que os baus podem chegar a dropar( fornecer )
-        #define MAX_BAUS_SALA 3
+        #define MAX_BAUS_SALA 8
+        #define BAU_LARGURA 31
+        #define BAU_COMPRIMENTO 21
 
         ///PORTAS
         #define TOL_ENTRAR_PORTAS 10

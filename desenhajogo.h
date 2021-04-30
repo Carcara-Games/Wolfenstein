@@ -11,5 +11,7 @@
         void DesenhaDebug( Jogo *jogo );
         void PassagemPorta( void );
         void DesenhaTiro(Jogo *jogo);
+        void DesenhaObjetos( Jogo *jogo );
+        void DesenhaBaus( Jogo *jogo );
 
 #endif // __DESENHAJOGO_H_

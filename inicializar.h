@@ -18,6 +18,7 @@
         void CarregarPes( Jogo *jogo );
         void inicializarSpawns( Jogo *jogo );
         void inicializarBaus( Jogo *jogo );
+        void CarregarBaus( Jogo *jogo );
 
 
 #endif // __INICIALIZAR_H_

@@ -14,6 +14,12 @@ void DesenhaLevel(Jogo *jogo)
         DesenhaPes(jogo);
         DesenhaJogador(jogo);
         DesenhaTiro(jogo);
+        DesenhaObjetos( jogo );
+        DesenhaPortas( jogo );
+        DesenhaPes( jogo);
+//        DesenhaInimigosT1( jogo );
+
+        DesenhaJogador( jogo );
 
         DesenhaDebug(jogo);
 
@@ -23,6 +29,16 @@ void DesenhaLevel(Jogo *jogo)
                 PassagemPorta();
 }
 //##############################################################################
+
+
+
+/**     Funcao DesenhaObjetos():
+    */
+void DesenhaObjetos( Jogo *jogo ){
+        DesenhaBaus( jogo );
+}
+
+
 
 /**     Funcao DesenhaMapa():
     */
@@ -38,6 +54,7 @@ void DesenhaMapa(Jogo *jogo)
 
 /**     Funcao DesenhaPes():
     */
+
 void DesenhaPes(Jogo *jogo)
 {
         DrawTexturePro(jogo->Res.Pes[jogo->jogador.atualMovTipo][jogo->spriteDef.atualFramePes], jogo->spriteDef.SrcPes, jogo->jogador.PosTelaPes, jogo->spriteDef.OriginPes, jogo->jogador.Rotac, WHITE);
@@ -46,12 +63,15 @@ void DesenhaPes(Jogo *jogo)
 
 /**     Funcao DesenhaJogador():
     */
+
 void DesenhaJogador(Jogo *jogo)
 {
 
         DrawTexturePro(jogo->Res.Per[0][jogo->jogador.atualStatus][jogo->spriteDef.atualFrame], jogo->spriteDef.Src, jogo->jogador.PosTela, jogo->spriteDef.Origin, jogo->jogador.Rotac, WHITE);
 }
 //##############################################################################
+
+
 
 /**     Funcao DesenhaPortas(): Desenha as portas trancadas
     */
@@ -60,7 +80,7 @@ void DesenhaTiro(Jogo *jogo)
 {
         static int qtd_balas_ativas = 0;
 
-        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON) && !jogo->jogador.latencia)
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)  &&  !jogo->jogador.latencia)
         {
                 jogo->tiro[qtd_balas_ativas].pos.x = jogo->jogador.PosMundo.x;
                 jogo->tiro[qtd_balas_ativas].pos.y = jogo->jogador.PosMundo.y;
@@ -125,7 +145,7 @@ void DesenhaPortas(Jogo *jogo)
 
 //##############################################################################
 
-///Fun��o PassagemPorta
+///Funcao PassagemPorta
 
 void PassagemPorta(void)
 {
@@ -140,7 +160,7 @@ void PassagemPorta(void)
 }
 //##############################################################################
 
-///Fun��o DesenhaDebug
+///Funcao DesenhaDebug
 
 void DesenhaDebug(Jogo *jogo)
 {
@@ -150,22 +170,22 @@ void DesenhaDebug(Jogo *jogo)
         //        char stt[] = {"\0"};
 
         ///Inforamacoes Gerais
-        DrawText(TextFormat("( %.2f , %.2f)", jogo->jogador.PosMundo.x, jogo->jogador.PosMundo.y), 10, 10, 60, YELLOW);
-        DrawText(TextFormat("PosTelaxy( %.2f , %.2f)", jogo->jogador.PosTela.x, jogo->jogador.PosTela.y), 10, 100, 40, SKYBLUE);
-        DrawText(TextFormat("PosTelawh( %.2f , %.2f)", jogo->jogador.PosTela.width, jogo->jogador.PosTela.height), 10, 180, 40, GREEN);
-        //        DrawText( TextFormat("RESOLUCAO:( %d , %d)" , GetScreenWidth()  , GetScreenHeight() ) , 10 , 700 , 60 , PINK );
-        //        DrawText( TextFormat("MAPA Desenho:( %.2f , %.2f)" , jogo->MapaDesenho.x  , jogo->MapaDesenho.y ) , 10 , 80 , 60 , RAYWHITE );
-        //        DrawText( TextFormat("MAPA Tamanho:( %.2f , %.2f)" , jogo->MapaTamanho.x  , jogo->MapaTamanho.y ) , 10 , 160 , 60 , RAYWHITE );
-        //        DrawText( TextFormat("( atual sala : %d)" , jogo->atualSala ) , 10 , 100 , 60 , SKYBLUE );
-        //                if( jogo->jogador.testeFlagTiro )
-        //                        DrawCircle( 70 , 700 , 30 , RED );
-        //                DrawText( TextFormat("ARMA %d" , jogo->jogador.atualArma ) , 20 , 430 , 50 , YELLOW );
-        //                DrawText( TextFormat("FRAME_PER %d" , jogo->spriteDef.atualFrame ) , 20 , 550 , 25 , YELLOW );
-        //                DrawText( TextFormat("FRAME_PES %d" , jogo->spriteDef.atualFramePes ) , 20 , 550 , 25 , YELLOW );
-        //                DrawText( TextFormat("STATUS %d" , jogo->jogador.atualStatus ) , 20 , 500 , 50 , YELLOW );
+        DrawText( TextFormat("( %.2f , %.2f)" , jogo->jogador.PosMundo.x , jogo->jogador.PosMundo.y ) , 10 , 10 , 60 , YELLOW );
+        DrawText( TextFormat("PosTelaxy( %.2f , %.2f)" , jogo->jogador.PosTela.x , jogo->jogador.PosTela.y ) , 10 , 100 , 40 , SKYBLUE );
+        DrawText( TextFormat("PosTelawh( %.2f , %.2f)" , jogo->jogador.PosTela.width , jogo->jogador.PosTela.height ) , 10 , 180 , 40 , GREEN );
+//        DrawText( TextFormat("RESOLUCAO:( %d , %d)" , GetScreenWidth()  , GetScreenHeight() ) , 10 , 700 , 60 , PINK );
+        DrawText( TextFormat("MAPA Desenho:( %.2f , %.2f)" , jogo->MapaDesenho.x  , jogo->MapaDesenho.y ) , 10 , 600 , 50 , RAYWHITE );
+//        DrawText( TextFormat("MAPA Tamanho:( %.2f , %.2f)" , jogo->MapaTamanho.x  , jogo->MapaTamanho.y ) , 10 , 160 , 60 , RAYWHITE );
+//        DrawText( TextFormat("( atual sala : %d)" , jogo->atualSala ) , 10 , 100 , 60 , SKYBLUE );
+//                if( jogo->jogador.testeFlagTiro )
+//                        DrawCircle( 70 , 700 , 30 , RED );
+//                DrawText( TextFormat("ARMA %d" , jogo->jogador.atualArma ) , 20 , 430 , 50 , YELLOW );
+//                DrawText( TextFormat("FRAME_PER %d" , jogo->spriteDef.atualFrame ) , 20 , 550 , 25 , YELLOW );
+//                DrawText( TextFormat("FRAME_PES %d" , jogo->spriteDef.atualFramePes ) , 20 , 550 , 25 , YELLOW );
+//                DrawText( TextFormat("STATUS %d" , jogo->jogador.atualStatus ) , 20 , 500 , 50 , YELLOW );
 
-        //                DrawText( TextFormat("MOV_TIPO : %d" , jogo->jogador.atualMovTipo ) , 600 , 20 , 50 , GREEN );
-        //                DrawText( TextFormat("ROTAC : %f" , jogo->jogador.Rotac ) , 10 , 300 , 40 , ORANGE );
+//                DrawText( TextFormat("MOV_TIPO : %d" , jogo->jogador.atualMovTipo ) , 600 , 20 , 50 , GREEN );
+//                DrawText( TextFormat("ROTAC : %f" , jogo->jogador.Rotac ) , 10 , 300 , 40 , ORANGE );
 
         ///Portas entrada -> destino
         //        for( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtdPortas ; i++ ){
@@ -181,12 +201,47 @@ void DesenhaDebug(Jogo *jogo)
 
         //        }
 
-        //        DrawText( TextFormat("( %.2f , %.2f)" , jogo->MapaDesenho.x , jogo->MapaDesenho.y ) , 10 , 70 , 30 , WHITE );
-        //        DrawText( TextFormat("( %.2f , %.2f)" , ESCALA * (jogo->salas[ jogo->atualSala ].portas[ 0 ].pos.x -  jogo->MapaDesenho.x) , ESCALA * (jogo->salas[ jogo->atualSala ].portas[ 0 ].pos.y -  jogo->MapaDesenho.y ) ) , 10 , 70 , 30 , WHITE );
-        //        DrawText( TextFormat("( %.2f , %.2f)" , ESCALA * (jogo->salas[ jogo->atualSala ].portas[ 1 ].pos.x -  jogo->MapaDesenho.x) , ESCALA * (jogo->salas[ jogo->atualSala ].portas[ 1 ].pos.y -  jogo->MapaDesenho.y ) ) , 10 , 70 , 30 , WHITE );
-        //        DrawText( TextFormat(" P=%d , Z=%d " , jogo->salas[ jogo->atualSala ].qtdPortas , jogo->salas[ 0 ].qtdZonas ) , 10 , 100 , 60 , GREEN );
-        //        DrawText( TextFormat(" P=%d , Z=%d " , jogo->salas[ jogo->atualSala ].qtdPortas , jogo->salas[ 0 ].qtdZonas ) , 10 , 100 , 60 , GREEN );
-        //        DrawText( TextFormat(" xP = %.2f  |  yP=%.2f " , jogo->salas[ jogo->atualSala ].portas[ 0 ].pos.x , jogo->salas[ jogo->atualSala ].portas[ 0 ].pos.y ) , 10 , 200 , 40 , SKYBLUE );
-        //        DrawText( TextFormat(" xP = %.2f  |  yP=%.2f " , jogo->salas[ jogo->atualSala ].portas[ 1 ].pos.x , jogo->salas[ jogo->atualSala ].portas[ 1 ].pos.y ) , 10 , 200 , 40 , SKYBLUE );
+//        DrawText( TextFormat("( %.2f , %.2f)" , jogo->MapaDesenho.x , jogo->MapaDesenho.y ) , 10 , 70 , 30 , WHITE );
+//        DrawText( TextFormat("( %.2f , %.2f)" , ESCALA * (jogo->salas[ jogo->atualSala ].portas[ 0 ].pos.x -  jogo->MapaDesenho.x) , ESCALA * (jogo->salas[ jogo->atualSala ].portas[ 0 ].pos.y -  jogo->MapaDesenho.y ) ) , 10 , 70 , 30 , WHITE );
+//        DrawText( TextFormat("( %.2f , %.2f)" , ESCALA * (jogo->salas[ jogo->atualSala ].portas[ 1 ].pos.x -  jogo->MapaDesenho.x) , ESCALA * (jogo->salas[ jogo->atualSala ].portas[ 1 ].pos.y -  jogo->MapaDesenho.y ) ) , 10 , 70 , 30 , WHITE );
+//        DrawText( TextFormat(" P=%d , Z=%d " , jogo->salas[ jogo->atualSala ].qtdPortas , jogo->salas[ 0 ].qtdZonas ) , 10 , 100 , 60 , GREEN );
+//        DrawText( TextFormat(" P=%d , Z=%d " , jogo->salas[ jogo->atualSala ].qtdPortas , jogo->salas[ 0 ].qtdZonas ) , 10 , 100 , 60 , GREEN );
+//        DrawText( TextFormat(" xP = %.2f  |  yP=%.2f " , jogo->salas[ jogo->atualSala ].portas[ 0 ].pos.x , jogo->salas[ jogo->atualSala ].portas[ 0 ].pos.y ) , 10 , 200 , 40 , SKYBLUE );
+//        DrawText( TextFormat(" xP = %.2f  |  yP=%.2f " , jogo->salas[ jogo->atualSala ].portas[ 1 ].pos.x , jogo->salas[ jogo->atualSala ].portas[ 1 ].pos.y ) , 10 , 200 , 40 , SKYBLUE );
+        DrawText( TextFormat(" xB = %.2f  |  yB=%.2f " , jogo->salas[ jogo->atualSala ].baus[ 0 ].posMapa.x , jogo->salas[ jogo->atualSala ].baus[0].posMapa.y ) , 10 , 650 , 40 , SKYBLUE );
 }
 //##############################################################################
+
+
+#define salaAt jogo->atualSala
+void DesenhaBaus( Jogo *jogo ){
+//        Texture2D imagem;
+        int  i;
+
+//        DrawTexture( jogo->Res.BauFechado , 10 , 10 , WHITE);
+//        if( CheckCollisionRecs( jogo->salas[  ].baus[0].posMapa , jogo->MapaDesenho ) ){
+//                DrawTexturePro( jogo->Res.BauFechado , (Rectangle){ 0 , 0 , jogo->Res.BauFechado.width , jogo->Res.BauFechado.height } , (Rectangle){ (jogo->salas[0].baus[0].posRec.x - jogo->MapaDesenho.x + jogo->salas[0].baus[0].posRec.width / 2 ) * (  jogo->tela.width / PIXEL_LARGURA_MAPA  )  , ( jogo->salas[0].baus[0].posRec.y - jogo->MapaDesenho.y + jogo->salas[0].baus[0].posRec.height / 2) * (  jogo->tela.height / PIXEL_ALTURA_MAPA) , 31 * (  jogo->tela.width / PIXEL_LARGURA_MAPA  )  , 21 * (  jogo->tela.height / PIXEL_ALTURA_MAPA) } , (Vector2){  jogo->salas[0].baus[0].posRec.width / 2 * (  jogo->tela.width / PIXEL_LARGURA_MAPA  ) ,21 * (  jogo->tela.height / PIXEL_ALTURA_MAPA) } , 90 , WHITE);
+
+        for( i = 0 ; i < jogo->salas[ salaAt ].qtdBaus ; i++)
+                if( CheckCollisionRecs( jogo->salas[ salaAt ].baus[ i ].posMapa , jogo->MapaDesenho ) ){
+//                if( CheckCollisionPointRec( (Vector2){ jogo->salas[ salaAt ].baus[ i ].posMapa.x , jogo->salas[ salaAt ].baus[ i ].posMapa.y } , jogo->MapaDesenho ) ){
+//                        DrawRing( (Vector2){ 400 , 400 } , 80 , 160 , 0 , 180 , 20 , RED );
+                        DrawTexturePro( jogo->salas[ salaAt ].baus[ i ].imagem , jogo->salas[ salaAt ].baus[ i ].src , jogo->salas[ salaAt ].baus[ i ].posTela , jogo->salas[ salaAt ].baus[ i ].origin , jogo->salas[ salaAt ].baus[ i ].Rotac , WHITE );
+//                        DrawTexturePro( jogo->Res.BauAberto , (Rectangle){ 0 , 0 , 512 , 347 } , jogo->salas[ salaAt ].baus[ i ].posTela , jogo->salas[ salaAt ].baus[ i ].origin , jogo->salas[ salaAt ].baus[ i ].Rotac , WHITE );
+                }
+//                        imagem =  ( jogo->salas[ jogo->atualSala ].baus[ i ].ABERTO ) ?  jogo->Res.BauAberto :  jogo->Res.BauFechado;
+//                        DrawTexturePro( jogo->Res.BauFechado , (Rectangle){ 0 , 0 , jogo->Res.BauFechado.width , jogo->Res.BauFechado.height } , (Rectangle){ (jogo->salas[0].baus[0].posRec.x - jogo->MapaDesenho.x + jogo->salas[0].baus[0].posRec.width / 2 ) * (  jogo->tela.width / PIXEL_LARGURA_MAPA  )  , ( jogo->salas[0].baus[0].posRec.y - jogo->MapaDesenho.y + jogo->salas[0].baus[0].posRec.height / 2) * (  jogo->tela.height / PIXEL_ALTURA_MAPA) , 31 * (  jogo->tela.width / PIXEL_LARGURA_MAPA  )  , 21 * (  jogo->tela.height / PIXEL_ALTURA_MAPA) } , (Vector2){  jogo->salas[0].baus[0].posRec.width / 2 * (  jogo->tela.width / PIXEL_LARGURA_MAPA  ) , jogo->salas[0].baus[0].posRec.height / 2* (  jogo->tela.width / PIXEL_LARGURA_MAPA  )  , 21 * (  jogo->tela.height / PIXEL_ALTURA_MAPA) } , 90 , WHITE);
+//                        DrawRectangleV( (Vector2){ ( jogo->salas[ jogo->atualSala ].baus[ i ].pos.x - jogo->MapaDesenho.x )  , ( jogo->salas[ jogo->atualSala ].baus[ i ].pos.y - jogo->MapaDesenho.y )  } , (Vector2){ 17 / ESCALA , 31 / ESCALA } , BLUE );
+//                        DrawRectangleV( (Vector2){ ( jogo->salas[ jogo->atualSala ].baus[ i ].pos.x - jogo->MapaDesenho.x )  , ( jogo->salas[ jogo->atualSala ].baus[ i ].pos.y - jogo->MapaDesenho.y )  } , (Vector2){ 17 / ESCALA , 31 / ESCALA } , BLUE );
+//                }
+}
+
+///**     Funcao DesenhaInimigosT1():
+//    */
+//void DesenhaInimigosT1( Jogo *jogo)
+//{
+//        for();
+//        DrawTexturePro( jogo->Res.Per[0][ jogo->jogador.atualStatus ][ jogo->spriteDef.atualFrame ] , jogo->spriteDef.Src , jogo->jogador.PosTela , jogo->spriteDef.Origin , jogo->jogador.Rotac , WHITE );
+//}
+////##############################################################################
+//

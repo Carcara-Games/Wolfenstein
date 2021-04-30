@@ -28,6 +28,8 @@
         float modVector( Vector2 vet );
         float argVector( Vector2 vet );
         void AtualizaFramePes( Jogo *jogo );
+        void AtualizaObjetos( Jogo *jogo );
+        void AtualizaBaus( Jogo *jogo );
 
 
 

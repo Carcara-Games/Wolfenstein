@@ -52,9 +52,6 @@ typedef struct
         ///Mapa
         Texture2D Mapa; // Imagem do mapa
 
-        ///Objetos do Jogo
-        Texture2D Portas; // Imagem das portas
-
         ///Imagens do Personagem
         Texture2D Per[QTD_ARMAS][QTD_STATUS_MAX][100]; // Personagem [1�][2�][3�]
         //[1�] codigo da arma atual:    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
@@ -65,19 +62,14 @@ typedef struct
         Texture2D Pes[QTD_STATUS_PES][100]; // Pernas e pes do Personagem [1�][2�]
         //[1�] codigo do status atual:  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
         //[2�] codigo do frame atual
+        ///Objetos do Jogo
+        Texture2D Portas;  // Imagem das portas
+        Texture2D BauAberto;
+        Texture2D BauFechado;
+
 
 } Recursos;
 
-typedef struct
-{
-        Vector2 pos; // Posicao
-        float Rotac; // Angulo de rotacao
-
-        int QtdItens;                    // A quantidade de itens que o bau fornecera. Por isso e a quantidade de elementos do array CodItens
-        int CodItens[QTD_DROP_MAX_BAUS]; // Codigo definidos randomicamente na criacao do bau que estabelecerao os itens fornecidos
-
-        unsigned ABERTO : 1;
-} Bau;
 
 typedef struct
 {
@@ -95,7 +87,6 @@ typedef struct
         float rotac; // Angulo de rotacao
 
         int inimigoTipo; // Tipo de inimigo que ele spawna
-
         unsigned ATIVO : 1; // Se esta ativo == 1 , se nao == 0
 } Spawn;
 
@@ -107,16 +98,31 @@ typedef struct
 
 typedef struct
 {
+        Rectangle posMapa;            // Posicao no mapa geral
+        Rectangle posTela;            // Posicao na tela se necessario
+        Rectangle src;
+        Vector2 origin;
+        float Rotac;            // Angulo de rotacao
+
+        int QtdItens;                    // A quantidade de itens que o bau fornecera. Por isso e a quantidade de elementos do array CodItens
+        int CodItens[QTD_DROP_MAX_BAUS]; // Codigo definidos randomicamente na criacao do bau que estabelecerao os itens fornecidos
+
+        Texture2D imagem;       // Texto do nome do arquivo imagem
+        unsigned ABERTO : 1;
+}Bau;
+
+typedef struct
+{
         RecLim LimCam; // Limites de deslocamento da camera aerea na sala
 
         Rectangle zonas[QTD_ZONAS_MAX]; //Zonas da sala, por onde o jogador se locomove
         int qtdZonas;
-
         int qtdBaus; // Quantidade de baus
         Bau baus[MAX_BAUS_SALA];
 
         int qtdPortas; // Quantidade de portas iterativas para o jogador
         Porta portas[10];
+
 
         int qtdSpawns; //Quantidade de portas ou outro marco de onde brotam inimigos tipos 1
         Spawn spawns[10];
@@ -159,7 +165,7 @@ typedef struct
         float speed;
         float nx;
         float ny;
-        
+
 } Tiro;
 
 
@@ -187,6 +193,8 @@ typedef struct
 
         Recursos Res; //Recursos do jogo
         SpriteDef spriteDef;
+
+        Vector2 escalaGeral;
 } Jogo;
 
 typedef struct //Tipo um tem 1 ponto de saude
@@ -198,6 +206,7 @@ typedef struct //Tipo um tem 1 ponto de saude
 
         unsigned VIVO : 1;
 } InimT1;
+
 
 
 //        typedef struct

@@ -25,13 +25,65 @@ void AtualizaLevel(Jogo *jogo)
         EntraEmPortas(jogo);
         AtualizaAtirar(jogo);
 
-        AtualizaFrameJogador(jogo);
-        AtualizaFramePes(jogo);
+        EntraEmPortas( jogo );
+        AtualizaAtirar( jogo );
 
-        //        AtualizaObjetos( &jogo );
-        //        AtualizaInimigosT1( &jogo );####
+        AtualizaFrameJogador( jogo );
+        AtualizaFramePes( jogo );
+
+        AtualizaObjetos( jogo );
+//        AtualizaInimigosT1( &jogo );####
+
 }
 //##############################################################################
+
+
+/**     Funcao AtualizaObjetos():
+    */
+void AtualizaObjetos( Jogo *jogo ){
+        AtualizaBaus( jogo );
+
+
+}
+//##############################################################################
+
+
+
+/**     Funcao AtualizaBaus():
+    */
+void AtualizaBaus( Jogo *jogo ){
+        int bau;
+
+        for( bau = 0 ; bau < jogo->salas[ jogo->atualSala ].qtdBaus ; bau++ ){
+                jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.x = ( jogo->salas[ jogo->atualSala ].baus[ bau ].posMapa.x -  jogo->MapaDesenho.x ) * jogo->escalaGeral.x;
+                jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.y = ( jogo->salas[ jogo->atualSala ].baus[ bau ].posMapa.y -  jogo->MapaDesenho.y ) * jogo->escalaGeral.y;
+
+//                jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.x = 500;
+//                jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.y = 400;
+
+                // Corrigindo deslocamento causado pelo origin necessario para a rotacao do bau
+                switch( (int)jogo->salas[ jogo->atualSala ].baus[ bau ].Rotac ){
+                        case 90:
+                                jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.x += ( jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.width / 2 ) ;
+                                break;
+                        case -90:
+//                                jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.x += ( jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.width / 2 ) ;
+                                jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.y += ( jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.width / 2 ) ;
+                                break;
+                        case 180:
+                                jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.x += ( jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.width  );
+                                jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.y += ( jogo->salas[ jogo->atualSala ].baus[ bau ].posTela.width / 2 );
+                                break;
+                        case 0:
+                                break;
+
+                }
+        }
+
+}
+//##############################################################################
+
+
 
 /**     Funcao AtualizaPosicao():
     */
@@ -406,7 +458,7 @@ void AtualizaAtirar(Jogo *jogo)
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
                 {
                         jogo->jogador.atualStatus = 2;
-                       
+
                 }
 
         }

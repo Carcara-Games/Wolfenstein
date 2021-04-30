@@ -45,6 +45,7 @@ typedef struct
         Texture2D TelaDeFundo;        //Tela de fundo somente cores
         Texture2D FundoConfirmarSair; //Janela de fundo da confirmacao de saida
         Texture2D Logo;               // Imagem de fundo (Logo)
+        Texture2D Bala;
         Font fonteWolfen;             // Fonte Estilizada Wolfenstein
         Font fonteWolfen2;            // Fonte Estilizada Wolfenstein 2
 
@@ -143,8 +144,24 @@ typedef struct
         int atualStatus;
         int atualMovTipo;
 
+        int latencia;
+
         /**   lembra de excluir    */ int testeFlagTiro; //excluir depois no final
 } Jogador;
+
+typedef struct
+{
+        Vector2 direcao; // x=cosseno  y= seno   do angulo
+        Vector2 pos;
+        Vector2 posTela;     // origem = jogador + distancia pra arma
+        bool ativo;
+        float Rotac; // mesma que jogador
+        float speed;
+        float nx;
+        float ny;
+        
+} Tiro;
+
 
 typedef struct
 {
@@ -163,6 +180,8 @@ typedef struct
         Jogador jogador;
         int atualSala;
 
+        Tiro tiro[QTD_BALAS_RENDER];
+
         //                int atualLevel;
         //                DadosLevel dadosLevel;
 
@@ -180,14 +199,6 @@ typedef struct //Tipo um tem 1 ponto de saude
         unsigned VIVO : 1;
 } InimT1;
 
-typedef struct
-{
-       Vector2 velocidade;
-       Vector2 pos;
-       bool ativo;
-       float Rotac; 
-
-} Tiro;
 
 //        typedef struct
 //        {

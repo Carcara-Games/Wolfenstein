@@ -10,5 +10,6 @@
         void DesenhaPortas( Jogo *jogo);
         void DesenhaDebug( Jogo *jogo );
         void PassagemPorta( void );
+        void DesenhaTiro(Jogo *jogo);
 
 #endif // __DESENHAJOGO_H_

@@ -6,7 +6,7 @@
 
 typedef int BOOL;
 
-typedef struct //Um retangulo definido pelos limites( Facilita na funcao criar zonas )
+typedef struct //Um retangulo definido pelos limites
 {
         float esq;
         float dir;
@@ -21,13 +21,13 @@ typedef struct
                                    //[1�] codigo da arma :    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
 
         int QTD_FRAMES[QTD_ARMAS][QTD_STATUS_MAX]; // QTD de iamgens disponiveis para status de cada arma
-        //[1�] codigo da arma :    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
-        //[2�] codigo do status :  repouso 0 , movimento 1 , atirando 2 , coronhada 3 , recarregando 4
+        //[1] codigo da arma :    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
+        //[2] codigo do status :  repouso 0 , movimento 1 , atirando 2 , coronhada 3 , recarregando 4
         int atualFrame; //Frame atual do personagem
 
         ///Sprite dos pes do personagem
         int QTD_FRAMES_PES[QTD_STATUS_PES]; // Quantidade de frames para pes de cada status
-        //[1�] codigo do status :  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
+        //[1] codigo do status :  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
         int atualFramePes; //Frame atual dos pes
 
         ///
@@ -54,14 +54,14 @@ typedef struct
 
         ///Imagens do Personagem
         Texture2D Per[QTD_ARMAS][QTD_STATUS_MAX][100]; // Personagem [1�][2�][3�]
-        //[1�] codigo da arma atual:    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
-        //[2�] codigo do status atual:  repouso 0 , movimento 1 , atirando 2 , coronhada 3 , recarregando 4
-        //[3�] codigo do frame atual
+        //[1] codigo da arma atual:    pistola 0 , smg 1 , faca de contato 2 , faca de arremesso 3
+        //[2] codigo do status atual:  repouso 0 , movimento 1 , atirando 2 , coronhada 3 , recarregando 4
+        //[3] codigo do frame atual
 
         ///Imagens dos pes/pernas do personagem
         Texture2D Pes[QTD_STATUS_PES][100]; // Pernas e pes do Personagem [1�][2�]
-        //[1�] codigo do status atual:  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
-        //[2�] codigo do frame atual
+        //[1] codigo do status atual:  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
+        //[2] codigo do frame atual
         ///Objetos do Jogo
         Texture2D Portas;  // Imagem das portas
         Texture2D BauAberto;
@@ -81,9 +81,22 @@ typedef struct
         unsigned DESTRANCADA : 1; // Se esta destrancada == 1 , se nao == 0
 } Porta;
 
+///
+typedef struct //Tipo T1 tem 1 ponto de saude
+{
+        Vector2 posMundo; //posicao no mundo
+        Vector2 posTela; //posicao na tela
+        float Rotac;
+
+        int codItem; // Codigo do item que ira dropar
+
+        unsigned VIVO : 1;
+} InimT1;
+
 typedef struct
 {
-        Vector2 pos; // Posicao
+        Rectangle posMundo; // Posicao
+        Rectangle posTela;
         float rotac; // Angulo de rotacao
 
         int inimigoTipo; // Tipo de inimigo que ele spawna
@@ -123,11 +136,23 @@ typedef struct
         int qtdPortas; // Quantidade de portas iterativas para o jogador
         Porta portas[10];
 
-
         int qtdSpawns; //Quantidade de portas ou outro marco de onde brotam inimigos tipos 1
         Spawn spawns[10];
-} Sala;
 
+        int qtd_inimigos_liberados; // Quantidade de inimigos liberados
+        int qtd_inimigos_liberar; // Quantidade de inimigos abatidos para se liberar porta_a_ser_liberada
+        int qtd_abatidos;       // Inimigos ja abatidos
+        int porta_a_ser_liberada;     // O numero da porta que sera destrancada depois de qtd_abatidos atingir qtd_inimigos_liberar
+
+        int max_ativos; //Maximo de inimigos ativos na sala. A ser definido pela dificuldade do jogo
+        InimT1 inimigosT1[ QTD_MAX_T1_SALA ];   // O array com os inimigos da sala
+} Sala;
+typedef struct
+{
+        int latencia;   // A latencia entre tiros
+
+
+}ARMA;
 typedef struct
 {
         char *nome;
@@ -197,15 +222,6 @@ typedef struct
         Vector2 escalaGeral;
 } Jogo;
 
-typedef struct //Tipo um tem 1 ponto de saude
-{
-        Vector2 pos; //posicao
-        float Rotac;
-
-        int codItem; // Codigo do item
-
-        unsigned VIVO : 1;
-} InimT1;
 
 
 

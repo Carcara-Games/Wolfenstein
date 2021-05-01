@@ -21,6 +21,7 @@ void IniciarJanela( void )
 }
 
 
+
 /** Função  IniciaJogo() :
     */
 
@@ -29,9 +30,6 @@ Jogo IniciaJogo( void )
         Jogo jogo;
         jogo.FECHAR = 0;
 
-        ///SPAWN
-//        inicializarSpawns();
-//
         ///Armas iniciais e Status iniciais
         //Inicial
         jogo.jogador.atualArma = 0;
@@ -80,38 +78,38 @@ Jogo IniciaJogo( void )
                         jogo.regulagemTela = 2;
                 }
         }
+        ///Ajuste do Mapa do Jogo
+        ///Tamanho Da Textura MAPA
+        jogo.MapaTamanho.x = jogo.Res.Mapa.width;
+        jogo.MapaTamanho.y = jogo.Res.Mapa.height;
+
+        ///Area de Extracao ( FIXA )
+        jogo.MapaDesenho.x = 0;
+        jogo.MapaDesenho.y = 300;
+        jogo.MapaDesenho.width = PIXEL_LARGURA_MAPA;
+        jogo.MapaDesenho.height = PIXEL_ALTURA_MAPA;
 
         ///Escala Geral
         jogo.escalaGeral.x = (  jogo.tela.width / PIXEL_LARGURA_MAPA  );
         jogo.escalaGeral.y = (  jogo.tela.height / PIXEL_ALTURA_MAPA  );
 
+        ///Posicao Jogador No Mundo
+        jogo.jogador.PosMundo.x = 102;
+        jogo.jogador.PosMundo.y = 633;
+
+
         ///Posicao Jogador Tela
                 ///Per
                 jogo.jogador.PosTela.width =  LARG_PADRAO * jogo.tela.width / REF_TELA_LARG;
                 jogo.jogador.PosTela.height =  jogo.jogador.PosTela.width * ALT_PADRAO / LARG_PADRAO;   //Altura Dependente da largura
-                jogo.jogador.PosTela.x =  jogo.tela.width / 2;
-                jogo.jogador.PosTela.y =  jogo.tela.height / 2;
-        //        jogo.jogador.PosTela.x =  ( jogo.tela.width - jogo.jogador.PosTela.width) / 2;
-        //        jogo.jogador.PosTela.y =  ( jogo.tela.height  -  jogo.jogador.PosTela.height ) / 2;
+                jogo.jogador.PosTela.x =  jogo.escalaGeral.x * ( jogo.jogador.PosMundo.x - jogo.MapaDesenho.x );
+                jogo.jogador.PosTela.y =  jogo.escalaGeral.y * ( jogo.jogador.PosMundo.y - jogo.MapaDesenho.y );
 
                 ///Pes
                 jogo.jogador.PosTelaPes.width =  ESC_PES * jogo.jogador.PosTela.width;
                 jogo.jogador.PosTelaPes.height =  ESC_PES* jogo.jogador.PosTela.height;
                 jogo.jogador.PosTelaPes.x =  jogo.jogador.PosTela.x;
                 jogo.jogador.PosTelaPes.y =  jogo.jogador.PosTela.y;
-
-        ///Posicao Jogador No Mundo
-        jogo.jogador.PosMundo.x = 102;
-        jogo.jogador.PosMundo.y = 633;
-
-        ///Ajuste do Mapa do Jogo
-                ///Tamanho Da Textura MAPA
-                jogo.MapaTamanho.x = jogo.Res.Mapa.width;
-                jogo.MapaTamanho.y = jogo.Res.Mapa.height;
-
-                ///Area de Extracao ( FIXA )
-                jogo.MapaDesenho.width = PIXEL_LARGURA_MAPA;
-                jogo.MapaDesenho.height = PIXEL_ALTURA_MAPA;
 
         ///Sala inicial
         jogo.atualSala = 0;
@@ -123,11 +121,23 @@ Jogo IniciaJogo( void )
         CarregarBaus( &jogo );
         inicializarBaus( &jogo );
 
+        /// Cria Spawns
+        inicializarSpawns( &jogo );
+
         ///Cria Portas
         CriaPortas( &jogo );
 
         ///Passagem de portas
         jogo.PASSAGEM = 0;
+
+        /// Inimigos
+        inicializarInimigosSalas( &jogo );
+
+//        ///Teste
+//        jogo.salas[0].inimigosT1[0].ATIVO=1;
+//        jogo.salas[0].inimigosT1[0].posMundo.x=102;
+//        jogo.salas[0].inimigosT1[0].posMundo.y=1000;
+//        jogo.salas[0].inimigosT1[0].ATIVO=1;
 
         ///Retorno
         return jogo;
@@ -652,104 +662,235 @@ void InverteStr( char *str )
 }
 
 
-
+///
 void inicializarSpawns(Jogo *jogo)
 {
-    int sala[QTD_SALAS_SPAWN] = {0, 2, 4, 5, 6, 8, 10, 12, 13};
-    int qtd_spawn_sala[QTD_SALAS_SPAWN] = {5, 2, 2, 2, 3, 3, 7, 4, 2};
+        jogo->salas[ 0 ].qtdSpawns = 5;
+        jogo->salas[ 1 ].qtdSpawns = 0;
+        jogo->salas[ 2 ].qtdSpawns = 2;
+        jogo->salas[ 3 ].qtdSpawns = 0;
+        jogo->salas[ 4 ].qtdSpawns = 2;
+        jogo->salas[ 5 ].qtdSpawns = 2;
+        jogo->salas[ 6 ].qtdSpawns = 3;
+        jogo->salas[ 7 ].qtdSpawns = 0;
+        jogo->salas[ 8 ].qtdSpawns = 3;
+        jogo->salas[ 9 ].qtdSpawns = 0;
+        jogo->salas[ 10 ].qtdSpawns = 7;
+        jogo->salas[ 11 ].qtdSpawns = 0;
+        jogo->salas[ 12 ].qtdSpawns = 4;
+        jogo->salas[ 13 ].qtdSpawns = 2;
+        jogo->salas[ 14 ].qtdSpawns = 0;
+        jogo->salas[ 15 ].qtdSpawns = 0;
 
-    Vector2 locais[QTD_SALAS_SPAWN][7] =
+    int locais[ QTDSALAS ][ MAX_SPAWN_SALAS ][ 2] =
         {
-            {// sala 0
-             {148, 978},
-             {230, 1240},
-             {270, 1300},
-             {400, 1322},
-             {540, 1425}},
+                {// sala 0
+                        {148 , 978 },
+                        {230 , 1240},
+                        {270 , 1300},
+                        {400 , 1322},
+                        {540 , 1425}
+                },
 
-            {// sala 2
-             {320, 880},
-             {500, 880}},
+                {// sala 1
+                        {/*Nenhum*/}
+                },
 
-            {// sala 4
-             {300, 350},
-             {520, 350}},
+                {// sala 2
+                        {320, 880},
+                        {500, 880}
+                },
 
-            {// sala 5
-             {800, 418},
-             {850, 260}},
+                {// sala 3
+                        {/*Nenhum*/}
+                },
 
-            {// sala 6
-             {1260, 200},
-             {1380, 200},
-             {1380, 270}},
+                {// sala 4
+                        {300, 350},
+                        {520, 350}
+                },
 
-            {// sala 8
-             {1260, 592},
-             {1260, 730},
-             {1380, 270}},
+                {// sala 5
+                        {800, 418},
+                        {850, 260}
+                },
 
-            {// sala 10
-             {1010, 1010},
-             {1010, 1110},
-             {1010, 1210},
-             {1260, 1060},
-             {1480, 1010},
-             {1480, 1110},
-             {1480, 1210}},
+                {// sala 6
+                     {1260, 200},
+                     {1380, 200},
+                     {1380, 270}
+                },
 
-            {// sala 12
-             {2238, 1018},
-             {2368, 1018},
-             {2238, 1220},
-             {2368, 1220}},
+                {// sala 7
+                        {/*Nenhum*/}
+                },
 
-            {// sala 13
-             {2150, 1515},
-             {2350, 1515}}};
+                {// sala 8
+                        {1260, 592},
+                        {1260, 730},
+                        {1380, 270}
+                },
 
-    /*
-            sala 0:  [0][5][]
-            sala 2:  [1][2][]
-            sala 4:  [2][2][]
-            sala 5:  [3][2][]
-            sala 6:  [4][3][]
-            sala 8:  [5][3][]
-            sala 10: [6][7][]
-            sala 12: [7][4][]
-            sala 13: [8][2][]
+                {// sala 9
+                        {/*Nenhum*/}
+                },
 
-        */
+                {// sala 10
+                        {1010, 1010},
+                        {1010, 1110},
+                        {1010, 1210},
+                        {1260, 1060},
+                        {1480, 1010},
+                        {1480, 1110},
+                        {1480, 1210}
+                },
 
-    for (int i = 0; i < QTD_SALAS_SPAWN; i++)
-    {
-        for (int j = 0; j < qtd_spawn_sala[i]; j++)
-        {
-            jogo->salas[sala[i]].spawns[j].pos = locais[i][j];
+                {// sala 11
+                        {/*Nenhum*/}
+                },
+
+                {// sala 12
+                        {2238, 1018},
+                        {2368, 1018},
+                        {2238, 1220},
+                        {2368, 1220}
+                },
+
+                {// sala 13
+                        {2150, 1515},
+                        {2350, 1515}
+                },
+
+                {// sala 14
+                        {/*Nenhum*/}
+                },
+
+                {// sala 15
+                        {/*Nenhum*/}
+                }
+
+     };
+
+
+     /// Atribuicao
+        for (int i = 0 ; i < QTDSALAS ; i++)
+                for ( int j = 0 ; j < jogo->salas[ i ].qtdSpawns ; j++){
+                        jogo->salas[ i ].spawns[ j ].posMundo.x = locais[ i ][ j ][ 0 ];
+                        jogo->salas[ i ].spawns[ j ].posMundo.y = locais[ i ][ j ][ 1 ];
+
+                        jogo->salas[ i ].spawns[ j ].posMundo.width = LARG_MUNDO_SPAWN;
+                        jogo->salas[ i ].spawns[ j ].posMundo.height = ALT_MUNDO_SPAWN;
+
+
         }
-        jogo->salas[sala[i]].qtdSpawns = qtd_spawn_sala[i];
-    }
 
-    //
-    //        for( sala = 0 ; sala < QTDSALAS ; sala++ ){
-    //
-    //
-    //
-    //        }
-    /*      sala 0 : {148, 978}, {230, 1240}, {270, 1300}, {400, 1322}, {540, 1425};
-        sala 2 : {320, 880}, {500, 880};
-        sala 4 : {300, 350}, {520, 350};
-        sala 5 : {800, 418}, {850, 260};
-        sala 6 : {1260, 200}, {1380, 200}, {1380, 270};
-        sala 8 : {1260, 592}, {1260, 730}, {1380, 270};
-        sala 10 : {1010, 1010}, {1010, 1110}, {1010, 1210}, {1260, 1060}, {1480, 1010}, {1480, 1110}, {1480, 1210};
-        sala 12 : {2238, 1018}, {2368, 1018}, {2238, 1220}, {2368,1220};
-        sala 13 : {2150, 1515}, {2350, 1515};
-*/
-    //
 }
-
-
+///Versao antiga
+////void inicializarSpawns(Jogo *jogo)
+////{
+////    int sala[QTD_SALAS_SPAWN] = {0, 2, 4, 5, 6, 8, 10, 12, 13};
+////    int qtd_spawn_sala[QTD_SALAS_SPAWN] = {5, 2, 2, 2, 3, 3, 7, 4, 2};
+////
+////    Vector2 locais[QTD_SALAS_SPAWN][7] =
+////        {
+////                {// sala 0
+////                        {148, 978},
+////                        {230, 1240},
+////                        {270, 1300},
+////                        {400, 1322},
+////                        {540, 1425}
+////                },
+////
+////                {// sala 2
+////                        {320, 880},
+////                        {500, 880}
+////                },
+////
+////                {// sala 4
+////                        {300, 350},
+////                        {520, 350}
+////                },
+////
+////                {// sala 5
+////                        {800, 418},
+////                        {850, 260}
+////                },
+////
+////                {// sala 6
+////                     {1260, 200},
+////                     {1380, 200},
+////                     {1380, 270}
+////                },
+////
+////                {// sala 8
+////                        {1260, 592},
+////                        {1260, 730},
+////                        {1380, 270}
+////                },
+////
+////                {// sala 10
+////                        {1010, 1010},
+////                        {1010, 1110},
+////                        {1010, 1210},
+////                        {1260, 1060},
+////                        {1480, 1010},
+////                        {1480, 1110},
+////                        {1480, 1210}
+////                },
+////
+////                {// sala 12
+////                        {2238, 1018},
+////                        {2368, 1018},
+////                        {2238, 1220},
+////                        {2368, 1220}
+////                },
+////
+////                {// sala 13
+////                        {2150, 1515},
+////                        {2350, 1515}
+////                }
+////
+////     };
+////
+////    /*
+////            sala 0:  [0][5][]
+////            sala 2:  [1][2][]
+////            sala 4:  [2][2][]
+////            sala 5:  [3][2][]
+////            sala 6:  [4][3][]
+////            sala 8:  [5][3][]
+////            sala 10: [6][7][]
+////            sala 12: [7][4][]
+////            sala 13: [8][2][]
+////
+////        */
+////
+////
+////        for (int i = 0; i < QTD_SALAS_SPAWN; i++)
+////        {
+////                jogo->salas[sala[i]].qtdSpawns = qtd_spawn_sala[i];
+////                for (int j = 0; j < qtd_spawn_sala[i]; j++)
+////                    jogo->salas[sala[i]].spawns[j].pos = locais[i][j];
+////        }
+////
+////    //
+////    //        for( sala = 0 ; sala < QTDSALAS ; sala++ ){
+////    //
+////    //
+////    //
+////    //        }
+////    /*      sala 0 : {148, 978}, {230, 1240}, {270, 1300}, {400, 1322}, {540, 1425};
+////        sala 2 : {320, 880}, {500, 880};
+////        sala 4 : {300, 350}, {520, 350};
+////        sala 5 : {800, 418}, {850, 260};
+////        sala 6 : {1260, 200}, {1380, 200}, {1380, 270};
+////        sala 8 : {1260, 592}, {1260, 730}, {1380, 270};
+////        sala 10 : {1010, 1010}, {1010, 1110}, {1010, 1210}, {1260, 1060}, {1480, 1010}, {1480, 1110}, {1480, 1210};
+////        sala 12 : {2238, 1018}, {2368, 1018}, {2238, 1220}, {2368,1220};
+////        sala 13 : {2150, 1515}, {2350, 1515};
+////*/
+////    //
+////}
 
 ///
 void inicializarBaus( Jogo *jogo ){
@@ -893,6 +1034,7 @@ void inicializarBaus( Jogo *jogo ){
                         jogo->salas[ sala ].baus[ bau ].posTela.height = BAU_COMPRIMENTO * jogo->escalaGeral.y;
 
                         jogo->salas[ sala ].baus[ bau ].src = (Rectangle){ 0 , 0 , jogo->Res.BauFechado.width , jogo->Res.BauFechado.height };
+                        jogo->salas[ sala ].baus[ bau ].ABERTO = 0;
 
 //                        jogo->salas[ sala ].baus[ bau ].origin.x = jogo->escalaGeral.x * jogo->Res.BauFechado.width / 2;
 //                        jogo->salas[ sala ].baus[ bau ].origin.y = jogo->escalaGeral.y * jogo->Res.BauFechado.height / 2;
@@ -904,5 +1046,67 @@ void CarregarBaus( Jogo *jogo ){
         jogo->Res.BauAberto = LoadTexture( "Sprites/Baús/BauVermelhoAberto.png");
 
 }
+
+void inicializarInimigosSalas( Jogo *jogo ){
+        int sala[QTD_SALAS_SPAWN] = {0, 2, 4, 5, 6, 8, 10, 12, 13};
+        int i;
+
+        /// Porta que sera liberada ao se matar todos os inimigos necessarios
+        jogo->salas[0].porta_a_ser_liberada = 2;
+        jogo->salas[2].porta_a_ser_liberada = 2;
+        jogo->salas[4].porta_a_ser_liberada = 2;
+        jogo->salas[5].porta_a_ser_liberada = 2;
+        jogo->salas[6].porta_a_ser_liberada = 3;
+        jogo->salas[8].porta_a_ser_liberada = 3;
+        jogo->salas[10].porta_a_ser_liberada = 2;
+        jogo->salas[12].porta_a_ser_liberada = 1; //N precisa
+        jogo->salas[13].porta_a_ser_liberada = 1; //N precisa
+
+        /// Quantidade de inimigos para liberar porta 'porta_a_ser_liberada'
+        jogo->salas[0].qtd_inimigos_liberar = 20;
+        jogo->salas[2].qtd_inimigos_liberar = 8;
+        jogo->salas[4].qtd_inimigos_liberar = 7;
+        jogo->salas[5].qtd_inimigos_liberar = 8;
+        jogo->salas[6].qtd_inimigos_liberar = 15;
+        jogo->salas[8].qtd_inimigos_liberar = 3;
+        jogo->salas[10].qtd_inimigos_liberar = 2;
+        jogo->salas[12].qtd_inimigos_liberar = 3; //N precisa
+        jogo->salas[13].qtd_inimigos_liberar = 3; //N precisa
+
+        /// Zerar inimigos ja liberados
+        for( i = 0 ; i < QTD_SALAS_SPAWN ; i++)
+                jogo->salas[ sala[ i ] ].qtd_inimigos_liberados = 0;
+
+        /// Zerar inimigos ja abatidos
+        for( i = 0 ; i < QTD_SALAS_SPAWN ; i++)
+                jogo->salas[ sala[ i ] ].qtd_abatidos = 0;
+
+        /// Atribuir VIVO para todos os inimigos
+        int j;
+        for( i = 0 ; i < QTD_SALAS_SPAWN ; i++)
+                for( j = 0 ; j < jogo->salas[ sala[ i ] ].qtd_inimigos_liberar ; j++)
+                        jogo->salas[ sala[ i ] ].inimigosT1[ i ].VIVO = 1;
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

@@ -13,5 +13,8 @@
         void DesenhaTiro(Jogo *jogo);
         void DesenhaObjetos( Jogo *jogo );
         void DesenhaBaus( Jogo *jogo );
+        void DesenhaInimigosT1( Jogo *jogo);
+        void DesenhaSpawns( Jogo *jogo);
+
 
 #endif // __DESENHAJOGO_H_

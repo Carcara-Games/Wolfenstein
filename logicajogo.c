@@ -7,9 +7,8 @@
     */
 void AtualizaLevel(Jogo *jogo)
 {
-        //        AtualizaArma( &jogo );
-
         AtualizaMira(jogo);
+        //        AtualizaArma( &jogo );
 
         //        AtualizaTiros( &jogo );
         //        AtualizaRecarga( &jogo );
@@ -25,15 +24,14 @@ void AtualizaLevel(Jogo *jogo)
         EntraEmPortas(jogo);
         AtualizaAtirar(jogo);
 
-        EntraEmPortas( jogo );
-        AtualizaAtirar( jogo );
 
         AtualizaFrameJogador( jogo );
         AtualizaFramePes( jogo );
 
         AtualizaObjetos( jogo );
-//        AtualizaInimigosT1( &jogo );####
+        AtualizaInimigosT1( jogo );
 
+        GeraInimigos( jogo );
 }
 //##############################################################################
 
@@ -46,6 +44,8 @@ void AtualizaObjetos( Jogo *jogo ){
 
 }
 //##############################################################################
+
+
 
 
 
@@ -164,10 +164,11 @@ void AtualizaPosicao(Jogo *jogo)
         //Alterando posicao na tela
         if (1)
         {
-                ///Personagem
+                ///Personagemg
+//                jogo->jogador.PosTela.x =  jogo->escalaGeral.x * ( jogo->jogador.PosMundo.x - jogo->MapaDesenho.x );
+//                jogo->jogador.PosTela.y =  jogo->escalaGeral.y * ( jogo->jogador.PosMundo.y - jogo->MapaDesenho.y );
                 jogo->jogador.PosTela.x = jogo->tela.width / 2;
                 jogo->jogador.PosTela.y = jogo->tela.height / 2;
-
                 ///Pes
                 //                jogo->jogador.PosTelaPes.x =  ( jogo->jogador.PosTela.x - jogo->jogador.PosTelaPes.width ) / 2;
                 //                jogo->jogador.PosTelaPes.y =  ( jogo->jogador.PosTela.y -  jogo->jogador.PosTelaPes.height ) / 2;
@@ -179,15 +180,45 @@ void AtualizaPosicao(Jogo *jogo)
         }
 }
 //##############################################################################
+
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
 float modVector(Vector2 vet)
 {
         return sqrt(pow(vet.x, 2) + pow(vet.y, 2));
 }
 
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
 float argVector(Vector2 vet)
 {
         return (180 / PI) * atan2(vet.y, vet.x);
 }
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
 
 void IncrementaPosicao(Vector2 *pos, int addX, int addY)
 {
@@ -195,10 +226,30 @@ void IncrementaPosicao(Vector2 *pos, int addX, int addY)
         pos->y += addY;
 }
 
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
 Vector2 SomaVectores(Vector2 vet1, Vector2 vet2)
 {
         return (Vector2){vet1.x + vet2.x, vet1.y + vet2.y};
 }
+
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
 
 float Deslocamento(Vector2 posInicial, Vector2 posFinal)
 {
@@ -482,6 +533,237 @@ void AtualizaSrcPer(Jogo *jogo)
         jogo->jogador.PosTela.height = jogo->Res.Per[jogo->jogador.atualArma][jogo->jogador.atualStatus][0].height;
 }
 
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
 void AtualizaInimigosT1(Jogo *jogo)
 {
+        int i;
+        Vector2 posAtual;
+        Vector2 alvo = jogo->jogador.PosMundo;
+
+        for( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados ; i++ )
+                if( jogo->salas[ jogo->atualSala ].inimigosT1[ i ].VIVO ){
+
+                        posAtual = jogo->salas[ jogo->atualSala ].inimigosT1[ i ].posMundo ;
+
+                        posAtual = T1Perseguicao( jogo , i ,  posAtual , alvo );
+
+                        jogo->salas[ jogo->atualSala ].inimigosT1[ i ].posMundo = posAtual ;
+
+                        if( CheckCollisionPointRec( posAtual , jogo->MapaDesenho ) ){
+                                AtualizaPosTela( jogo , posAtual );
+                        }
+                }
 }
+
+
+Vector2 T1Perseguicao( Jogo *jogo , int codInimigo , Vector2 posAtual , Vector2 alvo ){
+        Vector2 posFinal;
+        float passox;
+        float passoy;
+
+        /// Direta
+        passox = PASSOT1 * sinalNumero( alvo.x - posAtual.x );
+        passoy = PASSOT1 * sinalNumero( alvo.y - posAtual.y );
+
+        // Correcao movimento diagonal
+        if( passox  &&  passoy ){
+                passox /= sqrt(2);
+                passoy /= sqrt(2);
+        }
+
+        // Correcao flick
+        if( passox  >  CONSTANTE_ANITFLICK * passoy ) passoy = 0;
+        if( passoy  >  CONSTANTE_ANITFLICK * passox ) passox = 0;
+
+
+        /// Posicao Final
+        posFinal.x = posAtual.x  + passox;
+        posFinal.y =posAtual.y + passoy;
+        return posFinal;
+
+
+
+
+
+
+        //Rascunho
+//        static int flagPerseg[ QTD_MAX_T1_SALA ] = { 0 };
+//        static int tipoPerseg[ QTD_MAX_T1_SALA ];
+//        int quadrante; // 0 - Origem  , 1 -  Q1 , 2 - Q2 , 3 - Q3 , 4 - Q4 , 5 - EixoX , 6 - EixoY
+//        static int tipoAlinhamentoAnt[ QTD_MAX_T1_SALA ];
+//
+//        tipoAlinhamento = tipoAlinhamentoCheck( posAtual , alvo );
+//
+//        if( !flagPerseg  ||  tipoAlinhamentoAnt[ i ] )
+//                tipoPerseg = nmrRand( 1 , 3 );
+//
+//        if( passox  &&  passoy && flagPerseg ){
+//                switch( tipoPerseg ){
+//                        case 1:
+//                                posFinal.x = posAtual.x + passox;
+//                                posFinal.y = posAtual.y;
+//                                break;
+//                        case 2:
+//                                posFinal.x = posAtual.x;
+//                                posFinal.y = posAtual.y + passoy;
+//                                break;
+//                        case 3:
+//                                posFinal.x = posAtual.x + passox / sqrt(2);
+//                                posFinal.y = posAtual.y + passoy / sqrt(2);
+//                                break;
+//                }
+//        }
+//        else{
+//                flagPerseg = 0;
+//
+//                posFinal.x = posAtual.x + passox;
+//                posFinal.y = posAtual.y + passoy;
+//        }
+//
+//        tipoAlinhamentoAnt = tipoAlinhamento;
+//        return posFinal;
+}
+
+
+int sinalNumero( float nmr ){
+
+        if(nmr == 0) return 0;
+
+        return ( nmr > 0 ) ? 1 : -1;
+
+
+}
+
+//#include <stdlib.h>
+int nmrRand( int mini , int maxi ){
+        srand( time(NULL) );
+
+        return mini + rand() % ( maxi + 1 - mini );
+}
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+///
+Vector2 AtualizaPosTela( Jogo *jogo , Vector2 posMundo ){
+        float XTela;
+        float YTela;
+
+        XTela = (  posMundo.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x ;
+        YTela = ( posMundo.y  - jogo->MapaDesenho.y ) * jogo->escalaGeral.y ;
+
+        return (Vector2){ XTela , YTela };
+}
+
+
+//int tipoAlinhamentoCheck( Vector2 posAtual , Vector2 alvo ){
+//        int rx = sinalNumero( alvo.x - posAtual.x );
+//        int ry = sinalNumero( alvo.y - posAtual.y );
+//
+//        if( rx == -1 && !ry )
+//                return 0;
+//        if( rx == 1 && !ry )
+//                return 1;
+//        if( ry == -1 && !rx )
+//                return 2;
+//        if( ry == 1 && !rx )
+//                return 3;
+//
+//        if( rx == 1 && ry == 1 )
+//                return 4;
+//        if( rx == -1 && ry == 1 )
+//                return 5;
+//        if( rx == -1 && ry == -1 )
+//                return 6;
+//        if( rx == 1 && ry == -1 )
+//                return 7;
+//
+//        if( !rx && !ry )
+//                return 9;
+//}
+
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
+void GeraInimigos( Jogo *jogo ){
+        static int espera = 2;
+        int qtdAtual = jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados;
+
+
+        if( qtdAtual  <  jogo->salas[ jogo->atualSala ].qtd_inimigos_liberar ){
+                if( !espera ){
+                        jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados++;
+
+                        int spawnPerto = CalcularSpawnPerto( jogo ); // O spawn mais proximo
+
+                        jogo->salas[ jogo->atualSala ].inimigosT1[ qtdAtual ].posMundo.x = jogo->salas[ jogo->atualSala ].spawns[ spawnPerto ].posMundo.x;
+                        jogo->salas[ jogo->atualSala ].inimigosT1[ qtdAtual ].posMundo.y = jogo->salas[ jogo->atualSala ].spawns[ spawnPerto ].posMundo.y;
+
+                        jogo->salas[ jogo->atualSala ].inimigosT1[ qtdAtual ].VIVO = 1;
+                }
+        }
+
+        espera = ( espera )  ?  espera - 1 : DELAY_SPAWN;
+}
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
+int CalcularSpawnPerto( Jogo *jogo ){
+        int cod;
+        int menor = 0;
+        float distMenor = distancia( jogo->jogador.PosMundo , (Vector2){jogo->salas[ jogo->atualSala ].spawns[ menor ].posMundo.x , jogo->salas[ jogo->atualSala ].spawns[ menor ].posMundo.y} );
+        float dist;
+
+        for( cod = 0 ; cod < jogo->salas[ jogo->atualSala ].qtdSpawns ; cod++ ){
+                dist = distancia( jogo->jogador.PosMundo , (Vector2){jogo->salas[ jogo->atualSala ].spawns[ cod ].posMundo.x , jogo->salas[ jogo->atualSala ].spawns[ cod ].posMundo.y} );
+                menor = ( dist < distMenor )  ?  cod : menor;
+                distMenor = ( dist < distMenor )  ?  dist : distMenor;
+        }
+
+        return menor;
+}
+
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
+float distancia( Vector2 pos0 , Vector2 posF ){
+
+        return sqrt( pow( posF.x - pos0.x , 2 ) + pow( posF.y - pos0.y , 2 ) );
+
+}
+
+

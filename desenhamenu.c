@@ -17,13 +17,13 @@ void DesenhaMenuPrincipal(Jogo* jogo, int selecao)
         const int VARIACAO_ALTURA = FONT_SIZE * 1.5;    // Variacao de altura entre cada item dado pelo tamanho da letra
         const int QTD_OPCOES = 7;     // Quantidade de opcoes no menu
 
-        Rectangle imagem;
-        imagem.height = jogo->Res.TelaDeFundo.height ;
-        imagem.width = jogo->Res.TelaDeFundo.width ;
-        imagem.x = 0 ;
-        imagem.y = 0 ;
+//        Rectangle imagem;
+//        imagem.height = jogo->Res.TelaDeFundo.height ;
+//        imagem.width = jogo->Res.TelaDeFundo.width ;
+//        imagem.x = 0 ;
+//        imagem.y = 0 ;
 
-        Vector2 pos = (Vector2 ){ 0 , 0 };
+//        Vector2 pos = (Vector2 ){ 0 , 0 };
 
         BeginDrawing();
         {

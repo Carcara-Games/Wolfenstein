@@ -24,6 +24,8 @@
 
         void IncrementaPosicao( Vector2 *pos , int addX , int addY );
         float Deslocamento( Vector2 posInicial ,  Vector2 posFinal );
+        int CalcularSpawnPerto( Jogo *jogo );
+        float distancia( Vector2 pos0 , Vector2 posF );
         Vector2 SomaVectores( Vector2 vet1 , Vector2 vet2 );
         float modVector( Vector2 vet );
         float argVector( Vector2 vet );
@@ -31,6 +33,14 @@
         void AtualizaObjetos( Jogo *jogo );
         void AtualizaBaus( Jogo *jogo );
 
+        void AtualizaInimigosT1(Jogo *jogo);
+        Vector2 T1Perseguicao( Jogo *jogo , int codInimigo , Vector2 posAtual , Vector2 alvo );
+        int sinalNumero( float nmr );
+        int nmrRand( int mini , int maxi );
+        Vector2 AtualizaPosTela( Jogo *jogo , Vector2 posMundo );
+        int tipoAlinhamentoCheck( Vector2 posAtual , Vector2 alvo );
+
+        void GeraInimigos( Jogo *jogo );
 
 
 

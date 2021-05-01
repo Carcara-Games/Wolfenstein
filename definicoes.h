@@ -49,8 +49,17 @@
         #define QTDSALAS 16
         #define QTD_ZONAS_MAX 10
         #define QTD_SALAS_SPAWN 9
+        #define MAX_SPAWN_SALAS 10
 
+        ///SPAWNS
+        #define LARG_MUNDO_SPAWN 50
+        #define ALT_MUNDO_SPAWN 30
+        #define DELAY_SPAWN 100
 
+        ///INIMIGOS
+        #define QTD_MAX_T1_SALA 50
+        #define PASSOT1 .7*PASSO
+        #define CONSTANTE_ANITFLICK 5
 
         ///ARMAS
 //        #define QTD_ARMAS 5

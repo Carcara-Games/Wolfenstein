@@ -20,5 +20,7 @@
         void inicializarBaus( Jogo *jogo );
         void CarregarBaus( Jogo *jogo );
 
+        void inicializarInimigosSalas( Jogo *jogo );
+
 
 #endif // __INICIALIZAR_H_

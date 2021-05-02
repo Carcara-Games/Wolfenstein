@@ -37,7 +37,7 @@ void AtualizaLevel(Jogo *jogo)
         AtualizaAtaqueT1( jogo );
 
         AtualizaDanoJogador( jogo );
-        AtualizaDanoInimigo( jogo );
+//        AtualizaDanoInimigo( jogo );
 
         GeraInimigos( jogo );
 }
@@ -1068,37 +1068,37 @@ BOOL mesmaZona( Jogo *jogo , Vector2 pos1 , Vector2 pos2 ){
  *
  */
 
-void AtualizaDanoInimigo( Jogo *jogo ){
-        static int delayCor[ 100 ];
-
-
-
-        Vector2 posAtual;
-        int i;
-
-        int aSal = jogo->atualSala;
-
-        for( i = 0 ; i < jogo->salas[ aSal ].qtd_inimigos_liberados ; i++ )
-                if( jogo->salas[ aSal ].inimigos[ i ].VIVO ){
-                        if( jogo->jogador.DANO ){
-
-                                jogo->jogador.cor = RED;
-                                delayCor = DELAY_DANO;
-                                jogo->jogador.saude--;
-
-                                if( jogo->jogador.saude < 0 ) jogo->jogador.saude = 0;
-                                if(jogo->jogador.saude == 0 ) jogo->jogador.vidas--;
-                //                if(jogo->jogador.vidas == 0 ) EGameOver();
-                                jogo->jogador.DANO = 0;
-                        }
-                        else{
-                                if( !delayCor )
-                                        jogo->jogador.cor = WHITE;
-                                else
-                                        jogo->jogador.cor = RED;
-                        }
-
-                        if( delayCor ) delayCor--;
-                }
-}
-
+//void AtualizaDanoInimigo( Jogo *jogo ){
+//        static int delayCor[ 100 ];
+//
+//
+//
+//        Vector2 posAtual;
+//        int i;
+//
+//        int aSal = jogo->atualSala;
+//
+//        for( i = 0 ; i < jogo->salas[ aSal ].qtd_inimigos_liberados ; i++ )
+//                if( jogo->salas[ aSal ].inimigos[ i ].VIVO ){
+//                        if( jogo->jogador.DANO ){
+//
+//                                jogo->jogador.cor = RED;
+//                                delayCor = DELAY_DANO;
+//                                jogo->jogador.saude--;
+//
+//                                if( jogo->jogador.saude < 0 ) jogo->jogador.saude = 0;
+//                                if(jogo->jogador.saude == 0 ) jogo->jogador.vidas--;
+//                //                if(jogo->jogador.vidas == 0 ) EGameOver();
+//                                jogo->jogador.DANO = 0;
+//                        }
+//                        else{
+//                                if( !delayCor )
+//                                        jogo->jogador.cor = WHITE;
+//                                else
+//                                        jogo->jogador.cor = RED;
+//                        }
+//
+//                        if( delayCor ) delayCor--;
+//                }
+//}
+//

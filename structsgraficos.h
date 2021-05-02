@@ -101,7 +101,7 @@ typedef struct
 } Porta;
 
 ///
-typedef struct /
+typedef struct
 {
         int tipo; // T0 , T1 , T2
         Vector2 posMundo; //posicao no mundo

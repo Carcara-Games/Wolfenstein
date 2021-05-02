@@ -37,6 +37,7 @@ void AtualizaLevel(Jogo *jogo)
         AtualizaAtaqueT1( jogo );
 
         AtualizaDanoJogador( jogo );
+        AtualizaDanoInimigo( jogo );
 
         GeraInimigos( jogo );
 }
@@ -598,15 +599,26 @@ void AtualizaAtaqueT1(Jogo *jogo)
                                 jogo->salas[ aSal ].inimigos[ i ].atacando = 0;
                         }
 
-                        if( !flagAtaque[ i ] && jogo->salas[ aSal ].inimigos[ i ].atacando  &&  jogo->spriteDef.atualFrame_T1[ i ] >= 29  &&  jogo->spriteDef.atualFrame_T1[ i ] <= 35  &&  Deslocamento( posAtual , alvo ) <= DIST_EFETIVAR_ATAQUE_T1 ){
-                                jogo->jogador.DANO = 1;
-                                flagAtaque[ i ] = 1;
+                        ///T1
+                        if( jogo->salas[ aSal ].inimigos[ i ].tipo == 1 ){
+                                if( !flagAtaque[ i ] && jogo->salas[ aSal ].inimigos[ i ].atacando  &&  jogo->spriteDef.atualFrame_T1[ i ] >= 29  &&  jogo->spriteDef.atualFrame_T1[ i ] <= 35  &&  Deslocamento( posAtual , alvo ) <= DIST_EFETIVAR_ATAQUE_T1 ){
+                                        jogo->jogador.DANO = 1;
+                                        flagAtaque[ i ] = DELAY_DANO;
+                                }
+                        }
+
+                        ///T0
+                        if( jogo->salas[ aSal ].inimigos[ i ].tipo == 0 ){
+                                if( !flagAtaque[ i ]  &&  Deslocamento( posAtual , alvo ) <= DIST_EFETIVAR_ATAQUE_T0 ){
+                                        jogo->jogador.DANO = 1;
+                                        flagAtaque[ i ] = 4 * DELAY_DANO;
+                                }
                         }
 
                         if( jogo->salas[ aSal ].inimigos[ i ].latenciaAtaque )
                                 jogo->salas[ aSal ].inimigos[ i ].latenciaAtaque--;
 
-                        if( !flagAtaque[ i ] ) flagAtaque[ i ]--;
+                        if( flagAtaque[ i ] ) flagAtaque[ i ]--;
                 }
 }
 
@@ -975,6 +987,7 @@ void GeraInimigos( Jogo *jogo ){
                         jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].tipo = jogo->salas[ jogo->atualSala ].spawns[ spawn ].tipo;
 
                         jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].VIVO = 1;
+                        jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].saude = jogo->infoIniT.saude[ jogo->salas[ jogo->atualSala ].spawns[ spawn ].tipo ];
                 }
         }
 
@@ -1007,18 +1020,20 @@ int CalcularSpawnPerto( Jogo *jogo ){
 
 /** \brief AtualizaDanoJogador
  *
- * \param
- * \param
- * \return
+ * \param a
+ * \param b
+ * \return c
  *
  */
 
 void AtualizaDanoJogador( Jogo *jogo ){
+        static int delayCor;
 
         if( jogo->jogador.DANO ){
 
                 jogo->jogador.cor = RED;
-                jogo->jogador.saude -= jogo->jogador.DANO;
+                delayCor = DELAY_DANO;
+                jogo->jogador.saude--;
 
                 if( jogo->jogador.saude < 0 ) jogo->jogador.saude = 0;
                 if(jogo->jogador.saude == 0 ) jogo->jogador.vidas--;
@@ -1026,9 +1041,13 @@ void AtualizaDanoJogador( Jogo *jogo ){
                 jogo->jogador.DANO = 0;
         }
         else{
-                jogo->jogador.cor = WHITE;
+                if( !delayCor )
+                        jogo->jogador.cor = WHITE;
+                else
+                        jogo->jogador.cor = RED;
         }
 
+        if( delayCor ) delayCor--;
 }
 
 BOOL mesmaZona( Jogo *jogo , Vector2 pos1 , Vector2 pos2 ){
@@ -1041,4 +1060,45 @@ BOOL mesmaZona( Jogo *jogo , Vector2 pos1 , Vector2 pos2 ){
         return 0;
 }
 
+/** \brief AtualizaDanoInimigo
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
+void AtualizaDanoInimigo( Jogo *jogo ){
+        static int delayCor[ 100 ];
+
+
+
+        Vector2 posAtual;
+        int i;
+
+        int aSal = jogo->atualSala;
+
+        for( i = 0 ; i < jogo->salas[ aSal ].qtd_inimigos_liberados ; i++ )
+                if( jogo->salas[ aSal ].inimigos[ i ].VIVO ){
+                        if( jogo->jogador.DANO ){
+
+                                jogo->jogador.cor = RED;
+                                delayCor = DELAY_DANO;
+                                jogo->jogador.saude--;
+
+                                if( jogo->jogador.saude < 0 ) jogo->jogador.saude = 0;
+                                if(jogo->jogador.saude == 0 ) jogo->jogador.vidas--;
+                //                if(jogo->jogador.vidas == 0 ) EGameOver();
+                                jogo->jogador.DANO = 0;
+                        }
+                        else{
+                                if( !delayCor )
+                                        jogo->jogador.cor = WHITE;
+                                else
+                                        jogo->jogador.cor = RED;
+                        }
+
+                        if( delayCor ) delayCor--;
+                }
+}
 

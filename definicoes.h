@@ -29,6 +29,7 @@
         #define LARG_PADRAO 130
         #define ALT_PADRAO 115
         #define RAZAO_SOLID_JOGADOR 10
+        #define DELAY_DANO 10
 
 
         ///EXIT
@@ -96,8 +97,8 @@
         #define DIV_FPS_T1 2
 
         #define DIST_MANTER 30
-        #define DIST_INICIAR_ATAQUE_T1 80
-        #define DIST_EFETIVAR_ATAQUE_T1 55
+        #define DIST_INICIAR_ATAQUE_T0 80
+        #define DIST_EFETIVAR_ATAQUE_T0 13
         #define LATENCIA_T0 FPS*2
 
         ///ARMAS

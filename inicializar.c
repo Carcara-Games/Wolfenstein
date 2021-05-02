@@ -138,9 +138,14 @@ Jogo IniciaJogo( void )
         jogo.infoIniT.dist_manter[ 0 ] = 10;
         jogo.infoIniT.dist_manter[ 1 ] = 30;
         jogo.infoIniT.dist_manter[ 2 ] = 100;
+
         jogo.infoIniT.vel[ 0 ] = PASSO_T0;
         jogo.infoIniT.vel[ 1 ] = PASSO_T1;
         jogo.infoIniT.vel[ 2 ] = PASSO_T1;
+
+        jogo.infoIniT.saude[ 0 ] = 1;
+        jogo.infoIniT.saude[ 1 ] = 4;
+        jogo.infoIniT.saude[ 2 ] = 2;
         inicializarInimigosSalas( &jogo );
         spriteT1( &jogo );
 //        spriteT0( &jogo );

@@ -101,7 +101,7 @@ typedef struct
 } Porta;
 
 ///
-typedef struct //Tipo T1 tem 1 ponto de saude
+typedef struct /
 {
         int tipo; // T0 , T1 , T2
         Vector2 posMundo; //posicao no mundo
@@ -114,12 +114,14 @@ typedef struct //Tipo T1 tem 1 ponto de saude
 
         int codItem; // Codigo do item que ira dropar
 
+        int saude;
         unsigned VIVO : 1;
 } Inim;
 
 typedef struct{
         float dist_manter[ 3 ];
         float vel[ 3 ];
+        int saude[ 3 ];
 
 }infoTipoIni;
 

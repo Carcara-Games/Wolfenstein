@@ -50,6 +50,10 @@
 		<Unit filename="desenhamenu.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="fisica.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="fisica.h" />
 		<Unit filename="inicializar.c">
 			<Option compilerVar="CC" />
 		</Unit>

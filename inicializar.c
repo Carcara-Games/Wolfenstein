@@ -78,6 +78,11 @@ Jogo IniciaJogo( void )
                         jogo.regulagemTela = 2;
                 }
         }
+
+        ///Escala Geral
+        jogo.escalaGeral.x = (  jogo.tela.width / PIXEL_LARGURA_MAPA  );
+        jogo.escalaGeral.y = (  jogo.tela.height / PIXEL_ALTURA_MAPA  );
+
         ///Ajuste do Mapa do Jogo
         ///Tamanho Da Textura MAPA
         jogo.MapaTamanho.x = jogo.Res.Mapa.width;
@@ -89,10 +94,6 @@ Jogo IniciaJogo( void )
         jogo.MapaDesenho.width = PIXEL_LARGURA_MAPA;
         jogo.MapaDesenho.height = PIXEL_ALTURA_MAPA;
 
-        ///Escala Geral
-        jogo.escalaGeral.x = (  jogo.tela.width / PIXEL_LARGURA_MAPA  );
-        jogo.escalaGeral.y = (  jogo.tela.height / PIXEL_ALTURA_MAPA  );
-
         ///Posicao Jogador No Mundo
         jogo.jogador.PosMundo.x = 102;
         jogo.jogador.PosMundo.y = 633;
@@ -102,14 +103,17 @@ Jogo IniciaJogo( void )
                 ///Per
                 jogo.jogador.PosTela.width =  LARG_PADRAO * jogo.tela.width / REF_TELA_LARG;
                 jogo.jogador.PosTela.height =  jogo.jogador.PosTela.width * ALT_PADRAO / LARG_PADRAO;   //Altura Dependente da largura
-                jogo.jogador.PosTela.x =  jogo.escalaGeral.x * ( jogo.jogador.PosMundo.x - jogo.MapaDesenho.x );
-                jogo.jogador.PosTela.y =  jogo.escalaGeral.y * ( jogo.jogador.PosMundo.y - jogo.MapaDesenho.y );
+//                jogo.jogador.PosTela.x =  jogo.escalaGeral.x * ( jogo.jogador.PosMundo.x - jogo.MapaDesenho.x );
+//                jogo.jogador.PosTela.y =  jogo.escalaGeral.y * ( jogo.jogador.PosMundo.y - jogo.MapaDesenho.y );
+                jogo.jogador.PosTela.x =  jogo.tela.width / 2;
+                jogo.jogador.PosTela.y =  jogo.tela.height / 2;
 
                 ///Pes
                 jogo.jogador.PosTelaPes.width =  ESC_PES * jogo.jogador.PosTela.width;
                 jogo.jogador.PosTelaPes.height =  ESC_PES* jogo.jogador.PosTela.height;
                 jogo.jogador.PosTelaPes.x =  jogo.jogador.PosTela.x;
                 jogo.jogador.PosTelaPes.y =  jogo.jogador.PosTela.y;
+
 
         ///Sala inicial
         jogo.atualSala = 0;
@@ -132,12 +136,15 @@ Jogo IniciaJogo( void )
 
         /// Inimigos
         inicializarInimigosSalas( &jogo );
+        spriteT1( &jogo );
+
+
 
 //        ///Teste
-//        jogo.salas[0].inimigosT1[0].ATIVO=1;
-//        jogo.salas[0].inimigosT1[0].posMundo.x=102;
-//        jogo.salas[0].inimigosT1[0].posMundo.y=1000;
-//        jogo.salas[0].inimigosT1[0].ATIVO=1;
+//        jogo.salas[0].inimigos[0].ATIVO=1;
+//        jogo.salas[0].inimigos[0].posMundo.x=102;
+//        jogo.salas[0].inimigos[0].posMundo.y=1000;
+//        jogo.salas[0].inimigos[0].ATIVO=1;
 
         ///Retorno
         return jogo;
@@ -1063,7 +1070,7 @@ void inicializarInimigosSalas( Jogo *jogo ){
         jogo->salas[13].porta_a_ser_liberada = 1; //N precisa
 
         /// Quantidade de inimigos para liberar porta 'porta_a_ser_liberada'
-        jogo->salas[0].qtd_inimigos_liberar = 20;
+        jogo->salas[0].qtd_inimigos_liberar = 2;
         jogo->salas[2].qtd_inimigos_liberar = 8;
         jogo->salas[4].qtd_inimigos_liberar = 7;
         jogo->salas[5].qtd_inimigos_liberar = 8;
@@ -1082,18 +1089,79 @@ void inicializarInimigosSalas( Jogo *jogo ){
                 jogo->salas[ sala[ i ] ].qtd_abatidos = 0;
 
         /// Atribuir VIVO para todos os inimigos
+        /// Zerar latencia de ataque para todos os inimigos
         int j;
         for( i = 0 ; i < QTD_SALAS_SPAWN ; i++)
-                for( j = 0 ; j < jogo->salas[ sala[ i ] ].qtd_inimigos_liberar ; j++)
-                        jogo->salas[ sala[ i ] ].inimigosT1[ i ].VIVO = 1;
+                for( j = 0 ; j < jogo->salas[ sala[ i ] ].qtd_inimigos_liberar ; j++){
+                        jogo->salas[ sala[ i ] ].inimigos[ i ].VIVO = 1;                        jogo->salas[ sala[ i ] ].inimigos[ i ].latenciaAtaque = 0;
+
+                }
 
 
-
-
-
+        /// Atribuir tamanhos
+        for( i = 0 ; i < QTD_SALAS_SPAWN ; i++)
+                for( j = 0 ; j < jogo->salas[ sala[ i ] ].qtd_inimigos_liberar ; j++){
+                        jogo->salas[ sala[ i ] ].inimigos[ j ].posTela.width = MAPA_LQ_T1 * jogo->tela.width / REF_TELA_LARG;
+                        jogo->salas[ sala[ i ] ].inimigos[ j ].posTela.height = MAPA_LQ_T1 * jogo->tela.width / REF_TELA_LARG;
+                }
 }
 
 
+
+/** \brief Carrega as spites do inimigos tipo T1 e define valores
+ *
+ * \param *jogo
+ *
+ */
+
+void spriteT1( Jogo *jogo ){
+        jogo->spriteDef.QTD_FRAMES_T1[ 0 ] = 21; //Andando
+        jogo->spriteDef.QTD_FRAMES_T1[ 1 ] = 61; //Ataque
+
+
+        int status , frame;
+        char nmr[10];
+        const char comum[] = "Sprites/T1/";
+        char pasta[][100] = {
+                "movimento/",
+                "ataque/",
+                " ",
+                " ",
+                " "
+        };
+
+        char fim[] = ".png";
+        char arquivo[100];
+
+                for( status = 0 ; status < QTD_STATUS_T1 ; status++ )
+                        for( frame = 0 ; frame < jogo->spriteDef.QTD_FRAMES_T1[ status ] ; frame++ )
+                        {
+                                TextCopy( arquivo , comum );
+                                strcat( arquivo , pasta[status] );
+
+                                IntParaString( frame , nmr );
+                                strcat( arquivo , nmr );
+
+                                strcat( arquivo , fim );
+
+                                jogo->Res.T1[status][frame] = LoadTexture( arquivo );
+                        }
+
+        //Jogador extracao de textura
+        jogo->spriteDef.SrcT1[ 0 ].height = SRC_LQ_T1_0;
+        jogo->spriteDef.SrcT1[ 0 ].width = SRC_LQ_T1_0;
+        jogo->spriteDef.SrcT1[ 0 ].x = SRC_X_T1_0;
+        jogo->spriteDef.SrcT1[ 0 ].y = SRC_Y_T1_0;
+
+        jogo->spriteDef.SrcT1[ 1 ].height = SRC_LQ_T1_1;
+        jogo->spriteDef.SrcT1[ 1 ].width = SRC_LQ_T1_1;
+        jogo->spriteDef.SrcT1[ 1 ].x = SRC_X_T1_1;
+        jogo->spriteDef.SrcT1[ 1 ].y = SRC_Y_T1_1;
+
+        //Origin
+        jogo->spriteDef.OriginT1.x = MAPA_LQ_T1 / 2.0;
+        jogo->spriteDef.OriginT1.y = MAPA_LQ_T1 / 2.0;
+}
 
 
 

@@ -56,10 +56,31 @@
         #define ALT_MUNDO_SPAWN 30
         #define DELAY_SPAWN 100
 
-        ///INIMIGOS
+        ///INIMIGOS T1
         #define QTD_MAX_T1_SALA 50
         #define PASSOT1 .7*PASSO
         #define CONSTANTE_ANITFLICK 5
+
+        //0
+        #define SRC_LQ_T1_0 295      // Tamanho do lado em pixels do quadrado de extracao da imagem original
+        #define SRC_X_T1_0 142      // X
+        #define SRC_Y_T1_0 160      // Y
+
+        //1
+        #define SRC_LQ_T1_1 178      // Tamanho do lado em pixels do quadrado de extracao da imagem original
+        #define SRC_X_T1_1 197      // X
+        #define SRC_Y_T1_1 241      // Y
+
+        #define MAPA_LQ_T1 170      // Tamanho do lado em pixels do quadrado de destino no mapa
+
+        #define QTD_STATUS_T1 2
+        #define MAX_T1_TELA 50
+
+        #define DIV_FPS_T1 2
+
+        #define DIST_INICIAR_ATAQUE_T1 30
+        #define DIST_EFETIVAR_ATAQUE_T1 10
+        #define LATENCIA_T1 FPS*4
 
         ///ARMAS
 //        #define QTD_ARMAS 5

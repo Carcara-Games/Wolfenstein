@@ -32,9 +32,16 @@ typedef struct
 
         ///
         Rectangle Src;    //Retangulo de extracao da textura com as dimensoes da mesma do personagem
-        Rectangle SrcPes; //Retangulo de extracao da textura com as dimensoes da mesma do pes do personagem
+        Rectangle SrcPes;
+        Rectangle SrcT1[ QTD_STATUS_T1 ];
         Vector2 Origin;   // O deslocamento entre a quina superior esquerda da textura PersonagemPrincipal e o centro de rotacao
         Vector2 OriginPes;
+        Vector2 OriginT1;
+
+        ///T1
+        int QTD_FRAMES_T1[ QTD_STATUS_T1 ];
+        int atualFrame_T1[ MAX_T1_TELA ];       //Para cada T1 na tela
+
 
 } SpriteDef;
 
@@ -62,6 +69,12 @@ typedef struct
         Texture2D Pes[QTD_STATUS_PES][100]; // Pernas e pes do Personagem [1�][2�]
         //[1] codigo do status atual:  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
         //[2] codigo do frame atual
+
+        ///Imagens dos pes/pernas do personagem
+        Texture2D T1[ QTD_STATUS_T1][100]; // Pernas e pes do Personagem [1�][2�]
+        //[1] codigo do status atual:  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
+        //[2] codigo do frame atual
+
         ///Objetos do Jogo
         Texture2D Portas;  // Imagem das portas
         Texture2D BauAberto;
@@ -84,14 +97,19 @@ typedef struct
 ///
 typedef struct //Tipo T1 tem 1 ponto de saude
 {
-        Vector2 posMundo; //posicao no mundo
-        Vector2 posTela; //posicao na tela
+        int tipo; // T1 , T2 , T3
+
+        Rectangle posMundo; //posicao no mundo
+        Rectangle posTela; //posicao na tela
         float Rotac;
+
+        BOOL atacando;
+        int latenciaAtaque;
 
         int codItem; // Codigo do item que ira dropar
 
         unsigned VIVO : 1;
-} InimT1;
+} Inim;
 
 typedef struct
 {
@@ -145,7 +163,7 @@ typedef struct
         int porta_a_ser_liberada;     // O numero da porta que sera destrancada depois de qtd_abatidos atingir qtd_inimigos_liberar
 
         int max_ativos; //Maximo de inimigos ativos na sala. A ser definido pela dificuldade do jogo
-        InimT1 inimigosT1[ QTD_MAX_T1_SALA ];   // O array com os inimigos da sala
+        Inim inimigos[ QTD_MAX_T1_SALA ];   // O array com os inimigos da sala
 } Sala;
 typedef struct
 {
@@ -176,6 +194,9 @@ typedef struct
         int atualMovTipo;
 
         int latencia;
+
+        BOOL DANO;
+        Color cor;
 
         /**   lembra de excluir    */ int testeFlagTiro; //excluir depois no final
 } Jogador;

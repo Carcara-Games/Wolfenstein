@@ -68,7 +68,7 @@ void DesenhaPes(Jogo *jogo)
 
 void DesenhaJogador(Jogo *jogo)
 {
-        DrawTexturePro(jogo->Res.Per[0][jogo->jogador.atualStatus][jogo->spriteDef.atualFrame], jogo->spriteDef.Src, jogo->jogador.PosTela, jogo->spriteDef.Origin, jogo->jogador.Rotac, WHITE);
+        DrawTexturePro(jogo->Res.Per[0][jogo->jogador.atualStatus][jogo->spriteDef.atualFrame], jogo->spriteDef.Src, jogo->jogador.PosTela, jogo->spriteDef.Origin, jogo->jogador.Rotac, jogo->jogador.cor);
 }
 //##############################################################################
 
@@ -190,14 +190,16 @@ void DesenhaBaus( Jogo *jogo ){
 void DesenhaInimigosT1( Jogo *jogo)
 {
         int i;
+        int aSal = jogo->atualSala;
 
-        for( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados ; i++ )
-//                        if( jogo->salas[ jogo->atualSala ].inimigosT1[ i ].VIVO )
-                                if( CheckCollisionPointRec( jogo->salas[ jogo->atualSala ].inimigosT1[ i ].posMundo , jogo->MapaDesenho ) )
-                                        DrawRectangle( jogo->salas[ jogo->atualSala ].inimigosT1[ i ].posTela.x , jogo->salas[ jogo->atualSala ].inimigosT1[ i ].posTela.y , 30 , 30 , ORANGE );
-
-        DrawText( TextFormat("(%.2f , %.2f)" ,  jogo->salas[ 0 ].inimigosT1[ 0 ].posTela.x , jogo->salas[ 0 ].inimigosT1[ 0 ].posTela.y ), 300 , 500 , 30 , RED );
-        DrawText( TextFormat("(%.2f , %.2f)" ,  jogo->salas[ 0 ].inimigosT1[ 0 ].posMundo.x , jogo->salas[ 0 ].inimigosT1[ 0 ].posMundo.y ), 300 , 550 , 30 , RED );
+        for( i = 0 ; i < jogo->salas[ aSal ].qtd_inimigos_liberados ; i++ )
+//                        if( jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO )
+                                if( CheckCollisionRecs( jogo->salas[ aSal ].inimigos[ i ].posMundo , jogo->MapaDesenho ) ){
+//                                        DrawRectangle( jogo->salas[ aSal ].inimigos[ i ].posTela.x , jogo->salas[ aSal ].inimigos[ i ].posTela.y , 30 , 30 , ORANGE );
+                                        DrawTexturePro( jogo->Res.T1[ jogo->salas[ aSal ].inimigos[ i ].atacando ][jogo->spriteDef.atualFrame_T1[ i ] ] , jogo->spriteDef.SrcT1[ jogo->salas[ aSal ].inimigos[ i ].atacando ] , jogo->salas[ aSal ].inimigos[ i ].posTela , jogo->spriteDef.OriginT1 , jogo->salas[ aSal ].inimigos[ i ].Rotac ,  WHITE );
+                                }
+        DrawText( TextFormat("(%.2f , %.2f)" ,  jogo->salas[ 0 ].inimigos[ 0 ].posTela.x , jogo->salas[ 0 ].inimigos[ 0 ].posTela.y ), 300 , 500 , 30 , RED );
+        DrawText( TextFormat("(%.2f , %.2f)" ,  jogo->salas[ 0 ].inimigos[ 0 ].posMundo.x , jogo->salas[ 0 ].inimigos[ 0 ].posMundo.y ), 300 , 550 , 30 , RED );
 
 }
 //##############################################################################
@@ -278,8 +280,8 @@ void DesenhaDebug(Jogo *jogo)
         DrawText( TextFormat("Inimigos Gerados:    LIM : %d   |  %d" , jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados , jogo->salas[ jogo->atualSala ].qtd_inimigos_liberar ) , 10 , 100 , 30 , YELLOW );
         if( !laten){
                 for( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados ; i++ ){
-                        px[ i ] = jogo->salas[ jogo->atualSala ].inimigosT1[ i ].posMundo.x;
-                        py[ i ] = jogo->salas[ jogo->atualSala ].inimigosT1[ i ].posMundo.y;
+                        px[ i ] = jogo->salas[ jogo->atualSala ].inimigos[ i ].posMundo.x;
+                        py[ i ] = jogo->salas[ jogo->atualSala ].inimigos[ i ].posMundo.y;
                 }
                 laten = 50;
         }
@@ -287,9 +289,9 @@ void DesenhaDebug(Jogo *jogo)
                 laten--;
 
         for( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados ; i++ )
-                DrawText( TextFormat("INIM T1 %d | VIVO: %d | POS(%.0f , %.0f) " , i , jogo->salas[ jogo->atualSala ].inimigosT1[ i ].VIVO , px[ i ] , py[ i ] ) , 700 , 100 + 30*i , 25 , VIOLET );
+                DrawText( TextFormat("INIM T1 %d | VIVO: %d | POS(%.0f , %.0f) | T(%.0f , %.0f) | A=%d | L = %d" , i , jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO , px[ i ] , py[ i ] , jogo->salas[ jogo->atualSala ].inimigos[ i ].posTela.width , jogo->salas[ jogo->atualSala ].inimigos[ i ].posTela.height , jogo->salas[ jogo->atualSala ].inimigos[ i ].atacando , jogo->salas[ jogo->atualSala ].inimigos[ i ].latenciaAtaque ) , 500 , 50 + 30*i , 20 , SKYBLUE );
 
-        #include "logicajogo.h"
+//        #include "logicajogo.h"
 //        DrawText(TextFormat("MENOR  = %d   |  DIST= %.0f" , CalcularSpawnPerto( jogo ) , distancia( jogo->jogador.PosMundo , jogo->salas[ jogo->atualSala ].spawns[ CalcularSpawnPerto( jogo ) ]. ) ) , 20 , 400 ,50 , DARKBLUE);
 
 }

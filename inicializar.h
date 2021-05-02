@@ -22,5 +22,7 @@
 
         void inicializarInimigosSalas( Jogo *jogo );
 
+        void spriteT1( Jogo *jogo );
+
 
 #endif // __INICIALIZAR_H_

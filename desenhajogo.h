@@ -13,7 +13,7 @@
         void DesenhaTiro(Jogo *jogo);
         void DesenhaObjetos( Jogo *jogo );
         void DesenhaBaus( Jogo *jogo );
-        void DesenhaInimigosT1( Jogo *jogo);
+        void DesenhaInimigos( Jogo *jogo);
         void DesenhaSpawns( Jogo *jogo);
 
 

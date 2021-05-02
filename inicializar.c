@@ -135,8 +135,15 @@ Jogo IniciaJogo( void )
         jogo.PASSAGEM = 0;
 
         /// Inimigos
+        jogo.infoIniT.dist_manter[ 0 ] = 10;
+        jogo.infoIniT.dist_manter[ 1 ] = 30;
+        jogo.infoIniT.dist_manter[ 2 ] = 100;
+        jogo.infoIniT.vel[ 0 ] = PASSO_T0;
+        jogo.infoIniT.vel[ 1 ] = PASSO_T1;
+        jogo.infoIniT.vel[ 2 ] = PASSO_T1;
         inicializarInimigosSalas( &jogo );
         spriteT1( &jogo );
+//        spriteT0( &jogo );
 
 
 
@@ -778,128 +785,54 @@ void inicializarSpawns(Jogo *jogo)
 
      };
 
+        int tipo[QTDSALAS][ MAX_SPAWN_SALAS ] = {
+                {  1 /*s1*/ , 0/*s2*/ , 0 /*s3*/ , 0/*s4*/ , 0/*s5*/  },     //sala00
+                {  /*NENHUM*/ },      //sala01
+                {  1 /*s1*/ , 0/*s2*/ },      //sala02
+                {  /*NENHUM*/ },      //sala03
+                {  1 /*s1*/ , 1/*s2*/ },      //sala04
+                {  0 /*s1*/ , 0/*s2*/ },      //sala05
+                {  0 /*s1*/ , 0/*s2*/ , 1/*p3*/ },      //sala06
+                {  /*NENHUM*/ },      //sala07
+                {  1 /*s1*/ , 2/*s2*/ , 0/*p3*/ },      //sala08
+                {  /*NENHUM*/ },      //sala09
+                {  0 /*s1*/ , 1/*s2*/ , 0 /*s3*/ , 1/*s4*/ , 0/*s5*/ , 2/*s6*/ , 2/*s7*/ },      //sala10
+                { /*NENHUM*/  },      //sala11
+                {  0 /*s1*/ , 0/*s2*/ , 0 /*s3*/ , 0/*s4*/ },      //sala12
+                {  1 /*s1*/ , 2 /*s1*/ },      //sala13
+                {  /*NENHUM*/  },      //sala14
+                { /*NENHUM*/ }      //sala15
+
+
+        };
 
      /// Atribuicao
-        for (int i = 0 ; i < QTDSALAS ; i++)
-                for ( int j = 0 ; j < jogo->salas[ i ].qtdSpawns ; j++){
+     int i , j;
+        for ( i = 0 ; i < QTDSALAS ; i++ )
+                for ( j = 0 ; j < jogo->salas[ i ].qtdSpawns ; j++ ){
                         jogo->salas[ i ].spawns[ j ].posMundo.x = locais[ i ][ j ][ 0 ];
                         jogo->salas[ i ].spawns[ j ].posMundo.y = locais[ i ][ j ][ 1 ];
 
                         jogo->salas[ i ].spawns[ j ].posMundo.width = LARG_MUNDO_SPAWN;
                         jogo->salas[ i ].spawns[ j ].posMundo.height = ALT_MUNDO_SPAWN;
 
+                        jogo->salas[ i ].spawns[ j ].tipo = tipo[ i ][ j ];
+
 
         }
 
 }
-///Versao antiga
-////void inicializarSpawns(Jogo *jogo)
-////{
-////    int sala[QTD_SALAS_SPAWN] = {0, 2, 4, 5, 6, 8, 10, 12, 13};
-////    int qtd_spawn_sala[QTD_SALAS_SPAWN] = {5, 2, 2, 2, 3, 3, 7, 4, 2};
-////
-////    Vector2 locais[QTD_SALAS_SPAWN][7] =
-////        {
-////                {// sala 0
-////                        {148, 978},
-////                        {230, 1240},
-////                        {270, 1300},
-////                        {400, 1322},
-////                        {540, 1425}
-////                },
-////
-////                {// sala 2
-////                        {320, 880},
-////                        {500, 880}
-////                },
-////
-////                {// sala 4
-////                        {300, 350},
-////                        {520, 350}
-////                },
-////
-////                {// sala 5
-////                        {800, 418},
-////                        {850, 260}
-////                },
-////
-////                {// sala 6
-////                     {1260, 200},
-////                     {1380, 200},
-////                     {1380, 270}
-////                },
-////
-////                {// sala 8
-////                        {1260, 592},
-////                        {1260, 730},
-////                        {1380, 270}
-////                },
-////
-////                {// sala 10
-////                        {1010, 1010},
-////                        {1010, 1110},
-////                        {1010, 1210},
-////                        {1260, 1060},
-////                        {1480, 1010},
-////                        {1480, 1110},
-////                        {1480, 1210}
-////                },
-////
-////                {// sala 12
-////                        {2238, 1018},
-////                        {2368, 1018},
-////                        {2238, 1220},
-////                        {2368, 1220}
-////                },
-////
-////                {// sala 13
-////                        {2150, 1515},
-////                        {2350, 1515}
-////                }
-////
-////     };
-////
-////    /*
-////            sala 0:  [0][5][]
-////            sala 2:  [1][2][]
-////            sala 4:  [2][2][]
-////            sala 5:  [3][2][]
-////            sala 6:  [4][3][]
-////            sala 8:  [5][3][]
-////            sala 10: [6][7][]
-////            sala 12: [7][4][]
-////            sala 13: [8][2][]
-////
-////        */
-////
-////
-////        for (int i = 0; i < QTD_SALAS_SPAWN; i++)
-////        {
-////                jogo->salas[sala[i]].qtdSpawns = qtd_spawn_sala[i];
-////                for (int j = 0; j < qtd_spawn_sala[i]; j++)
-////                    jogo->salas[sala[i]].spawns[j].pos = locais[i][j];
-////        }
-////
-////    //
-////    //        for( sala = 0 ; sala < QTDSALAS ; sala++ ){
-////    //
-////    //
-////    //
-////    //        }
-////    /*      sala 0 : {148, 978}, {230, 1240}, {270, 1300}, {400, 1322}, {540, 1425};
-////        sala 2 : {320, 880}, {500, 880};
-////        sala 4 : {300, 350}, {520, 350};
-////        sala 5 : {800, 418}, {850, 260};
-////        sala 6 : {1260, 200}, {1380, 200}, {1380, 270};
-////        sala 8 : {1260, 592}, {1260, 730}, {1380, 270};
-////        sala 10 : {1010, 1010}, {1010, 1110}, {1010, 1210}, {1260, 1060}, {1480, 1010}, {1480, 1110}, {1480, 1210};
-////        sala 12 : {2238, 1018}, {2368, 1018}, {2238, 1220}, {2368,1220};
-////        sala 13 : {2150, 1515}, {2350, 1515};
-////*/
-////    //
-////}
 
-///
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
 void inicializarBaus( Jogo *jogo ){
         Vector2 pos[ QTDSALAS ][ MAX_BAUS_SALA ] = {
                { //sala 00
@@ -1070,7 +1003,7 @@ void inicializarInimigosSalas( Jogo *jogo ){
         jogo->salas[13].porta_a_ser_liberada = 1; //N precisa
 
         /// Quantidade de inimigos para liberar porta 'porta_a_ser_liberada'
-        jogo->salas[0].qtd_inimigos_liberar = 2;
+        jogo->salas[0].qtd_inimigos_liberar = 5;
         jogo->salas[2].qtd_inimigos_liberar = 8;
         jogo->salas[4].qtd_inimigos_liberar = 7;
         jogo->salas[5].qtd_inimigos_liberar = 8;
@@ -1103,6 +1036,9 @@ void inicializarInimigosSalas( Jogo *jogo ){
                 for( j = 0 ; j < jogo->salas[ sala[ i ] ].qtd_inimigos_liberar ; j++){
                         jogo->salas[ sala[ i ] ].inimigos[ j ].posTela.width = MAPA_LQ_T1 * jogo->tela.width / REF_TELA_LARG;
                         jogo->salas[ sala[ i ] ].inimigos[ j ].posTela.height = MAPA_LQ_T1 * jogo->tela.width / REF_TELA_LARG;
+                        jogo->salas[ sala[ i ] ].inimigos[ j ].posTelaSolid.width = MAPA_LQ_T1 * jogo->tela.width / REF_TELA_LARG;
+                        jogo->salas[ sala[ i ] ].inimigos[ j ].posTelaSolid.height = MAPA_LQ_T1 * jogo->tela.width / REF_TELA_LARG;
+
                 }
 }
 
@@ -1148,15 +1084,64 @@ void spriteT1( Jogo *jogo ){
                         }
 
         //Jogador extracao de textura
-        jogo->spriteDef.SrcT1[ 0 ].height = SRC_LQ_T1_0;
-        jogo->spriteDef.SrcT1[ 0 ].width = SRC_LQ_T1_0;
-        jogo->spriteDef.SrcT1[ 0 ].x = SRC_X_T1_0;
-        jogo->spriteDef.SrcT1[ 0 ].y = SRC_Y_T1_0;
+        jogo->spriteDef.SrcT1.height = SRC_LQ_T1_0;
+        jogo->spriteDef.SrcT1.width = SRC_LQ_T1_0;
+        jogo->spriteDef.SrcT1.x = SRC_X_T1_0;
+        jogo->spriteDef.SrcT1.y = SRC_Y_T1_0;
 
-        jogo->spriteDef.SrcT1[ 1 ].height = SRC_LQ_T1_1;
-        jogo->spriteDef.SrcT1[ 1 ].width = SRC_LQ_T1_1;
-        jogo->spriteDef.SrcT1[ 1 ].x = SRC_X_T1_1;
-        jogo->spriteDef.SrcT1[ 1 ].y = SRC_Y_T1_1;
+        //Origin
+        jogo->spriteDef.OriginT1.x = MAPA_LQ_T1 / 2.0;
+        jogo->spriteDef.OriginT1.y = MAPA_LQ_T1 / 2.0;
+}
+
+
+
+/** \brief Carrega as spites do inimigos tipo T0 e define valores
+ *
+ * \param *jogo
+ *
+ */
+
+void spriteT0( Jogo *jogo ){
+        jogo->Res.T0 = LoadTexture("Sprites/aranahas2");
+
+        jogo->spriteDef.QTD_FRAMES_T1[ 0 ] = 7; //Andando
+        jogo->spriteDef.QTD_FRAMES_T1[ 1 ] = 4; //morrendo
+
+
+        int status , frame;
+        char nmr[10];
+        const char comum[] = "Sprites/T1/";
+        char pasta[][100] = {
+                "movimento/",
+                "ataque/",
+                " ",
+                " ",
+                " "
+        };
+
+        char fim[] = ".png";
+        char arquivo[100];
+
+                for( status = 0 ; status < QTD_STATUS_T1 ; status++ )
+                        for( frame = 0 ; frame < jogo->spriteDef.QTD_FRAMES_T1[ status ] ; frame++ )
+                        {
+                                TextCopy( arquivo , comum );
+                                strcat( arquivo , pasta[status] );
+
+                                IntParaString( frame , nmr );
+                                strcat( arquivo , nmr );
+
+                                strcat( arquivo , fim );
+
+                                jogo->Res.T1[status][frame] = LoadTexture( arquivo );
+                        }
+
+        //Jogador extracao de textura
+        jogo->spriteDef.SrcT1.height = SRC_LQ_T1_0;
+        jogo->spriteDef.SrcT1.width = SRC_LQ_T1_0;
+        jogo->spriteDef.SrcT1.x = SRC_X_T1_0;
+        jogo->spriteDef.SrcT1.y = SRC_Y_T1_0;
 
         //Origin
         jogo->spriteDef.OriginT1.x = MAPA_LQ_T1 / 2.0;

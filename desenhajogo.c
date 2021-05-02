@@ -15,7 +15,7 @@ void DesenhaLevel(Jogo *jogo)
 
         DesenhaObjetos( jogo );
 
-        DesenhaInimigosT1( jogo );
+        DesenhaInimigos( jogo );
 
         DesenhaPes( jogo);
         DesenhaJogador(jogo);
@@ -187,20 +187,27 @@ void DesenhaBaus( Jogo *jogo ){
 
 ///**     Funcao DesenhaInimigosT1():
 
-void DesenhaInimigosT1( Jogo *jogo)
-{
+void DesenhaInimigos( Jogo *jogo){
         int i;
         int aSal = jogo->atualSala;
 
         for( i = 0 ; i < jogo->salas[ aSal ].qtd_inimigos_liberados ; i++ )
-//                        if( jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO )
-                                if( CheckCollisionRecs( jogo->salas[ aSal ].inimigos[ i ].posMundo , jogo->MapaDesenho ) ){
+//                if( jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO )
+                if( CheckCollisionRecs( (Rectangle){ jogo->salas[ aSal ].inimigos[ i ].posMundo.x , jogo->salas[ aSal ].inimigos[ i ].posMundo.y , jogo->salas[ aSal ].inimigos[ i ].posTelaSolid.width , jogo->salas[ aSal ].inimigos[ i ].posTelaSolid.height } , jogo->MapaDesenho ) ){
+                        switch( jogo->salas[ aSal ].inimigos[ i ].tipo)
+                        {
+                                case 0:
+                                        DrawRectanglePro((Rectangle){ jogo->salas[ aSal ].inimigos[ i ].posTela.x , jogo->salas[ aSal ].inimigos[ i ].posTela.y , 30 , 30 } , (Vector2){ 15 , 15} , jogo->salas[ aSal ].inimigos[ i ].Rotac , PURPLE );
+                                        break;
+                                case 1:
 //                                        DrawRectangle( jogo->salas[ aSal ].inimigos[ i ].posTela.x , jogo->salas[ aSal ].inimigos[ i ].posTela.y , 30 , 30 , ORANGE );
-                                        DrawTexturePro( jogo->Res.T1[ jogo->salas[ aSal ].inimigos[ i ].atacando ][jogo->spriteDef.atualFrame_T1[ i ] ] , jogo->spriteDef.SrcT1[ jogo->salas[ aSal ].inimigos[ i ].atacando ] , jogo->salas[ aSal ].inimigos[ i ].posTela , jogo->spriteDef.OriginT1 , jogo->salas[ aSal ].inimigos[ i ].Rotac ,  WHITE );
-                                }
-        DrawText( TextFormat("(%.2f , %.2f)" ,  jogo->salas[ 0 ].inimigos[ 0 ].posTela.x , jogo->salas[ 0 ].inimigos[ 0 ].posTela.y ), 300 , 500 , 30 , RED );
-        DrawText( TextFormat("(%.2f , %.2f)" ,  jogo->salas[ 0 ].inimigos[ 0 ].posMundo.x , jogo->salas[ 0 ].inimigos[ 0 ].posMundo.y ), 300 , 550 , 30 , RED );
-
+                                        DrawRectanglePro((Rectangle){ jogo->salas[ aSal ].inimigos[ i ].posTela.x , jogo->salas[ aSal ].inimigos[ i ].posTela.y , 30 , 30 } , (Vector2){ 15 , 15} , jogo->salas[ aSal ].inimigos[ i ].Rotac , ORANGE );
+//                                        DrawTexturePro( jogo->Res.T1[ jogo->salas[ aSal ].inimigos[ i ].atacando ][jogo->spriteDef.atualFrame_T1[ i ] ] , jogo->spriteDef.SrcT1 , jogo->salas[ aSal ].inimigos[ i ].posTela , jogo->spriteDef.OriginT1 , jogo->salas[ aSal ].inimigos[ i ].Rotac ,  WHITE );
+                                        break;
+                                case 2:
+                                        break;
+                        }
+                }
 }
 //##############################################################################
 
@@ -293,6 +300,12 @@ void DesenhaDebug(Jogo *jogo)
 
 //        #include "logicajogo.h"
 //        DrawText(TextFormat("MENOR  = %d   |  DIST= %.0f" , CalcularSpawnPerto( jogo ) , distancia( jogo->jogador.PosMundo , jogo->salas[ jogo->atualSala ].spawns[ CalcularSpawnPerto( jogo ) ]. ) ) , 20 , 400 ,50 , DARKBLUE);
+
+
+        ///JOGADOR
+        DrawText( TextFormat("DANO: %d" , jogo->jogador.DANO ) , 20 , 600 , 25 , RED );
+        DrawText( TextFormat("SAUDE: %d" , jogo->jogador.saude ) , 20 , 630 , 25 , YELLOW );
+        DrawText( TextFormat("VIDAS: %d" , jogo->jogador.vidas ) , 20 , 660 , 25 , YELLOW );
 
 }
 //##############################################################################

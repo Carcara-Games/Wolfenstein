@@ -56,31 +56,49 @@
         #define ALT_MUNDO_SPAWN 30
         #define DELAY_SPAWN 100
 
+        ///Inimigos
+        #define MULTI_PASSO_SEGURO 3
+        #define MAX_INI_TELA 50
+
         ///INIMIGOS T1
         #define QTD_MAX_T1_SALA 50
-        #define PASSOT1 .7*PASSO
+        #define PASSO_T1 0.75*PASSO
         #define CONSTANTE_ANITFLICK 5
 
-        //0
-        #define SRC_LQ_T1_0 295      // Tamanho do lado em pixels do quadrado de extracao da imagem original
-        #define SRC_X_T1_0 142      // X
-        #define SRC_Y_T1_0 160      // Y
 
-        //1
-        #define SRC_LQ_T1_1 178      // Tamanho do lado em pixels do quadrado de extracao da imagem original
-        #define SRC_X_T1_1 197      // X
-        #define SRC_Y_T1_1 241      // Y
+        #define SRC_LQ_T1_0 600      // Tamanho do lado em pixels do quadrado de extracao da imagem original
+        #define SRC_X_T1_0 0      // X
+        #define SRC_Y_T1_0 0      // Y
 
-        #define MAPA_LQ_T1 170      // Tamanho do lado em pixels do quadrado de destino no mapa
+
+        #define MAPA_LQ_T1 550      // Tamanho do lado em pixels do quadrado de destino no mapa
 
         #define QTD_STATUS_T1 2
-        #define MAX_T1_TELA 50
 
         #define DIV_FPS_T1 2
 
-        #define DIST_INICIAR_ATAQUE_T1 30
-        #define DIST_EFETIVAR_ATAQUE_T1 10
-        #define LATENCIA_T1 FPS*4
+        #define DIST_MANTER 30
+        #define DIST_INICIAR_ATAQUE_T1 80
+        #define DIST_EFETIVAR_ATAQUE_T1 55
+        #define LATENCIA_T1 FPS*2
+
+        ///Inimigos T0
+        #define PASSO_T0  1*PASSO
+
+
+        #define SRC_LQ_T0 600      // Tamanho do lado em pixels do quadrado de extracao da imagem original
+
+
+        #define MAPA_LQ_T0 100      // Tamanho do lado em pixels do quadrado de destino no mapa
+
+        #define QTD_STATUS_T0 2
+
+        #define DIV_FPS_T1 2
+
+        #define DIST_MANTER 30
+        #define DIST_INICIAR_ATAQUE_T1 80
+        #define DIST_EFETIVAR_ATAQUE_T1 55
+        #define LATENCIA_T0 FPS*2
 
         ///ARMAS
 //        #define QTD_ARMAS 5
@@ -105,5 +123,6 @@
         #define TOL_ENTRAR_PORTAS 10
         #define SALTO_PORTA 105
 
-
+        ///RASTREAMENTO DE ALVO
+        #define PASSO_RASTREAMENTO 2
 #endif // __DEFINICOES_H_

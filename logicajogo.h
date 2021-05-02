@@ -34,7 +34,7 @@
         void AtualizaBaus( Jogo *jogo );
 
         void AtualizaInimigosT1(Jogo *jogo);
-        Vector2 T1Perseguicao( Jogo *jogo , Vector2 posAtual , Vector2 alvo );
+       Vector2 T1Perseguicao( Jogo *jogo , Vector2 posAtual , Vector2 alvo , int tipo );
         int sinalNumero( float nmr );
         int nmrRand( int mini , int maxi );
         Vector2 AtualizaPosTela( Jogo *jogo , Vector2 posMundo );
@@ -46,6 +46,8 @@
         void AtualizaAtaqueT1(Jogo *jogo);
         void AtualizaDanoJogador( Jogo *jogo );
         void AtualizaRotacT1(Jogo *jogo);
+
+        BOOL mesmaZona( Jogo *jogo , Vector2 pos1 , Vector2 pos2 );
 
 
 

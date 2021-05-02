@@ -33,14 +33,14 @@ typedef struct
         ///
         Rectangle Src;    //Retangulo de extracao da textura com as dimensoes da mesma do personagem
         Rectangle SrcPes;
-        Rectangle SrcT1[ QTD_STATUS_T1 ];
+        Rectangle SrcT1;
         Vector2 Origin;   // O deslocamento entre a quina superior esquerda da textura PersonagemPrincipal e o centro de rotacao
         Vector2 OriginPes;
         Vector2 OriginT1;
 
         ///T1
         int QTD_FRAMES_T1[ QTD_STATUS_T1 ];
-        int atualFrame_T1[ MAX_T1_TELA ];       //Para cada T1 na tela
+        int atualFrame_T1[ MAX_INI_TELA ];       //Para cada T1 na tela
 
 
 } SpriteDef;
@@ -70,15 +70,21 @@ typedef struct
         //[1] codigo do status atual:  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
         //[2] codigo do frame atual
 
-        ///Imagens dos pes/pernas do personagem
+        ///T1
         Texture2D T1[ QTD_STATUS_T1][100]; // Pernas e pes do Personagem [1�][2�]
         //[1] codigo do status atual:  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
         //[2] codigo do frame atual
 
+        ///T2
+
+
+        ///T0
+        Texture2D T0;
         ///Objetos do Jogo
         Texture2D Portas;  // Imagem das portas
         Texture2D BauAberto;
         Texture2D BauFechado;
+
 
 
 } Recursos;
@@ -97,10 +103,10 @@ typedef struct
 ///
 typedef struct //Tipo T1 tem 1 ponto de saude
 {
-        int tipo; // T1 , T2 , T3
-
-        Rectangle posMundo; //posicao no mundo
+        int tipo; // T0 , T1 , T2
+        Vector2 posMundo; //posicao no mundo
         Rectangle posTela; //posicao na tela
+        Rectangle posTelaSolid; //posicao na tela solida
         float Rotac;
 
         BOOL atacando;
@@ -111,12 +117,19 @@ typedef struct //Tipo T1 tem 1 ponto de saude
         unsigned VIVO : 1;
 } Inim;
 
+typedef struct{
+        float dist_manter[ 3 ];
+        float vel[ 3 ];
+
+}infoTipoIni;
+
 typedef struct
 {
         Rectangle posMundo; // Posicao
         Rectangle posTela;
         float rotac; // Angulo de rotacao
 
+        int tipo;       //Tipo de inimigo que spawna
         int inimigoTipo; // Tipo de inimigo que ele spawna
         unsigned ATIVO : 1; // Se esta ativo == 1 , se nao == 0
 } Spawn;
@@ -241,6 +254,8 @@ typedef struct
         SpriteDef spriteDef;
 
         Vector2 escalaGeral;
+
+        infoTipoIni infoIniT;
 } Jogo;
 
 

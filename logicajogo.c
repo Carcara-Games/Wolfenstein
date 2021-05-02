@@ -493,7 +493,7 @@ void AtualizaFrameT1(Jogo *jogo)
         static int aux[ QTD_MAX_T1_SALA ] = { 0 };
         static int frame[ QTD_MAX_T1_SALA ] = { 0 };
         static int antStatus = 0;
-        static int flagTiro = 0;
+        static int flagTiro[ QTD_MAX_T1_SALA ] =  { 0 };
 
         int ini;
         int aSal = jogo->atualSala;
@@ -501,11 +501,11 @@ void AtualizaFrameT1(Jogo *jogo)
         for( ini = 0 ; ini < jogo->salas[ aSal ].qtd_inimigos_liberados ; ini++)
                 if( jogo->salas[ aSal ].inimigos[ ini ].VIVO ){
                         //Caso atire e preciso terminar o ciclo dos frame[ ini ]s
-                        if ( jogo->salas[ aSal ].inimigos[ ini ].atacando  || flagTiro)
+                        if ( jogo->salas[ aSal ].inimigos[ ini ].atacando  || flagTiro[ ini ])
                         {
-                                if (!flagTiro)
+                                if (!flagTiro[ ini ])
                                 {
-                                        flagTiro = 1;
+                                        flagTiro[ ini ] = 1;
                                         frame[ ini ] = 0;
                                         aux[ ini ] = 0;
                                 }
@@ -522,10 +522,10 @@ void AtualizaFrameT1(Jogo *jogo)
 
                                 jogo->spriteDef.atualFrame_T1[ ini ] = frame[ ini ];
 
-                                if (frame[ ini ] == jogo->spriteDef.QTD_FRAMES_T1[ 1 ] )
+                                if (frame[ ini ] == jogo->spriteDef.QTD_FRAMES_T1[ 1 ] - 1)
                                 {
                                         frame[ ini ] = 0;
-                                        flagTiro = 0;
+                                        flagTiro[ ini ] = 0;
                                 }
                                 antStatus = jogo->salas[ aSal ].inimigos[ ini ].atacando;
                                 return;
@@ -579,16 +579,17 @@ void AtualizaSrcPer(Jogo *jogo)
 void AtualizaAtaqueT1(Jogo *jogo)
 {
         Vector2 posAtual;
+        Vector2 alvo = jogo->jogador.PosMundo;
         int i;
+        static int flagAtaque[ 50 ];
 
         int aSal = jogo->atualSala;
 
         for( i = 0 ; i < jogo->salas[ aSal ].qtd_inimigos_liberados ; i++ )
                 if( jogo->salas[ aSal ].inimigos[ i ].VIVO ){
-                        posAtual.x = jogo->salas[ aSal ].inimigos[ i ].posMundo.x;
-                        posAtual.y = jogo->salas[ aSal ].inimigos[ i ].posMundo.y;
+                        posAtual = jogo->salas[ aSal ].inimigos[ i ].posMundo;
 
-                        if( Deslocamento( posAtual , jogo->jogador.PosMundo ) < DIST_INICIAR_ATAQUE_T1  &&  !jogo->salas[ aSal ].inimigos[ i ].latenciaAtaque ){
+                        if( Deslocamento( posAtual , alvo ) < DIST_INICIAR_ATAQUE_T1  &&  !jogo->salas[ aSal ].inimigos[ i ].latenciaAtaque ){
                                 jogo->salas[ aSal ].inimigos[ i ].atacando = 1;
                                 jogo->salas[ aSal ].inimigos[ i ].latenciaAtaque = LATENCIA_T1;
                         }
@@ -597,13 +598,15 @@ void AtualizaAtaqueT1(Jogo *jogo)
                                 jogo->salas[ aSal ].inimigos[ i ].atacando = 0;
                         }
 
-                        if( jogo->salas[ aSal ].inimigos[ i ].latenciaAtaque <= LATENCIA_T1 / 2  &&  Deslocamento( posAtual , jogo->jogador.PosMundo ) <= DIST_EFETIVAR_ATAQUE_T1 ){
-                                jogo->jogador.DANO += 1;
+                        if( !flagAtaque[ i ] && jogo->salas[ aSal ].inimigos[ i ].atacando  &&  jogo->spriteDef.atualFrame_T1[ i ] >= 29  &&  jogo->spriteDef.atualFrame_T1[ i ] <= 35  &&  Deslocamento( posAtual , alvo ) <= DIST_EFETIVAR_ATAQUE_T1 ){
+                                jogo->jogador.DANO = 1;
+                                flagAtaque[ i ] = 1;
                         }
 
                         if( jogo->salas[ aSal ].inimigos[ i ].latenciaAtaque )
                                 jogo->salas[ aSal ].inimigos[ i ].latenciaAtaque--;
 
+                        if( !flagAtaque[ i ] ) flagAtaque[ i ]--;
                 }
 }
 
@@ -629,7 +632,7 @@ void AtualizaRotacT1(Jogo *jogo)
                         posAtual.y = jogo->salas[ aSal ].inimigos[ i ].posMundo.y;
 
                         jogo->salas[ aSal ].inimigos[ i ].Rotac = -90 + argVector( (Vector2){ alvo.y - posAtual.y , alvo.x - posAtual.x } );
-
+                        jogo->salas[ aSal ].inimigos[ i ].Rotac = - 90 +(180 / PI) * atan2((alvo.y - posAtual.y), (alvo.x  - posAtual.x));
                 }
 }
 
@@ -648,34 +651,79 @@ void AtualizaInimigosT1(Jogo *jogo)
         int i;
         Vector2 alvo = jogo->jogador.PosMundo;
 
+//        static int sentidoAleatorioAnt[ MAX_INI_TELA ] = { 0 };
+        static int sentidoAleatorio[ MAX_INI_TELA ] = { 0 };
+        static int batera[ MAX_INI_TELA ] = { 0 };
+        Vector2 passo;
+
+
         int aSal = jogo->atualSala;
 
         for( i = 0 ; i < jogo->salas[ aSal ].qtd_inimigos_liberados ; i++ )
                 if( jogo->salas[ aSal ].inimigos[ i ].VIVO ){
                         posAtual.x = jogo->salas[ aSal ].inimigos[ i ].posMundo.x;
                         posAtual.y = jogo->salas[ aSal ].inimigos[ i ].posMundo.y;
-                        posAtual = T1Perseguicao( jogo , posAtual , alvo );
 
-                        jogo->salas[ aSal ].inimigos[ i ].posMundo.x = posAtual.x;
-                        jogo->salas[ aSal ].inimigos[ i ].posMundo.y = posAtual.y;
-
-                        if( CheckCollisionPointRec( posAtual , jogo->MapaDesenho ) ){
+                         if( mesmaZona( jogo , posAtual , alvo ) ){
+                                /// Direta (ALVO AVISTADO)
+                                posAtual = T1Perseguicao( jogo , posAtual , alvo , jogo->infoIniT.vel[ jogo->salas[ aSal ].inimigos[ i ].tipo ] );
+                         }else{
+                                ///Rodando aleatoriamente
+                                 passo.x = cos( (PI / 180) * sentidoAleatorio[ i ] ) * jogo->infoIniT.vel[ jogo->salas[ aSal ].inimigos[ i ].tipo ];
+                                 passo.y = sin( (PI / 180) * sentidoAleatorio[ i ] ) * jogo->infoIniT.vel[ jogo->salas[ aSal ].inimigos[ i ].tipo ];
+//
+                                 if( !ChecaMov( *jogo ,  posAtual , MULTI_PASSO_SEGURO * passo.x , MULTI_PASSO_SEGURO * passo.y ) )
+                                        batera[ i ] = 1;
+//
+                                 if( !batera[ i ] ){
+                                        posAtual = SomaVectores( posAtual , passo );
+                                 }
+                                 else{
+//                                        sentidoAleatorioAnt[ i ] = sentidoAleatorio[ i ];
+//                                        while( sentidoAleatorioAnt[ i ] == sentidoAleatorio[ i ] ){
+                                        switch( nmrRand(1 , 4) ){
+                                                case 1:
+                                                        sentidoAleatorio[ i ] = 0;
+                                                        break;
+                                                case 2:
+                                                        sentidoAleatorio[ i ] = 90;
+                                                        break;
+                                                case 3:
+                                                        sentidoAleatorio[ i ] = -90;
+                                                        break;
+                                                case 4:
+                                                        sentidoAleatorio[ i ] = 180;
+                                                        break;
+                                        }
+                                }
+                        }
+                        if( Deslocamento(  jogo->salas[ aSal ].inimigos[ i ].posMundo , alvo) > jogo->infoIniT.dist_manter[ jogo->salas[ aSal ].inimigos[ i ].tipo ] ){
+                                jogo->salas[ aSal ].inimigos[ i ].posMundo.x = posAtual.x;
+                                jogo->salas[ aSal ].inimigos[ i ].posMundo.y = posAtual.y;
+                        }
+                        if( CheckCollisionRecs( (Rectangle){ posAtual.x , posAtual.y , jogo->salas[ aSal ].inimigos[ i ].posTelaSolid.width , jogo->salas[ aSal ].inimigos[ i ].posTelaSolid.height } , jogo->MapaDesenho ) ){
                                 Vector2 novaPosTela = AtualizaPosTela( jogo , posAtual );
 
                                 jogo->salas[ aSal ].inimigos[ i ].posTela.x = novaPosTela.x;
                                 jogo->salas[ aSal ].inimigos[ i ].posTela.y = novaPosTela.y;
                         }
+                        batera[ i ] = 0;
                 }
 }
 
 
-Vector2 T1Perseguicao( Jogo *jogo , Vector2 posAtual , Vector2 alvo ){
+Vector2 T1Perseguicao( Jogo *jogo , Vector2 posAtual , Vector2 alvo , int tipo ){
         Vector2 posFinal;
         Vector2 passo;
 
-        /// Direta
-        passo.x = PASSOT1 * sinalNumero( alvo.x - posAtual.x );
-        passo.y = PASSOT1 * sinalNumero( alvo.y - posAtual.y );
+//        static int nflag = 0;
+//        static int flagEC = 0;
+//        static int flagEB = 0;
+//        static int flagDC = 0;
+//        static int flagDB = 0;
+
+        passo.x = jogo->infoIniT.vel[ tipo ] * sinalNumero( alvo.x - posAtual.x );
+        passo.y = jogo->infoIniT.vel[ tipo ] * sinalNumero( alvo.y - posAtual.y );
 
         // Correcao flick
 //        if( passox  >  CONSTANTE_ANITFLICK * passoy ) passoy = 0;
@@ -687,17 +735,85 @@ Vector2 T1Perseguicao( Jogo *jogo , Vector2 posAtual , Vector2 alvo ){
                 passo.y /= sqrt(2);
         }
 
-        if( !ChecaMov( *jogo , posAtual , passo.x , 0 ) )
-//                passo.x *= -1 ;
-                passo.x = 0 ;
-        if( !ChecaMov( *jogo , posAtual , 0 , passo.y ) )
-//                passo.y *= -1 ;
-                passo.y = 0 ;
+        //Colisao
+        if( !ChecaMov( *jogo , posAtual , passo.x , 0 ) ){
+                passo.x *= -1;
+        }
+        if( !ChecaMov( *jogo , posAtual , passo.y , 0 ) ){
+                passo.y *= -1;
+        }
+
+////        if( !ChecaMov( *jogo , posAtual , passo.x , 0 )  || nflag || !ChecaMov( *jogo , posAtual , 0 , passo.y )){
+//        if( !ChecaMov( *jogo , posAtual , passo.x , 0 )  || nflag || !ChecaMov( *jogo , posAtual , 0 , passo.y )){
+//                if(   !ChecaMov( *jogo , posAtual , passo.x , 0 ) && passo || flagEC ){
+//                        flagEC = 1;
+//                        nflag = 1;
+//                        passo.x = -PASSOT1 / sqrt(2);
+//                        passo.y = PASSOT1 / sqrt(2);
+//                       flagEB = 0;
+//                       flagDC = 0;
+//                       flagDB = 0;
+//                       flagEC = 0;
+//                }
+//
+//                 if( ( passo.x < 0  &&  passo.y > 0) || flagEB  ){
+//                        flagEB = 1;
+//                        nflag = 1;
+//                        passo.x = -PASSOT1 / sqrt(2);
+//                        passo.y = -PASSOT1 / sqrt(2);
+//                       flagEC = 0;
+//                       flagDC = 0;
+//                       flagDB = 0;
+//                       flagEC = 0;
+//                }
+//
+//                 if( ( passo.x > 0  &&  passo.y <= 0) || flagDC  ){
+//                        flagDC = 1;
+//                        nflag = 1;
+//                        passo.x = PASSOT1 / sqrt(2);
+//                        passo.y = PASSOT1 / sqrt(2);
+//                       flagEC = 0;
+//                       flagEB = 0;
+//                       flagDB = 0;
+//                       flagEC = 0;
+//                }
+//
+//                 if( ( passo.x > 0  &&  passo.y > 0 ) || flagDB ){
+//                        flagDB = 1;
+//                        nflag = 1;
+//                        passo.x = PASSOT1 / sqrt(2);
+//                        passo.y = -PASSOT1 / sqrt(2);
+//                       flagEC = 0;
+//                       flagEB = 0;
+//                       flagDC = 0;
+//                       flagEC = 0;
+//                 }
+//        }else{
+//               nflag = 0;
+//               flagEC = 0;
+//               flagEB = 0;
+//               flagDC = 0;
+//               flagDB = 0;
+//               flagEC = 0;
+//        }
+
+//
+//        if( !ChecaMov( *jogo , posAtual , 0 , passo.y ) ){
+//                if( passo.x == 0 )
+////                        if( nmrRand(1 , 2) == 1)
+//                                passo.x = PASSOT1;
+////                        else
+////                                passo.x = -PASSOT1;
+//                passo.y = 0 ;
+//        }
+
+
 
         /// Posicao Final
         posFinal = SomaVectores( posAtual , passo );
 
         return posFinal;
+}
 
 
 
@@ -740,8 +856,46 @@ Vector2 T1Perseguicao( Jogo *jogo , Vector2 posAtual , Vector2 alvo ){
 //
 //        tipoAlinhamentoAnt = tipoAlinhamento;
 //        return posFinal;
-}
 
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
+//Vector2 SegueParede( Jogo *jogo , int i , int novaBusca , Vector2 posAtual , Vector2 alvo ){
+//        int parede[ MAX_INI_TELA ];
+//        int distParede[ 4 ][ MAX_INI_TELA ];
+//        static int angMov;
+//
+//
+//
+//        /// BUSCA
+//        if( !flagBusca ){
+//                flagBusca = 1;
+//        }
+//}
+
+//BOOL CheckRotaDireta( Jogo *jogo , Vector2 posAtual , Vector2 alvo ){
+//        float distTotal = Deslocamento( posAtual , alvo );
+//        float ang = argVector( posAtual , alvo );
+//        float distP = 0;
+//        Vector2 pCalc;
+//
+//        while( distP < distTotal){
+//                pCalc.x = posAtual.x + PASSO_RASTREAMENTO * cos( ang );
+//                pCalc.y = posAtual.y + PASSO_RASTREAMENTO * sin( ang );
+//
+//                if( !ChecaMov( *jogo , pCalc , 0 , 0) )
+//                        return 0;
+//        }
+//
+//        return 1;
+//}
 
 
 
@@ -818,6 +972,8 @@ void GeraInimigos( Jogo *jogo ){
                         jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].posMundo.x = jogo->salas[ jogo->atualSala ].spawns[ spawn ].posMundo.x;
                         jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].posMundo.y = jogo->salas[ jogo->atualSala ].spawns[ spawn ].posMundo.y;
 
+                        jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].tipo = jogo->salas[ jogo->atualSala ].spawns[ spawn ].tipo;
+
                         jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].VIVO = 1;
                 }
         }
@@ -875,6 +1031,14 @@ void AtualizaDanoJogador( Jogo *jogo ){
 
 }
 
+BOOL mesmaZona( Jogo *jogo , Vector2 pos1 , Vector2 pos2 ){
+        int i;
+        for( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtdZonas ; i++ )
+                if( CheckCollisionPointRec( pos1 , jogo->salas[ jogo->atualSala ].zonas[ i ] ) )
+                        if( CheckCollisionPointRec( pos2 , jogo->salas[ jogo->atualSala ].zonas[ i ] ) )
+                                return 1;
 
+        return 0;
+}
 
 

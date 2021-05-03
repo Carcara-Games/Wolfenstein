@@ -4,8 +4,9 @@
 #include "definicoes.h"
 
 
-/**     Funcao IniciarJanela() : Inicia janela do jogo
-    */
+/** \brief Inicializa a janela no sistema operacional
+ *
+ */
 
 void IniciarJanela( void )
 {
@@ -21,154 +22,261 @@ void IniciarJanela( void )
 }
 
 
+/** \brief  preJogo(): Incializa elementos intrinsecos do jogo, alem de carregar todas as texturas e fontes.
+ *
+ * \return JOGO
+ *
+ */
+ JOGO definirPreJogo( void ){
+         JOGO pre_jogo;
 
-/** Função  IniciaJogo() :
-    */
+        definirTela( &pre_jogo );
 
-Jogo IniciaJogo( void )
+        definirMapa( &pre_jogo );               // Define o Mapa do jogo
+
+        definirEscalaGeral( &pre_jogo );                // Define a Escala Geral
+
+        definirDadosSpritesPersonagem( &pre_jogo );               // Define propriedades das sprites
+
+        carregarTexturasFontes( &pre_jogo );           //Carregar Texturas e Fontes
+
+        definirTiposInimigo( &pre_jogo );               // Define propriedades de cada tipo de inimigo
+
+
+        CriaSalas( &pre_jogo );             //Criar Salas: zonas , obstaculos fixos , spawns,  portas , baus e pontos de regeneracao
+
+
+
+
+
+        /// Retorno
+        return pre_jogo;
+ }
+
+
+
+/** \brief Crias as salas do jogo , definindo posição de portas e de baús , limites de vizualização ,  etc
+ *
+ * \param *JOGO
+ *
+ */
+
+void CriaSalas( JOGO *jogo)
 {
-        Jogo jogo;
-        jogo.FECHAR = 0;
-
-        ///Armas iniciais e Status iniciais
-        //Inicial
-        jogo.jogador.atualArma = 0;
-        jogo.jogador.atualStatus = 0;
-        jogo.spriteDef.atualFrame = 0;
-        jogo.jogador.latencia = 0;
-
-        ///QTD de status para cada arma
-        jogo.spriteDef.QTD_STATUS[ 0 ] = 5;      //pistola
-        jogo.spriteDef.QTD_STATUS[ 0 ] = 5;      //SMG
-
-                //Qtd de Frames para cada status de cada arma
-                        //Pistola
-        jogo.spriteDef.QTD_FRAMES[ 0 ][ 0 ] = 20;
-        jogo.spriteDef.QTD_FRAMES[ 0 ][ 1 ] = 20;
-        jogo.spriteDef.QTD_FRAMES[ 0 ][ 2 ] = 3;
-        jogo.spriteDef.QTD_FRAMES[ 0 ][ 3 ] = 15;
-        jogo.spriteDef.QTD_FRAMES[ 0 ][ 4 ] = 15;
-
-        ///QTD de Frame para cada tipo de movimento
-        jogo.spriteDef.QTD_FRAMES_PES[ 0 ] = 1;        //Repouso
-        jogo.spriteDef.QTD_FRAMES_PES[ 1 ] = 20;       //Andando
-        jogo.spriteDef.QTD_FRAMES_PES[ 2 ] = 20;       //Correndo
-        jogo.spriteDef.QTD_FRAMES_PES[ 3 ] = 20;       //Movimento lateral para a esquerda
-        jogo.spriteDef.QTD_FRAMES_PES[ 4 ] = 20;       //Movimento lateral para a direita
-
-        ///Carregar Texturas e Fontes
-        carregarTexturasFontes( &jogo );
-
-        ///Tela
-        jogo.tela.x = 0;
-        jogo.tela.y = 0;
-
-        if( GetScreenWidth() / (float)GetScreenHeight() == REF_TELA_LARG / (float)REF_TELA_ALT ){
-                        jogo.tela.width = REF_TELA_LARG;        // A tela deve ficar cheia em largura
-                        jogo.tela.height = REF_TELA_ALT;        // A altura deve ser regulada para manter a proporcao
-                        jogo.regulagemTela = 0;
-        }else{
-                if( GetScreenWidth() / (float)GetScreenHeight() > REF_TELA_LARG / (float)REF_TELA_ALT ){         //A largura e proporionalmente maior
-                        jogo.tela.width = GetScreenWidth();        // A tela deve ficar cheia em largura
-                        jogo.tela.height = REF_TELA_ALT * jogo.tela.width / REF_TELA_LARG ;        // A altura deve ser regulada para manter a proporcao
-                        jogo.regulagemTela = 1;
-                }else{          // Nesse caso a altura e proporcionalmente maior
-                        jogo.tela.height = GetScreenHeight();        // A tela deve ficar cheia em altura
-                        jogo.tela.width =  REF_TELA_LARG * jogo.tela.height / REF_TELA_ALT ;        // A largura deve ser regulada para manter a proporcao
-                        jogo.regulagemTela = 2;
-                }
-        }
-
-        ///Escala Geral
-        jogo.escalaGeral.x = (  jogo.tela.width / PIXEL_LARGURA_MAPA  );
-        jogo.escalaGeral.y = (  jogo.tela.height / PIXEL_ALTURA_MAPA  );
-
-        ///Ajuste do Mapa do Jogo
-        ///Tamanho Da Textura MAPA
-        jogo.MapaTamanho.x = jogo.Res.Mapa.width;
-        jogo.MapaTamanho.y = jogo.Res.Mapa.height;
-
-        ///Area de Extracao ( FIXA )
-        jogo.MapaDesenho.x = 0;
-        jogo.MapaDesenho.y = 300;
-        jogo.MapaDesenho.width = PIXEL_LARGURA_MAPA;
-        jogo.MapaDesenho.height = PIXEL_ALTURA_MAPA;
-
-        ///Posicao Jogador No Mundo
-        jogo.jogador.PosMundo.x = 102;
-        jogo.jogador.PosMundo.y = 633;
-
-
-        ///Posicao Jogador Tela
-                ///Per
-                jogo.jogador.PosTela.width =  LARG_PADRAO * jogo.tela.width / REF_TELA_LARG;
-                jogo.jogador.PosTela.height =  jogo.jogador.PosTela.width * ALT_PADRAO / LARG_PADRAO;   //Altura Dependente da largura
-//                jogo.jogador.PosTela.x =  jogo.escalaGeral.x * ( jogo.jogador.PosMundo.x - jogo.MapaDesenho.x );
-//                jogo.jogador.PosTela.y =  jogo.escalaGeral.y * ( jogo.jogador.PosMundo.y - jogo.MapaDesenho.y );
-                jogo.jogador.PosTela.x =  jogo.tela.width / 2;
-                jogo.jogador.PosTela.y =  jogo.tela.height / 2;
-
-                ///Pes
-                jogo.jogador.PosTelaPes.width =  ESC_PES * jogo.jogador.PosTela.width;
-                jogo.jogador.PosTelaPes.height =  ESC_PES* jogo.jogador.PosTela.height;
-                jogo.jogador.PosTelaPes.x =  jogo.jogador.PosTela.x;
-                jogo.jogador.PosTelaPes.y =  jogo.jogador.PosTela.y;
-
-
-        ///Sala inicial
-        jogo.atualSala = 0;
-
-        ///Criar Salas e zonas
-        CriaSalas( &jogo );
-
-        ///Cria BAUS
-        CarregarBaus( &jogo );
-        inicializarBaus( &jogo );
-
-        /// Cria Spawns
-        inicializarSpawns( &jogo );
-
-        ///Cria Portas
-        CriaPortas( &jogo );
-
-        ///Passagem de portas
-        jogo.PASSAGEM = 0;
-
-        /// Inimigos
-        jogo.infoIniT.dist_manter[ 0 ] = 10;
-        jogo.infoIniT.dist_manter[ 1 ] = 30;
-        jogo.infoIniT.dist_manter[ 2 ] = 100;
-
-        jogo.infoIniT.vel[ 0 ] = PASSO_T0;
-        jogo.infoIniT.vel[ 1 ] = PASSO_T1;
-        jogo.infoIniT.vel[ 2 ] = PASSO_T1;
-
-        jogo.infoIniT.saude[ 0 ] = 1;
-        jogo.infoIniT.saude[ 1 ] = 4;
-        jogo.infoIniT.saude[ 2 ] = 2;
-        inicializarInimigosSalas( &jogo );
-        spriteT1( &jogo );
-//        spriteT0( &jogo );
+        CriaZonas( jogo );
+        CriaPortas( jogo );
+        CriaSpawns( jogo );             // Cria Spawns
+        CarregarBaus( jogo );
+        CriaBaus( jogo );               //Cria BAUS
+}
 
 
 
-//        ///Teste
-//        jogo.salas[0].inimigos[0].ATIVO=1;
-//        jogo.salas[0].inimigos[0].posMundo.x=102;
-//        jogo.salas[0].inimigos[0].posMundo.y=1000;
-//        jogo.salas[0].inimigos[0].ATIVO=1;
+/** \brief Inicializa a variavel JOGO para um novo jogo
+ *
+ * \param *JOGO
+ *
+ */
 
-        ///Retorno
-        return jogo;
+void IniciaNovoJogo( JOGO *jogo )
+{
+        jogo->FECHAR = 0;
+
+        inicializarJogador( jogo );      // Inicializa os dados do jogador para Novo Jogo
+
+
+
+
+
 }
 //##############################################################################
 
 
 
-/** Função  carregarTexturasFontes() :
-    */
+/** \brief Incializa dados do  JOGADOR para Novo Jogo
+ *
+ * \param *JOGO
+ *
+ */
 
-void carregarTexturasFontes( Jogo *jogo )
+ void inicializarJogador( JOGO *jogo){
+        ///GERAL
+        jogo->jogador.saude = SAUDE_TOTAL_JOGADOR;
+        jogo->jogador.vidas = VIDAS_INICIAIS_JOGADOR;
+        jogo->jogador.pontos = 0;
+
+        ///Posicao no MUNDO
+        jogo->jogador.PosMundo.x = 102;
+        jogo->jogador.PosMundo.y = 633;
+
+        ///Posicao TELA
+                ///Jogador
+                jogo->jogador.PosTela.width =  LARG_PADRAO * jogo->tela.width / REF_TELA_LARG;
+                jogo->jogador.PosTela.height =  jogo->jogador.PosTela.width * ALT_PADRAO / LARG_PADRAO;   //Altura Dependente da largura
+//                jogo->jogador.PosTela.x =  jogo->escalaGeral.x * ( jogo->jogador.PosMundo.x - jogo->MapaDesenho.x );
+//                jogo->jogador.PosTela.y =  jogo->escalaGeral.y * ( jogo->jogador.PosMundo.y - jogo->MapaDesenho.y );
+                jogo->jogador.PosTela.x =  jogo->tela.width / 2;
+                jogo->jogador.PosTela.y =  jogo->tela.height / 2;
+
+                ///Pes
+                jogo->jogador.PosTelaPes.width =  ESC_PES * jogo->jogador.PosTela.width;
+                jogo->jogador.PosTelaPes.height =  ESC_PES* jogo->jogador.PosTela.height;
+                jogo->jogador.PosTelaPes.x =  jogo->jogador.PosTela.x;
+                jogo->jogador.PosTelaPes.y =  jogo->jogador.PosTela.y;
+
+        ///Armas iniciais e Status iniciais
+        jogo->jogador.atualArma = 0;
+        jogo->jogador.atualStatus = 0;
+        jogo->spriteDef.atualFrame = 0;
+        jogo->jogador.latencia = 0;
+
+        ///Sala inicial
+        jogo->atualSala = 0;
+
+        ///Passagem de portas
+        jogo->PASSAGEM = 0;
+ }
+
+
+
+
+/** \brief Define caracteristicas da  TELA
+ *
+ * \param *JOGO
+ *
+ */
+
+ void definirTela( JOGO *jogo ){
+
+        ///Tela
+        jogo->tela.x = 0;
+        jogo->tela.y = 0;
+
+        if( GetScreenWidth() / (float)GetScreenHeight() == REF_TELA_LARG / (float)REF_TELA_ALT ){
+                        jogo->tela.width = REF_TELA_LARG;        // A tela deve ficar cheia em largura
+                        jogo->tela.height = REF_TELA_ALT;        // A altura deve ser regulada para manter a proporcao
+                        jogo->regulagemTela = 0;
+        }else{
+                if( GetScreenWidth() / (float)GetScreenHeight() > REF_TELA_LARG / (float)REF_TELA_ALT ){         //A largura e proporionalmente maior
+                        jogo->tela.width = GetScreenWidth();        // A tela deve ficar cheia em largura
+                        jogo->tela.height = REF_TELA_ALT * jogo->tela.width / REF_TELA_LARG ;        // A altura deve ser regulada para manter a proporcao
+                        jogo->regulagemTela = 1;
+                }else{          // Nesse caso a altura e proporcionalmente maior
+                        jogo->tela.height = GetScreenHeight();        // A tela deve ficar cheia em altura
+                        jogo->tela.width =  REF_TELA_LARG * jogo->tela.height / REF_TELA_ALT ;        // A largura deve ser regulada para manter a proporcao
+                        jogo->regulagemTela = 2;
+                }
+        }
+
+
+ }
+
+
+
+
+/** \brief Define caracteristicas da  TELA
+ *
+ * \param *JOGO
+ *
+ */
+
+ void definirMapa( JOGO *jogo ){
+        ///Tamanho Da Textura MAPA
+        jogo->MapaTamanho.x = jogo->Res.Mapa.width;
+        jogo->MapaTamanho.y = jogo->Res.Mapa.height;
+
+        ///Area de Extracao ( FIXA )
+        jogo->MapaDesenho.x = 0;
+        jogo->MapaDesenho.y = 300;
+        jogo->MapaDesenho.width = PIXEL_LARGURA_MAPA;
+        jogo->MapaDesenho.height = PIXEL_ALTURA_MAPA;
+ }
+
+
+
+/** \brief Define ESCALA GERAL do mapa em relacao a tela TIPO DE INIMIGO
+ *
+ * \param *JOGO
+ *
+ */
+ void definirEscalaGeral( JOGO *jogo ){
+        jogo->escalaGeral.x = (  jogo->tela.width / PIXEL_LARGURA_MAPA  );
+        jogo->escalaGeral.y = (  jogo->tela.height / PIXEL_ALTURA_MAPA  );
+ }
+
+
+
+/** \brief Define caracteristicas de cada TIPO DE INIMIGO
+ *
+ * \param *JOGO
+ *
+ */
+
+ void definirTiposInimigo( JOGO *jogo ){
+        /// Distancia minima para o jogador
+        jogo->infoIniT.dist_manter[ 0 ] = 10;
+        jogo->infoIniT.dist_manter[ 1 ] = 30;
+        jogo->infoIniT.dist_manter[ 2 ] = 100;
+
+        /// Velocidade
+        jogo->infoIniT.vel[ 0 ] = PASSO_T0;
+        jogo->infoIniT.vel[ 1 ] = PASSO_T1;
+        jogo->infoIniT.vel[ 2 ] = PASSO_T1;
+
+        /// Pontos de Saude
+        jogo->infoIniT.saude[ 0 ] = 1;
+        jogo->infoIniT.saude[ 1 ] = 4;
+        jogo->infoIniT.saude[ 2 ] = 2;
+        inicializarInimigosSalas( jogo);
+
+        spriteT1( jogo);
+        spriteT0( jogo);
+
+ }
+
+
+
+/** \brief Define caracteristicas das sprites
+ *
+ * \param *JOGO
+ *
+ */
+
+ void definirDadosSpritesPersonagem( JOGO *jogo ){
+        ///QTD de status para cada arma
+        jogo->spriteDef.QTD_STATUS[ 0 ] = 5;      //pistola
+        jogo->spriteDef.QTD_STATUS[ 0 ] = 5;      //SMG
+
+        ///Qtd de Frames para cada status de cada arma
+                ///Pistola
+                jogo->spriteDef.QTD_FRAMES[ 0 ][ 0 ] = 20;
+                jogo->spriteDef.QTD_FRAMES[ 0 ][ 1 ] = 20;
+                jogo->spriteDef.QTD_FRAMES[ 0 ][ 2 ] = 3;
+                jogo->spriteDef.QTD_FRAMES[ 0 ][ 3 ] = 15;
+                jogo->spriteDef.QTD_FRAMES[ 0 ][ 4 ] = 15;
+
+        ///QTD de Frame para cada tipo de movimento
+        jogo->spriteDef.QTD_FRAMES_PES[ 0 ] = 1;        //Repouso
+        jogo->spriteDef.QTD_FRAMES_PES[ 1 ] = 20;       //Andando
+        jogo->spriteDef.QTD_FRAMES_PES[ 2 ] = 20;       //Correndo
+        jogo->spriteDef.QTD_FRAMES_PES[ 3 ] = 20;       //Movimento lateral para a esquerda
+        jogo->spriteDef.QTD_FRAMES_PES[ 4 ] = 20;       //Movimento lateral para a direita
+
+        /// Retangulo de extracao da textura
+        jogo->spriteDef.Src.width = 258;
+        jogo->spriteDef.Src.height = 220;
+        jogo->spriteDef.Src.x = 0;
+        jogo->spriteDef.Src.y = 0;
+}
+
+
+/** \brief Carrega as Texturas e Fontes
+ *
+ * \param *JOGO
+ *
+ */
+
+void carregarTexturasFontes( JOGO *jogo )
 {
         ///Texturas  Gerais
         jogo->Res.Logo =  LoadTexture("Logo/Logo.png");   // Imagem de fundo (Logo)
@@ -184,8 +292,8 @@ void carregarTexturasFontes( Jogo *jogo )
         jogo->Res.fonteWolfen2 =    LoadFontEx("Fontes/wolfenstein.ttf"  ,96 , 0 , 0);
 
         ///Sprites
-        CarregarPersonagemImagens( jogo);      //Jogador
-        CarregarPes( jogo );           //Pes do jogador
+        carregarSpritesPersonagem( jogo);      //Jogador
+        carregarSpritesPes( jogo );           //Pes do jogador
 }
 //##############################################################################
 
@@ -194,7 +302,7 @@ void carregarTexturasFontes( Jogo *jogo )
 /**     Funcao CarregarLevel(): Carrega os levels
     */
 
-void CarregarLevel( Jogo *jogo)
+void CarregarLevel( JOGO *jogo)
 {
 //        int i;
 
@@ -239,21 +347,11 @@ void CarregarLevel( Jogo *jogo)
 
 
 
-/**     Função CriaSalas() : Crias as salas do jogo , definindo posição de portas e de baús , limites de vizualização ,  etc
-   */
-
-void CriaSalas( Jogo *jogo)
-{
-        CriaZonas( jogo );
-//        CriaPortas( jogo );
-
-}
-
 
 /**     Função CriaZonas() : Crias as zonas da sala , definindo limites de deslocamento
    */
 
-void CriaZonas( Jogo *jogo)
+void CriaZonas( JOGO *jogo)
 {
         int i , j;
 
@@ -387,7 +485,7 @@ void CriaZonas( Jogo *jogo)
    *                    obs: Portas se comportam como teleportes - alteram posicao do jogado
    */
 
-void CriaPortas( Jogo *jogo)
+void CriaPortas( JOGO *jogo)
 {
         int i , j;
         int pos[ QTDSALAS ][ 10 ][ 2 ] = {           //As posicoes  das portas ( x-0 , y - 1 ) de cada porta de cada sala
@@ -565,8 +663,13 @@ void CriaPortas( Jogo *jogo)
 
 
 #include <string.h>
-///
-void CarregarPersonagemImagens( Jogo *jogo )
+/** \brief Carrega as sprites do personagem
+ *
+ * \param *JOGO
+ *
+ */
+
+void carregarSpritesPersonagem( JOGO *jogo )
 {
         int arma , status , frame;
         char nmr[10];
@@ -604,17 +707,10 @@ void CarregarPersonagemImagens( Jogo *jogo )
 
                                 jogo->Res.Per[arma][status][frame] = LoadTexture( arquivo );
                         }
-
-        //Jogador extracao de textura
-        jogo->spriteDef.Src.height = jogo->Res.Per[0][0][0].height;
-        jogo->spriteDef.Src.width = jogo->Res.Per[0][0][0].width;
-        jogo->spriteDef.Src.x = 0;
-        jogo->spriteDef.Src.y = 0;
 }
 
 ///
-void CarregarPes( Jogo *jogo )
-{
+void carregarSpritesPes( JOGO *jogo ){
         int status , frame;
         char nmr[10];
         const char comum[] = "Sprites/Personagem/Pes/";
@@ -682,7 +778,7 @@ void InverteStr( char *str )
 
 
 ///
-void inicializarSpawns(Jogo *jogo)
+void CriaSpawns(JOGO *jogo)
 {
         jogo->salas[ 0 ].qtdSpawns = 5;
         jogo->salas[ 1 ].qtdSpawns = 0;
@@ -838,7 +934,7 @@ void inicializarSpawns(Jogo *jogo)
  *
  */
 
-void inicializarBaus( Jogo *jogo ){
+void CriaBaus( JOGO *jogo ){
         Vector2 pos[ QTDSALAS ][ MAX_BAUS_SALA ] = {
                { //sala 00
                         { 156 , 962 },    //b1
@@ -986,13 +1082,13 @@ void inicializarBaus( Jogo *jogo ){
                 }
 }
 
-void CarregarBaus( Jogo *jogo ){
+void CarregarBaus( JOGO *jogo ){
         jogo->Res.BauFechado = LoadTexture( "Sprites/Baús/BauVermelho.png");
         jogo->Res.BauAberto = LoadTexture( "Sprites/Baús/BauVermelhoAberto.png");
 
 }
 
-void inicializarInimigosSalas( Jogo *jogo ){
+void inicializarInimigosSalas( JOGO *jogo ){
         int sala[QTD_SALAS_SPAWN] = {0, 2, 4, 5, 6, 8, 10, 12, 13};
         int i;
 
@@ -1055,7 +1151,7 @@ void inicializarInimigosSalas( Jogo *jogo ){
  *
  */
 
-void spriteT1( Jogo *jogo ){
+void spriteT1( JOGO *jogo ){
         jogo->spriteDef.QTD_FRAMES_T1[ 0 ] = 21; //Andando
         jogo->spriteDef.QTD_FRAMES_T1[ 1 ] = 61; //Ataque
 
@@ -1107,50 +1203,50 @@ void spriteT1( Jogo *jogo ){
  *
  */
 
-void spriteT0( Jogo *jogo ){
-        jogo->Res.T0 = LoadTexture("Sprites/aranahas2");
+void spriteT0( JOGO *jogo ){
+        jogo->Res.T0 = LoadTexture("Sprites/aranhas2.png");
 
-        jogo->spriteDef.QTD_FRAMES_T1[ 0 ] = 7; //Andando
-        jogo->spriteDef.QTD_FRAMES_T1[ 1 ] = 4; //morrendo
-
-
-        int status , frame;
-        char nmr[10];
-        const char comum[] = "Sprites/T1/";
-        char pasta[][100] = {
-                "movimento/",
-                "ataque/",
-                " ",
-                " ",
-                " "
-        };
-
-        char fim[] = ".png";
-        char arquivo[100];
-
-                for( status = 0 ; status < QTD_STATUS_T1 ; status++ )
-                        for( frame = 0 ; frame < jogo->spriteDef.QTD_FRAMES_T1[ status ] ; frame++ )
-                        {
-                                TextCopy( arquivo , comum );
-                                strcat( arquivo , pasta[status] );
-
-                                IntParaString( frame , nmr );
-                                strcat( arquivo , nmr );
-
-                                strcat( arquivo , fim );
-
-                                jogo->Res.T1[status][frame] = LoadTexture( arquivo );
-                        }
-
-        //Jogador extracao de textura
-        jogo->spriteDef.SrcT1.height = SRC_LQ_T1_0;
-        jogo->spriteDef.SrcT1.width = SRC_LQ_T1_0;
-        jogo->spriteDef.SrcT1.x = SRC_X_T1_0;
-        jogo->spriteDef.SrcT1.y = SRC_Y_T1_0;
-
-        //Origin
-        jogo->spriteDef.OriginT1.x = MAPA_LQ_T1 / 2.0;
-        jogo->spriteDef.OriginT1.y = MAPA_LQ_T1 / 2.0;
+//        jogo->spriteDef.QTD_FRAMES_T1[ 0 ] = 7; //Andando
+//        jogo->spriteDef.QTD_FRAMES_T1[ 1 ] = 4; //morrendo
+//
+//
+//        int status , frame;
+//        char nmr[10];
+//        const char comum[] = "Sprites/T1/";
+//        char pasta[][100] = {
+//                "movimento/",
+//                "ataque/",
+//                " ",
+//                " ",
+//                " "
+//        };
+//
+//        char fim[] = ".png";
+//        char arquivo[100];
+//
+//                for( status = 0 ; status < QTD_STATUS_T1 ; status++ )
+//                        for( frame = 0 ; frame < jogo->spriteDef.QTD_FRAMES_T1[ status ] ; frame++ )
+//                        {
+//                                TextCopy( arquivo , comum );
+//                                strcat( arquivo , pasta[status] );
+//
+//                                IntParaString( frame , nmr );
+//                                strcat( arquivo , nmr );
+//
+//                                strcat( arquivo , fim );
+//
+//                                jogo->Res.T1[status][frame] = LoadTexture( arquivo );
+//                        }
+//
+//        //Jogador extracao de textura
+//        jogo->spriteDef.SrcT1.height = SRC_LQ_T1_0;
+//        jogo->spriteDef.SrcT1.width = SRC_LQ_T1_0;
+//        jogo->spriteDef.SrcT1.x = SRC_X_T1_0;
+//        jogo->spriteDef.SrcT1.y = SRC_Y_T1_0;
+//
+//        //Origin
+//        jogo->spriteDef.OriginT1.x = MAPA_LQ_T1 / 2.0;
+//        jogo->spriteDef.OriginT1.y = MAPA_LQ_T1 / 2.0;
 }
 
 

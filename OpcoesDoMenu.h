@@ -12,12 +12,12 @@
         #include "desenhamenu.h"
         #include "desenhajogo.h"
 
-        void NovoJogo( Jogo *jogo );
-        void Continuar( Jogo *jogo);
-        void ModoHorda( Jogo *jogo);
-        void Ajuda( Jogo *jogo);
-        void Configurar( Jogo *jogo);
-        void Sobre( Jogo *jogo);
-        void Sair( Jogo *jogo);
+        void NovoJOGO( JOGO *jogo );
+        void Continuar( JOGO *jogo);
+        void ModoHorda( JOGO *jogo);
+        void Ajuda( JOGO *jogo);
+        void Configurar( JOGO *jogo);
+        void Sobre( JOGO *jogo);
+        void Sair( JOGO *jogo);
 
 #endif // __OPCOESDOMENU_H_

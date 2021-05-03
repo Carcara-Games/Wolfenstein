@@ -6,7 +6,7 @@
 
 /**     Funcao AtualizaLevel(): Atualiza os dados do level atual
     */
-void AtualizaLevel(Jogo *jogo)
+void AtualizaLevel(JOGO *jogo)
 {
         AtualizaMira(jogo);
         //        AtualizaArma( &jogo );
@@ -29,6 +29,7 @@ void AtualizaLevel(Jogo *jogo)
         AtualizaFrameJogador( jogo );
         AtualizaFramePes( jogo );
         AtualizaFrameT1( jogo );
+//        AtualizaFrameT0( jogo );
 
         AtualizaObjetos( jogo );
 
@@ -46,7 +47,7 @@ void AtualizaLevel(Jogo *jogo)
 
 /**     Funcao AtualizaObjetos():
     */
-void AtualizaObjetos( Jogo *jogo ){
+void AtualizaObjetos( JOGO *jogo ){
         AtualizaBaus( jogo );
 
 
@@ -59,7 +60,7 @@ void AtualizaObjetos( Jogo *jogo ){
 
 /**     Funcao AtualizaBaus():
     */
-void AtualizaBaus( Jogo *jogo ){
+void AtualizaBaus( JOGO *jogo ){
         int bau;
 
         for( bau = 0 ; bau < jogo->salas[ jogo->atualSala ].qtdBaus ; bau++ ){
@@ -96,7 +97,7 @@ void AtualizaBaus( Jogo *jogo ){
 /**     Funcao AtualizaPosicao():
     */
 
-void AtualizaPosicao(Jogo *jogo)
+void AtualizaPosicao(JOGO *jogo)
 {
         Vector2 desloc = (Vector2){0, 0}; // Deslocamento
         Vector2 posAtual = jogo->jogador.PosMundo; // Deslocamento
@@ -221,7 +222,7 @@ void IncrementaPosicao(Vector2 *pos, int addX, int addY)
 /**     Funcao AtualizaMira():
     */
 
-void AtualizaMira(Jogo *jogo)
+void AtualizaMira(JOGO *jogo)
 {
         //O angulo formado entre a linha imaginaria do centro de rotacao do personagem e o centro de mira que fica na ponta da arma
         //        const int delta[ 3/*QTD_ARMAS*/ ] = { 00 , 25 };
@@ -255,7 +256,7 @@ void AtualizaMira(Jogo *jogo)
 /**     Funcao AtualizaMapa():
     */
 
-void AtualizaMapa(Jogo *jogo)
+void AtualizaMapa(JOGO *jogo)
 {
         float novox = jogo->jogador.PosMundo.x - jogo->MapaDesenho.width / 2; // Desloca coordenadas do desenho do fundo centrando o personagem
         float novoy = jogo->jogador.PosMundo.y - jogo->MapaDesenho.height / 2;
@@ -271,7 +272,7 @@ void AtualizaMapa(Jogo *jogo)
 /**     Funcao ChecaMov():
     */
 
-BOOL ChecaMov(Jogo jogo, Vector2 posAtual , int varx, int vary)
+BOOL ChecaMov(JOGO jogo, Vector2 posAtual , int varx, int vary)
 {
         int i;
         Vector2 destino = SomaVectores( posAtual , (Vector2){ varx , vary } );
@@ -287,7 +288,7 @@ BOOL ChecaMov(Jogo jogo, Vector2 posAtual , int varx, int vary)
 /**     Funcao EntraEmPortas():
     */
 
-void EntraEmPortas(Jogo *jogo)
+void EntraEmPortas(JOGO *jogo)
 {
         int porta = ChecaPortas(*jogo);
 
@@ -309,7 +310,7 @@ void EntraEmPortas(Jogo *jogo)
 /**     Funcao ChecaPortas():
     */
 
-BOOL ChecaPortas(Jogo jogo)
+BOOL ChecaPortas(JOGO jogo)
 {
         int i;
 
@@ -337,7 +338,7 @@ void pausa(int tempo)
 }
 
 ///
-void AtualizaOrigin(Jogo *jogo)
+void AtualizaOrigin(JOGO *jogo)
 {
         if (jogo->jogador.atualArma == 0)
         {
@@ -353,7 +354,7 @@ void AtualizaOrigin(Jogo *jogo)
 }
 
 ///
-void AtualizaOriginPes(Jogo *jogo)
+void AtualizaOriginPes(JOGO *jogo)
 {
         /*if( jogo->jogador.atualMovTipo == 0 )*/ {
                 jogo->spriteDef.OriginPes.x = jogo->jogador.PosTelaPes.width / 2;
@@ -365,7 +366,7 @@ void AtualizaOriginPes(Jogo *jogo)
 
 
 ///
-void AtualizaFrameJogador(Jogo *jogo)
+void AtualizaFrameJogador(JOGO *jogo)
 {
         static int aux = 0;
         static int frame = 0;
@@ -428,7 +429,7 @@ void AtualizaFrameJogador(Jogo *jogo)
 }
 
 ///
-void AtualizaFramePes(Jogo *jogo)
+void AtualizaFramePes(JOGO *jogo)
 {
         static int aux = 0;
         static int frame = 0;
@@ -459,7 +460,7 @@ void AtualizaFramePes(Jogo *jogo)
 }
 
 ///
-void AtualizaAtirar(Jogo *jogo)
+void AtualizaAtirar(JOGO *jogo)
 {
         //Pistola
         if (jogo->jogador.atualArma == 0)
@@ -489,7 +490,7 @@ void AtualizaAtirar(Jogo *jogo)
  *
  */
 
-void AtualizaFrameT1(Jogo *jogo)
+void AtualizaFrameT1(JOGO *jogo)
 {
         static int aux[ QTD_MAX_T1_SALA ] = { 0 };
         static int frame[ QTD_MAX_T1_SALA ] = { 0 };
@@ -553,15 +554,79 @@ void AtualizaFrameT1(Jogo *jogo)
                 }
 }
 
+//void AtualizaFrameT0(JOGO *jogo)
+//{
+//        static int aux[ QTD_MAX_T1_SALA ] = { 0 };
+//        static int frame[ QTD_MAX_T1_SALA ] = { 0 };
+//        static int antStatus = 0;
+//        static int flagTiro[ QTD_MAX_T1_SALA ] =  { 0 };
+//
+//        int ini;
+//        int aSal = jogo->atualSala;
+//
+//        for( ini = 0 ; ini < jogo->salas[ aSal ].qtd_inimigos_liberados ; ini++)
+//                if( jogo->salas[ aSal ].inimigos[ ini ].VIVO ){
+//                        //Caso atire e preciso terminar o ciclo dos frame[ ini ]s
+//                        if ( jogo->salas[ aSal ].inimigos[ ini ].atacando  || flagTiro[ ini ])
+//                        {
+//                                if (!flagTiro[ ini ])
+//                                {
+//                                        flagTiro[ ini ] = 1;
+//                                        frame[ ini ] = 0;
+//                                        aux[ ini ] = 0;
+//                                }
+//                                else
+//                                        aux[ ini ]++;
+//
+//                                jogo->salas[ aSal ].inimigos[ ini ].atacando = 1;
+//
+//                                if (aux[ ini ] == DIV_FPS_T1 )
+//                                {
+//                                        aux[ ini ] = 0;
+//                                        frame[ ini ]++;
+//                                }
+//
+//                                jogo->spriteDef.atualFrame_T1[ ini ] = frame[ ini ];
+//
+//                                if (frame[ ini ] == jogo->spriteDef.QTD_FRAMES_T1[ 1 ] - 1)
+//                                {
+//                                        frame[ ini ] = 0;
+//                                        flagTiro[ ini ] = 0;
+//                                }
+//                                antStatus = jogo->salas[ aSal ].inimigos[ ini ].atacando;
+//                                return;
+//                        }
+//
+//                        if ( jogo->salas[ aSal ].inimigos[ ini ].atacando != antStatus)
+//                        {
+//                                aux[ ini ] = 0;
+//                                frame[ ini ] = 0;
+//                        }
+//
+//                        aux[ ini ]++;
+//
+//                        if ( aux[ ini ] == DIV_FPS_T1 )
+//                        {
+//                                aux[ ini ] = 0;
+//                                frame[ ini ]++;
+//                                jogo->spriteDef.atualFrame_T1[ ini ] = frame[ ini ];
+//                                if (frame[ ini ] == jogo->spriteDef.QTD_FRAMES_T1[ jogo->salas[ aSal ].inimigos[ ini ].atacando ] - 1)
+//                                        frame[ ini ] = 0;
+//                        }
+//
+//                        antStatus = jogo->salas[ aSal ].inimigos[ ini ].atacando;
+//                }
+//}
 
 
-void AtualizaSrcPes(Jogo *jogo)
+
+void AtualizaSrcPes(JOGO *jogo)
 {
         jogo->spriteDef.SrcPes.width = jogo->Res.Pes[jogo->jogador.atualMovTipo][0].width;
         jogo->spriteDef.SrcPes.height = jogo->Res.Pes[jogo->jogador.atualMovTipo][0].height;
 }
 
-void AtualizaSrcPer(Jogo *jogo)
+void AtualizaSrcPer(JOGO *jogo)
 {
         jogo->jogador.PosTela.width = jogo->Res.Per[jogo->jogador.atualArma][jogo->jogador.atualStatus][0].width;
         jogo->jogador.PosTela.height = jogo->Res.Per[jogo->jogador.atualArma][jogo->jogador.atualStatus][0].height;
@@ -577,7 +642,7 @@ void AtualizaSrcPer(Jogo *jogo)
  *
  */
 
-void AtualizaAtaqueT1(Jogo *jogo)
+void AtualizaAtaqueT1(JOGO *jogo)
 {
         Vector2 posAtual;
         Vector2 alvo = jogo->jogador.PosMundo;
@@ -630,7 +695,7 @@ void AtualizaAtaqueT1(Jogo *jogo)
  *
  */
 
-void AtualizaRotacT1(Jogo *jogo)
+void AtualizaRotacT1(JOGO *jogo)
 {
         Vector2 posAtual;
         Vector2 alvo = jogo->jogador.PosMundo;
@@ -657,7 +722,7 @@ void AtualizaRotacT1(Jogo *jogo)
  *
  */
 
-void AtualizaInimigosT1(Jogo *jogo)
+void AtualizaInimigosT1(JOGO *jogo)
 {
         Vector2 posAtual;
         int i;
@@ -678,7 +743,7 @@ void AtualizaInimigosT1(Jogo *jogo)
 
                          if( mesmaZona( jogo , posAtual , alvo ) ){
                                 /// Direta (ALVO AVISTADO)
-                                posAtual = T1Perseguicao( jogo , posAtual , alvo , jogo->infoIniT.vel[ jogo->salas[ aSal ].inimigos[ i ].tipo ] );
+                                posAtual = T1Perseguicao( jogo , posAtual , alvo , jogo->salas[ aSal ].inimigos[ i ].tipo );
                          }else{
                                 ///Rodando aleatoriamente
                                  passo.x = cos( (PI / 180) * sentidoAleatorio[ i ] ) * jogo->infoIniT.vel[ jogo->salas[ aSal ].inimigos[ i ].tipo ];
@@ -724,7 +789,7 @@ void AtualizaInimigosT1(Jogo *jogo)
 }
 
 
-Vector2 T1Perseguicao( Jogo *jogo , Vector2 posAtual , Vector2 alvo , int tipo ){
+Vector2 T1Perseguicao( JOGO *jogo , Vector2 posAtual , Vector2 alvo , int tipo ){
         Vector2 posFinal;
         Vector2 passo;
 
@@ -879,7 +944,7 @@ Vector2 T1Perseguicao( Jogo *jogo , Vector2 posAtual , Vector2 alvo , int tipo )
  *
  */
 
-//Vector2 SegueParede( Jogo *jogo , int i , int novaBusca , Vector2 posAtual , Vector2 alvo ){
+//Vector2 SegueParede( JOGO *jogo , int i , int novaBusca , Vector2 posAtual , Vector2 alvo ){
 //        int parede[ MAX_INI_TELA ];
 //        int distParede[ 4 ][ MAX_INI_TELA ];
 //        static int angMov;
@@ -892,7 +957,7 @@ Vector2 T1Perseguicao( Jogo *jogo , Vector2 posAtual , Vector2 alvo , int tipo )
 //        }
 //}
 
-//BOOL CheckRotaDireta( Jogo *jogo , Vector2 posAtual , Vector2 alvo ){
+//BOOL CheckRotaDireta( JOGO *jogo , Vector2 posAtual , Vector2 alvo ){
 //        float distTotal = Deslocamento( posAtual , alvo );
 //        float ang = argVector( posAtual , alvo );
 //        float distP = 0;
@@ -919,7 +984,7 @@ Vector2 T1Perseguicao( Jogo *jogo , Vector2 posAtual , Vector2 alvo , int tipo )
  *
  */
 ///
-Vector2 AtualizaPosTela( Jogo *jogo , Vector2 posMundo ){
+Vector2 AtualizaPosTela( JOGO *jogo , Vector2 posMundo ){
         float XTela;
         float YTela;
 
@@ -966,7 +1031,7 @@ Vector2 AtualizaPosTela( Jogo *jogo , Vector2 posMundo ){
  *
  */
 
-void GeraInimigos( Jogo *jogo ){
+void GeraInimigos( JOGO *jogo ){
         static int espera = 2;
         int qtdAtual = jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados;
 
@@ -1003,7 +1068,7 @@ void GeraInimigos( Jogo *jogo ){
  *
  */
 
-int CalcularSpawnPerto( Jogo *jogo ){
+int CalcularSpawnPerto( JOGO *jogo ){
         int cod;
         int menor = 0;
         float distMenor = Deslocamento( jogo->jogador.PosMundo , (Vector2){jogo->salas[ jogo->atualSala ].spawns[ menor ].posMundo.x , jogo->salas[ jogo->atualSala ].spawns[ menor ].posMundo.y} );
@@ -1026,7 +1091,7 @@ int CalcularSpawnPerto( Jogo *jogo ){
  *
  */
 
-void AtualizaDanoJogador( Jogo *jogo ){
+void AtualizaDanoJogador( JOGO *jogo ){
         static int delayCor;
 
         if( jogo->jogador.DANO ){
@@ -1035,8 +1100,12 @@ void AtualizaDanoJogador( Jogo *jogo ){
                 delayCor = DELAY_DANO;
                 jogo->jogador.saude--;
 
-                if( jogo->jogador.saude < 0 ) jogo->jogador.saude = 0;
-                if(jogo->jogador.saude == 0 ) jogo->jogador.vidas--;
+                if(jogo->jogador.saude == 0 ) {
+                        jogo->jogador.saude = SAUDE_TOTAL_JOGADOR;
+                        jogo->jogador.vidas--;
+//                        ReniciarLevel();
+                }
+
 //                if(jogo->jogador.vidas == 0 ) EGameOver();
                 jogo->jogador.DANO = 0;
         }
@@ -1050,7 +1119,7 @@ void AtualizaDanoJogador( Jogo *jogo ){
         if( delayCor ) delayCor--;
 }
 
-BOOL mesmaZona( Jogo *jogo , Vector2 pos1 , Vector2 pos2 ){
+BOOL mesmaZona( JOGO *jogo , Vector2 pos1 , Vector2 pos2 ){
         int i;
         for( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtdZonas ; i++ )
                 if( CheckCollisionPointRec( pos1 , jogo->salas[ jogo->atualSala ].zonas[ i ] ) )
@@ -1068,7 +1137,7 @@ BOOL mesmaZona( Jogo *jogo , Vector2 pos1 , Vector2 pos2 ){
  *
  */
 
-//void AtualizaDanoInimigo( Jogo *jogo ){
+//void AtualizaDanoInimigo( JOGO *jogo ){
 //        static int delayCor[ 100 ];
 //
 //

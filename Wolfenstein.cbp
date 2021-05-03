@@ -43,13 +43,13 @@
 		<Unit filename="desenhajogo.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="desenhajogo.h" />
 		<Unit filename="desenhamenu.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="desenhamenu.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
+		<Unit filename="estruturascomplexas.h" />
 		<Unit filename="fisica.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -69,7 +69,6 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
-		<Unit filename="structsgraficos.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

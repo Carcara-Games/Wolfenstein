@@ -1,8 +1,9 @@
 
 #include "OpcoesDoMenu.h"
+#include "booleanas.h"
 
 
-void NovoJogo( Jogo *jogo )
+void NovoJOGO( JOGO *jogo )
 {
         int selecaoMenu = 0;
 
@@ -18,7 +19,7 @@ void NovoJogo( Jogo *jogo )
                         {
 //                                                                CarregarLevel( &jogo ); //Carrega as fases em sequência. Se Jogador recebe game over, zera ou pede para voltar para o menu ativa as respectivas flags
 //                                                                while( !IsGameOver( jogo )  &&  !IsLevelEnd( jogo )  &&  !IsVoltarMenu( jogo )  )
-                                while(  !IsKeyPressed( KEY_P ) )
+                                while(  !IsGameOver( *jogo )  &&  !IsKeyPressed( KEY_HOME ) )
                                 {
                                         AtualizaLevel( jogo );
                                         DesenhaLevel( jogo );
@@ -31,7 +32,7 @@ void NovoJogo( Jogo *jogo )
 }
 
 
-void Continuar( Jogo *jogo)
+void Continuar( JOGO *jogo)
 {
         while( !IsKeyPressed( KEY_A ) )
         {
@@ -45,7 +46,7 @@ void Continuar( Jogo *jogo)
 }
 
 
-void ModoHorda( Jogo *jogo)
+void ModoHorda( JOGO *jogo)
 {
         while( !IsKeyPressed( KEY_A ) )
         {
@@ -59,7 +60,7 @@ void ModoHorda( Jogo *jogo)
 }
 
 
-void Configurar( Jogo *jogo)
+void Configurar( JOGO *jogo)
 {
         while( !IsKeyPressed( KEY_A ) )
         {
@@ -73,7 +74,7 @@ void Configurar( Jogo *jogo)
 }
 
 
-void Ajuda( Jogo *jogo)
+void Ajuda( JOGO *jogo)
 {
         while( !IsKeyPressed( KEY_A ) )
         {
@@ -87,7 +88,7 @@ void Ajuda( Jogo *jogo)
 }
 
 
-void Sobre( Jogo *jogo)
+void Sobre( JOGO *jogo)
 {
         do{
                 DesenhaSobre( *jogo );
@@ -96,7 +97,7 @@ void Sobre( Jogo *jogo)
 }
 
 
-void Sair( Jogo *jogo)
+void Sair( JOGO *jogo)
 {
 //        int selecaoMenu = 0;
 //        do

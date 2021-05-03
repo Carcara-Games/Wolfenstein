@@ -4,14 +4,14 @@
         #include "structsgraficos.h"
         #include "logicamenu.h"
 
-        void NomeWolfenEntrada( Jogo *jogo , int selecao  );
-        void DesenhaMenuPrincipal(Jogo *jogo, int selecao);
-        void DesenhaMenuDificuldade( Jogo *jogo , int selecao );
+        void NomeWolfenEntrada( JOGO *jogo , int selecao  );
+        void DesenhaMenuPrincipal(JOGO *jogo, int selecao);
+        void DesenhaMenuDificuldade( JOGO *jogo , int selecao );
         void DesenharObrigado( void );
         int CentraTextoXEX( Font fonte , char *texto , float fontsize , float space);
         int CentraTextoX( char *texto , int fontsize );
-        void DesenharConfirmarSair( int selecao , Jogo *jogo );
-        void DesenhaSobre( Jogo jogo);
+        void DesenharConfirmarSair( int selecao , JOGO *jogo );
+        void DesenhaSobre( JOGO jogo);
 
 
 

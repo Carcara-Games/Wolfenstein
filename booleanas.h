@@ -4,10 +4,10 @@
         #include "structsgraficos.h"
         #include "definicoes.h"
 
-        BOOL IsGameOver( Jogo jogo );
-        BOOL IsEndGame( Jogo jogo );
-        BOOL IsVoltarMenu( Jogo jogo );
-        BOOL IsLevelEnd( Jogo jogo );
-        BOOL TestaLimVizual( Jogo jogo );
+        BOOL IsGameOver( JOGO jogo );
+        BOOL IsEndGame( JOGO jogo );
+        BOOL IsVoltarMenu( JOGO jogo );
+        BOOL IsLevelEnd( JOGO jogo );
+        BOOL TestaLimVizual( JOGO jogo );
 
 #endif // __BOOLEANAS_H_

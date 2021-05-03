@@ -6,16 +6,18 @@
 
 #include "raylib.h"
 
+#include "inicializar.h"
 #include "OpcoesDoMenu.h"
 
 
 ///MAIN
 int main()
 {
-        IniciarJanela();  //Configura as opções da janela
-        Jogo jogo = IniciaJogo();  // Carrega recursos do jogo
+        IniciarJanela();  //Configura as opcoes da janela
+        JOGO jogo = definirPreJogo();          // Inicializa fontes, texturas e informacoes gerais do jogo
+        IniciaNovoJogo( &jogo );  // Incializa informacoes para Novo Jogo
 
-        void (*opcao[])( Jogo* ) = { NovoJogo , Continuar , ModoHorda , Configurar , Ajuda , Sobre , Sair };            //Ponteiro para as opcoes do MENU
+        void (*opcao[])( JOGO* ) = { NovoJOGO , Continuar , ModoHorda , Configurar , Ajuda , Sobre , Sair };            //Ponteiro para as opcoes do MENU
         int selecaoMenu = 0;
 
         while( !((IsKeyPressed( KEY_ENTER ) && selecaoMenu == ITENS_MAIN_MENU - 1 ) || WindowShouldClose() || jogo.FECHAR ) )

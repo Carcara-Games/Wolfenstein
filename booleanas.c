@@ -4,7 +4,7 @@
 /**     Funcao IsGameOver(): Retorn TRUE se jogador recebeu game over
     */
 
-BOOL IsGameOver( Jogo jogo )
+BOOL IsGameOver( JOGO jogo )
 {
         if( !jogo.jogador.vidas )
         {
@@ -20,7 +20,7 @@ BOOL IsGameOver( Jogo jogo )
 /**     Funcao IsEndGame(): Retorn TRUE se jogador recebeu zerou o jogo
     */
 
-//BOOL IsEndGame( Jogo jogo )
+//BOOL IsEndGame( JOGO jogo )
 //{
 //        if( jogo.atualLevel > MAXLEVEL )
 //        {
@@ -36,7 +36,7 @@ BOOL IsGameOver( Jogo jogo )
 /**     Funcao IsVoltarMenu(): Retorn TRUE se jogador quer volar para o menu principal
     */
 
-BOOL IsVoltarMenu( Jogo jogo )
+BOOL IsVoltarMenu( JOGO jogo )
 {
         if( jogo.VOLTARMENU )
         {
@@ -52,7 +52,7 @@ BOOL IsVoltarMenu( Jogo jogo )
 /**     Funcao IsLevelEnd(): Retorn TRUE se jogador terminou level
     */
 
-//BOOL IsLevelEnd( Jogo jogo )
+//BOOL IsLevelEnd( JOGO jogo )
 //{
 //        if( jogo.dadosLevel.TERMINADO )
 //        {
@@ -66,7 +66,7 @@ BOOL IsVoltarMenu( Jogo jogo )
 
 /**     Funcao TestaLimVizua():
     */
-BOOL TestaLimVizual( Jogo jogo )
+BOOL TestaLimVizual( JOGO jogo )
 {
         return SIM;
 }

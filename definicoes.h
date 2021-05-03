@@ -31,6 +31,9 @@
         #define RAZAO_SOLID_JOGADOR 10
         #define DELAY_DANO 10
 
+        #define SAUDE_TOTAL_JOGADOR 15
+        #define VIDAS_INICIAIS_JOGADOR 3
+
 
         ///EXIT
         #define EXITKEY KEY_BACKSLASH

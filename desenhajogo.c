@@ -5,7 +5,7 @@
 /**     Funcao DesenhaLevel(): Desenha o level atual
     */
 
-void DesenhaLevel(Jogo *jogo)
+void DesenhaLevel(JOGO *jogo)
 {
         BeginDrawing();
 
@@ -33,7 +33,7 @@ void DesenhaLevel(Jogo *jogo)
 
 /**     Funcao DesenhaObjetos():
     */
-void DesenhaObjetos( Jogo *jogo ){
+void DesenhaObjetos( JOGO *jogo ){
         DesenhaBaus( jogo );
         DesenhaPortas( jogo );
         DesenhaSpawns( jogo );
@@ -44,7 +44,7 @@ void DesenhaObjetos( Jogo *jogo ){
 
 /**     Funcao DesenhaMapa():
     */
-void DesenhaMapa(Jogo *jogo)
+void DesenhaMapa(JOGO *jogo)
 {
         Vector2 pos;
         pos.x = 0;
@@ -57,7 +57,7 @@ void DesenhaMapa(Jogo *jogo)
 /**     Funcao DesenhaPes():
     */
 
-void DesenhaPes(Jogo *jogo)
+void DesenhaPes(JOGO *jogo)
 {
         DrawTexturePro(jogo->Res.Pes[jogo->jogador.atualMovTipo][jogo->spriteDef.atualFramePes], jogo->spriteDef.SrcPes, jogo->jogador.PosTelaPes, jogo->spriteDef.OriginPes, jogo->jogador.Rotac, WHITE);
 }
@@ -66,7 +66,7 @@ void DesenhaPes(Jogo *jogo)
 /**     Funcao DesenhaJogador():
     */
 
-void DesenhaJogador(Jogo *jogo)
+void DesenhaJogador(JOGO *jogo)
 {
         DrawTexturePro(jogo->Res.Per[0][jogo->jogador.atualStatus][jogo->spriteDef.atualFrame], jogo->spriteDef.Src, jogo->jogador.PosTela, jogo->spriteDef.Origin, jogo->jogador.Rotac, jogo->jogador.cor);
 }
@@ -77,7 +77,7 @@ void DesenhaJogador(Jogo *jogo)
 /**     Funcao DesenhaPortas(): Desenha as portas trancadas
     */
 
-void DesenhaTiro(Jogo *jogo)
+void DesenhaTiro(JOGO *jogo)
 {
         static int qtd_balas_ativas = 0;
 
@@ -127,7 +127,7 @@ void DesenhaTiro(Jogo *jogo)
 }
 
 ///
-void DesenhaPortas(Jogo *jogo)
+void DesenhaPortas(JOGO *jogo)
 {
         int i;
         Vector2 posic;
@@ -163,7 +163,7 @@ void PassagemPorta(void)
 //##############################################################################
 
 #define salaAt jogo->atualSala
-void DesenhaBaus( Jogo *jogo ){
+void DesenhaBaus( JOGO *jogo ){
 //        Texture2D imagem;
         int  i;
 
@@ -187,7 +187,7 @@ void DesenhaBaus( Jogo *jogo ){
 
 ///**     Funcao DesenhaInimigosT1():
 
-void DesenhaInimigos( Jogo *jogo){
+void DesenhaInimigos( JOGO *jogo){
         int i;
         int aSal = jogo->atualSala;
 
@@ -198,6 +198,7 @@ void DesenhaInimigos( Jogo *jogo){
                         {
                                 case 0:
                                         DrawRectanglePro((Rectangle){ jogo->salas[ aSal ].inimigos[ i ].posTela.x , jogo->salas[ aSal ].inimigos[ i ].posTela.y , 30 , 30 } , (Vector2){ 15 , 15} , jogo->salas[ aSal ].inimigos[ i ].Rotac , PURPLE );
+//                                        DrawTexturePro( jogo->Res.T0 , (Rectangle){ 0 , 10 , 71 , 71 } ,(Rectangle){ jogo->salas[ aSal ].inimigos[ i ].posTela.x , jogo->salas[ aSal ].inimigos[ i ].posTela.y , 130 , 130 } , (Vector2){0 , 0} , jogo->salas[ aSal ].inimigos[ i ].Rotac ,  WHITE );
                                         break;
                                 case 1:
 //                                        DrawRectangle( jogo->salas[ aSal ].inimigos[ i ].posTela.x , jogo->salas[ aSal ].inimigos[ i ].posTela.y , 30 , 30 , ORANGE );
@@ -213,7 +214,7 @@ void DesenhaInimigos( Jogo *jogo){
 
 ///**     Funcao DesenhaSpawns():
 
-void DesenhaSpawns( Jogo *jogo)
+void DesenhaSpawns( JOGO *jogo)
 {
         int i;
         Vector2 pontoNaTela;
@@ -231,7 +232,7 @@ void DesenhaSpawns( Jogo *jogo)
 
 ///Funcao DesenhaDebug
 
-void DesenhaDebug(Jogo *jogo)
+void DesenhaDebug(JOGO *jogo)
 {
         int i;
         static int laten = 50;

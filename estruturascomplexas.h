@@ -97,17 +97,17 @@ typedef struct
 typedef struct
 {
         int tipo; // T0 , T1 , T2
-        Vector2 posMundo; //posicao no mundo
-        Rectangle posTela; //posicao na tela
-        Rectangle posTelaSolid; //posicao na tela solida
+        Vector2 posMundo;       // Posicao do centro do inimigo no mundo
+        Vector2 recMundo;       // Area que inimigo ocupa no mundo
+        Rectangle posTela;      // Posicao na tela
         float Rotac;
 
+        int saude;      // Pontos de Saude
         BOOL atacando;
         int latenciaAtaque;
 
         int codItem; // Codigo do item que ira dropar
 
-        int saude;
         unsigned VIVO : 1;
 } Inim;
 

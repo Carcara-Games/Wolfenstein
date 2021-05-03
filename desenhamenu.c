@@ -9,7 +9,7 @@
 #define COR_MENU_COMUM WHITE          // Cor do texto do menu nao selecionado
 #define COR_MENU_SELECAO GOLD          // Cor do texto do menu selecionado
 
-void DesenhaMenuPrincipal(Jogo* jogo, int selecao)
+void DesenhaMenuPrincipal(JOGO* jogo, int selecao)
 {
         int i;
         const int FONT_SIZE = 30;   // Tamanho da fonte do menu
@@ -55,7 +55,7 @@ void DesenhaMenuPrincipal(Jogo* jogo, int selecao)
 #define CHUCK_NORRIS 3
 #define VOLTAR 4
 
-void DesenhaMenuDificuldade( Jogo *jogo , int selecao )
+void DesenhaMenuDificuldade( JOGO *jogo , int selecao )
 {
         int i ;
 
@@ -136,7 +136,7 @@ void DesenharObrigado( void )
 #define MULT 5
 #define ESP_WOLF 7
 #include <math.h>
-void NomeWolfenEntrada( Jogo *jogo , int selecao  )
+void NomeWolfenEntrada( JOGO *jogo , int selecao  )
 {
         static int i = 0 , j = 10 * MULT;
         int k , f , L1 , L2;
@@ -200,7 +200,7 @@ int CentraTextoXEX( Font fonte , char *texto , float fontsize , float space)
 
 /**     Funcao DesenhaSobre(): Desenha a janela de informações sobre a autoria do jogo
     */
-void DesenhaSobre( Jogo jogo)
+void DesenhaSobre( JOGO jogo)
 {
         const int fonte = 25 ;
         const int escala = 1.3;
@@ -237,7 +237,7 @@ void DesenhaSobre( Jogo jogo)
 
 /**     Funcao DesenharConfirmarSair() : Retorna os itens do menu de escolha de dificuldade
     */
-void DesenharConfirmarSair( int selecao , Jogo *jogo )
+void DesenharConfirmarSair( int selecao , JOGO *jogo )
 {
         Rectangle Janela ;
         Janela.width = 550;

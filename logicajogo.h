@@ -1,11 +1,13 @@
 #ifndef __LOGICAJOGO_H_
 #define __LOGICAJOGO_H_
 
-        #include "structsgraficos.h"
+        #include "estruturascomplexas.h"
 
         void AtualizaLevel( JOGO *jogo);
         void AtualizaPosicao( JOGO *jogo);
         void AtualizaMira( JOGO *jogo);
+        void AtualizaTirosJogador( JOGO *jogo );
+        void AtualizaColisaoTirosJogador( JOGO *jogo );
         void AtualizaMapa( JOGO *jogo);
         BOOL ChecaMov(JOGO jogo, Vector2 posAtual , int varx, int vary);
         int ChecaPortas( JOGO jogo );
@@ -17,10 +19,12 @@
 
         void AtualizaSrcPer( JOGO *jogo );
         void AtualizaSrcPes( JOGO *jogo );
-
+        void AtualizaDanoInimigo( JOGO *jogo );
 
         void AtualizaFrameJogador( JOGO *jogo );
         void AtualizaAtirar( JOGO *jogo );
+        void abrirBaus( JOGO *jogo );
+        void destrancarPortas( JOGO *jogo );
 
         void IncrementaPosicao( Vector2 *pos , int addX , int addY );
         float Deslocamento( Vector2 posInicial ,  Vector2 posFinal );
@@ -31,10 +35,9 @@
         float argVector( Vector2 vet );
         void AtualizaFramePes( JOGO *jogo );
         void AtualizaObjetos( JOGO *jogo );
-        void AtualizaBaus( JOGO *jogo );
-
+        void AtualizaBausDesenho( JOGO *jogo );
         void AtualizaInimigosT1(JOGO *jogo);
-       Vector2 T1Perseguicao( JOGO *jogo , Vector2 posAtual , Vector2 alvo , int tipo );
+        Vector2 T1Perseguicao( JOGO *jogo , Vector2 posAtual , Vector2 alvo , int tipo );
         int sinalNumero( float nmr );
         int nmrRand( int mini , int maxi );
         Vector2 AtualizaPosTela( JOGO *jogo , Vector2 posMundo );

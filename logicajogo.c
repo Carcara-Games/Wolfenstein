@@ -2,7 +2,7 @@
 #include "logicajogo.h"
 #include "definicoes.h"
 #include "fisica.h"
-#include <math.h> // uso para atan2
+#include <math.h>
 
 /**     Funcao AtualizaLevel(): Atualiza os dados do level atual
     */
@@ -11,7 +11,8 @@ void AtualizaLevel(JOGO *jogo)
         AtualizaMira(jogo);
         //        AtualizaArma( &jogo );
 
-        //        AtualizaTiros( &jogo );
+        AtualizaTirosJogador( jogo );
+        AtualizaColisaoTirosJogador( jogo );
         //        AtualizaRecarga( &jogo );
 
         AtualizaPosicao(jogo);
@@ -23,6 +24,8 @@ void AtualizaLevel(JOGO *jogo)
         AtualizaOriginPes(jogo);
 
         EntraEmPortas(jogo);
+        abrirBaus( jogo );
+        destrancarPortas( jogo );
         AtualizaAtirar(jogo);
 
 
@@ -38,7 +41,8 @@ void AtualizaLevel(JOGO *jogo)
         AtualizaAtaqueT1( jogo );
 
         AtualizaDanoJogador( jogo );
-//        AtualizaDanoInimigo( jogo );
+        AtualizaDanoInimigo( jogo );
+
 
         GeraInimigos( jogo );
 }
@@ -48,7 +52,7 @@ void AtualizaLevel(JOGO *jogo)
 /**     Funcao AtualizaObjetos():
     */
 void AtualizaObjetos( JOGO *jogo ){
-        AtualizaBaus( jogo );
+        AtualizaBausDesenho( jogo );
 
 
 }
@@ -56,11 +60,50 @@ void AtualizaObjetos( JOGO *jogo ){
 
 
 
+/** \brief Mudar estado de BAUS para aberto e dropar items
+ *
+ * \param *JOGO
+ *
+ */
+void abrirBaus( JOGO *jogo ){
+        int i , j;
+
+        for( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtdBaus ; i++)
+                if( Deslocamento( jogo->jogador.PosMundo , (Vector2){ jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.x , jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.y} ) < DIST_ABRIR_BAUS )
+                        if( !jogo->salas[ jogo->atualSala ].baus[ i ].ABERTO )
+                                if( IsKeyPressed( KEY_E ) ){
+                                        jogo->salas[ jogo->atualSala ].baus[ i ].ABERTO = 1;
+
+                                        for( j = 0 ; j < jogo->salas[ jogo->atualSala ].baus[ i ].QtdItens ; j++ ){
+                                                jogo->items[ jogo->qtd_items_liberados ].posMundo.x =  jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.x + (DIST_DROP + j * DELTA_DIST_DROP ) * sin( jogo->salas[ jogo->atualSala ].baus[ i ].Rotac * ( PI / 180 ) );
+                                                jogo->items[ jogo->qtd_items_liberados ].posMundo.y =  jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.y + (DIST_DROP + j * DELTA_DIST_DROP ) * cos( jogo->salas[ jogo->atualSala ].baus[ i ].Rotac * ( PI / 180 ) );
+                                                jogo->items[ jogo->qtd_items_liberados ].codItem =  jogo->salas[ jogo->atualSala ].baus[ i ].CodItens[ j ];
+                                                jogo->qtd_items_liberados++;
+                                        }
+
+                                        jogo->salas[ jogo->atualSala ].baus[ i ].ABERTO = 1;
+                                        jogo->salas[ jogo->atualSala ].baus[ i ].imagem = jogo->Res.BauAberto;
+                                }
+
+
+}
+
+
+/** \brief Mudar estado de PORTAS para destrancada
+ *
+ * \param *JOGO
+ *
+ */
+void destrancarPortas( JOGO *jogo ){
+        if( jogo->salas[ jogo->atualSala ].qtd_abatidos >= jogo->salas[ jogo->atualSala ].qtd_inimigos_liberar )
+                jogo->salas[ jogo->atualSala ].portas[ jogo->salas[ jogo->atualSala ].porta_a_ser_liberada ].DESTRANCADA = 1;
+
+}
 
 
 /**     Funcao AtualizaBaus():
     */
-void AtualizaBaus( JOGO *jogo ){
+void AtualizaBausDesenho( JOGO *jogo ){
         int bau;
 
         for( bau = 0 ; bau < jogo->salas[ jogo->atualSala ].qtdBaus ; bau++ ){
@@ -524,7 +567,7 @@ void AtualizaFrameT1(JOGO *jogo)
 
                                 jogo->spriteDef.atualFrame_T1[ ini ] = frame[ ini ];
 
-                                if (frame[ ini ] == jogo->spriteDef.QTD_FRAMES_T1[ 1 ] - 1)
+                                if ( frame[ ini ] >= jogo->spriteDef.QTD_FRAMES_T1[ 1 ] - 1 )
                                 {
                                         frame[ ini ] = 0;
                                         flagTiro[ ini ] = 0;
@@ -777,8 +820,11 @@ void AtualizaInimigosT1(JOGO *jogo)
                         if( Deslocamento(  jogo->salas[ aSal ].inimigos[ i ].posMundo , alvo) > jogo->infoIniT.dist_manter[ jogo->salas[ aSal ].inimigos[ i ].tipo ] ){
                                 jogo->salas[ aSal ].inimigos[ i ].posMundo.x = posAtual.x;
                                 jogo->salas[ aSal ].inimigos[ i ].posMundo.y = posAtual.y;
+
+                                jogo->salas[ aSal ].inimigos[ i ].recMundo.x = posAtual.x - jogo->salas[ jogo->atualSala ].inimigos[ i ].recMundo.width / 2;
+                                jogo->salas[ aSal ].inimigos[ i ].recMundo.y = posAtual.y - jogo->salas[ jogo->atualSala ].inimigos[ i ].recMundo.height / 2;
                         }
-                        if( CheckCollisionRecs( (Rectangle){ posAtual.x , posAtual.y , jogo->salas[ aSal ].inimigos[ i ].posTelaSolid.width , jogo->salas[ aSal ].inimigos[ i ].posTelaSolid.height } , jogo->MapaDesenho ) ){
+                        if( CheckCollisionRecs( (Rectangle){ posAtual.x , posAtual.y , jogo->salas[ aSal ].inimigos[ i ].recMundo.width , jogo->salas[ aSal ].inimigos[ i ].recMundo.height } , jogo->MapaDesenho ) ){
                                 Vector2 novaPosTela = AtualizaPosTela( jogo , posAtual );
 
                                 jogo->salas[ aSal ].inimigos[ i ].posTela.x = novaPosTela.x;
@@ -1053,6 +1099,15 @@ void GeraInimigos( JOGO *jogo ){
 
                         jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].VIVO = 1;
                         jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].saude = jogo->infoIniT.saude[ jogo->salas[ jogo->atualSala ].spawns[ spawn ].tipo ];
+
+                        jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].xpDrop = jogo->infoIniT.xpDrop[ jogo->salas[ jogo->atualSala ].spawns[ spawn ].tipo ];
+
+                        jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].recMundo.width = jogo->infoIniT.largMundo[ jogo->salas[ jogo->atualSala ].spawns[ spawn ].tipo ];
+                        jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].recMundo.height = jogo->infoIniT.altMundo[ jogo->salas[ jogo->atualSala ].spawns[ spawn ].tipo ];
+
+                        jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].cor = WHITE;
+
+
                 }
         }
 
@@ -1119,6 +1174,8 @@ void AtualizaDanoJogador( JOGO *jogo ){
         if( delayCor ) delayCor--;
 }
 
+
+
 BOOL mesmaZona( JOGO *jogo , Vector2 pos1 , Vector2 pos2 ){
         int i;
         for( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtdZonas ; i++ )
@@ -1137,37 +1194,130 @@ BOOL mesmaZona( JOGO *jogo , Vector2 pos1 , Vector2 pos2 ){
  *
  */
 
-//void AtualizaDanoInimigo( JOGO *jogo ){
-//        static int delayCor[ 100 ];
-//
-//
-//
-//        Vector2 posAtual;
-//        int i;
-//
-//        int aSal = jogo->atualSala;
-//
-//        for( i = 0 ; i < jogo->salas[ aSal ].qtd_inimigos_liberados ; i++ )
-//                if( jogo->salas[ aSal ].inimigos[ i ].VIVO ){
-//                        if( jogo->jogador.DANO ){
-//
-//                                jogo->jogador.cor = RED;
-//                                delayCor = DELAY_DANO;
-//                                jogo->jogador.saude--;
-//
-//                                if( jogo->jogador.saude < 0 ) jogo->jogador.saude = 0;
-//                                if(jogo->jogador.saude == 0 ) jogo->jogador.vidas--;
-//                //                if(jogo->jogador.vidas == 0 ) EGameOver();
-//                                jogo->jogador.DANO = 0;
-//                        }
-//                        else{
-//                                if( !delayCor )
-//                                        jogo->jogador.cor = WHITE;
-//                                else
-//                                        jogo->jogador.cor = RED;
-//                        }
-//
-//                        if( delayCor ) delayCor--;
-//                }
-//}
-//
+void AtualizaDanoInimigo( JOGO *jogo ){
+        static int delayCor[ 100 ] = { 0 };
+
+
+        int i;
+
+        int aSal = jogo->atualSala;
+
+        for( i = 0 ; i < jogo->salas[ aSal ].qtd_inimigos_liberados ; i++ )
+                if( jogo->salas[ aSal ].inimigos[ i ].VIVO ){
+                        if( jogo->salas[ aSal ].inimigos[ i ].dano ){
+
+                                delayCor[ i ] = DELAY_DANO;
+                                jogo->salas[ jogo->atualSala ].inimigos[ i ].saude--;
+                                jogo->salas[ jogo->atualSala ].inimigos[ i ].cor = RED;
+
+                                if( !jogo->salas[ jogo->atualSala ].inimigos[ i ].saude ){
+                                        jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO = 0;
+                                        jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO = 0;
+                                        jogo->salas[ jogo->atualSala ].qtd_abatidos++;
+                                        jogo->jogador.pontos += jogo->salas[ jogo->atualSala ].inimigos[ i ].xpDrop;
+                                }
+
+                                jogo->salas[ aSal ].inimigos[ i ].dano = 0;
+                        }
+                        else{
+                                if( !delayCor[ i ] )
+                                        jogo->salas[ aSal ].inimigos[ i ].cor = WHITE;
+                                else
+                                        jogo->salas[ aSal ].inimigos[ i ].cor = RED;
+                        }
+
+                        if( delayCor[ i ] ) delayCor[ i ]--;
+                }
+}
+
+
+
+
+/** \brief Atualiza a posicao dos tirosJogs do jogador
+ *
+ * \param JOGO*
+ * \param
+ * \return
+ *
+ */
+
+void AtualizaTirosJogador( JOGO *jogo ){
+        int i;
+
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)  &&  !jogo->jogador.latencia){
+                jogo->tirosJog[ jogo->qtd_tirosJog ].pos.x = jogo->jogador.PosMundo.x;
+                jogo->tirosJog[ jogo->qtd_tirosJog ].pos.y = jogo->jogador.PosMundo.y;
+                jogo->tirosJog[ jogo->qtd_tirosJog ].speed = 5;
+                jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac = jogo->jogador.Rotac * PI / 180;
+                jogo->tirosJog[ jogo->qtd_tirosJog ].ativo = 1;
+                jogo->tirosJog[ jogo->qtd_tirosJog ].direcao.x = cos(jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac);
+                jogo->tirosJog[ jogo->qtd_tirosJog ].direcao.y = sin(jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac);
+                jogo->jogador.latencia = 10;
+                jogo->qtd_tirosJog++;
+        }
+
+        for ( i = 0; i < jogo->qtd_tirosJog; i++){
+                jogo->tirosJog[ i ].nx = jogo->tirosJog[ i ].speed * jogo->tirosJog[ i ].direcao.x;
+                jogo->tirosJog[ i ].ny = jogo->tirosJog[ i ].speed * jogo->tirosJog[ i ].direcao.y;
+
+                jogo->tirosJog[ i ].pos.x += jogo->tirosJog[ i ].nx;
+                jogo->tirosJog[ i ].pos.y += jogo->tirosJog[ i ].ny;
+
+                jogo->tirosJog[ i ].posTela.x = (jogo->tirosJog[ i ].pos.x - jogo->MapaDesenho.x) * (jogo->tela.width / PIXEL_LARGURA_MAPA);
+                jogo->tirosJog[ i ].posTela.y = (jogo->tirosJog[ i ].pos.y - jogo->MapaDesenho.y) * (jogo->tela.height / PIXEL_ALTURA_MAPA);
+        }
+
+
+        if (jogo->jogador.latencia != 0)
+                jogo->jogador.latencia--;
+}
+
+
+
+/** \brief Checa se Tiro esta colidindo com obstaculo
+ *
+ * \param JOGO*
+ * \param
+ * \return
+ *
+ */
+void AtualizaColisaoTirosJogador( JOGO *jogo ){
+        int i , j , k;
+        int colisao;
+
+        for ( j = 0 ; j < jogo->qtd_tirosJog ; j++){
+                colisao = 1;
+
+                for ( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtdZonas ; i++ )
+                        if ( CheckCollisionPointRec( jogo->tirosJog[ j ].pos , jogo->salas[ jogo->atualSala ].zonas[ i ] ) )
+                                colisao = 0;
+
+                for ( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados ; i++ )
+                        if ( CheckCollisionPointRec( jogo->tirosJog[ j ].pos , jogo->salas[ jogo->atualSala ].inimigos[ i ].recMundo ) ){
+                                jogo->salas[ jogo->atualSala ].inimigos[ i ].dano = 1;
+                                colisao = 1;
+                        }
+
+
+                if( colisao ){
+                        for( k = j ; k <  jogo->qtd_tirosJog ; k++  )
+                                jogo->tirosJog[ k ] = jogo->tirosJog[ k + 1 ];
+
+                        jogo->qtd_tirosJog--;
+                        j--;
+                        i = 0;
+                }
+        }
+}
+
+
+
+
+
+
+
+
+
+
+
+

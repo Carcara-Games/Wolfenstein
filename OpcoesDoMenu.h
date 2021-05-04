@@ -1,7 +1,7 @@
 #ifndef __OPCOESDOMENU_H_
 #define __OPCOESDOMENU_H_
 
-        #include "structsgraficos.h"
+        #include "estruturascomplexas.h"
         #include "definicoes.h"
         #include "inicializar.h"
 

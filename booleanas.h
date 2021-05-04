@@ -1,7 +1,7 @@
 #ifndef __BOOLEANAS_H_
 #define __BOOLEANAS_H_
 
-        #include "structsgraficos.h"
+        #include "estruturascomplexas.h"
         #include "definicoes.h"
 
         BOOL IsGameOver( JOGO jogo );

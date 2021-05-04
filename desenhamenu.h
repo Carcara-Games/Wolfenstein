@@ -1,7 +1,7 @@
 #ifndef __DESENHAMENU_H_
 #define __DESENHAMENU_H_
 
-        #include "structsgraficos.h"
+        #include "estruturascomplexas.h"
         #include "logicamenu.h"
 
         void NomeWolfenEntrada( JOGO *jogo , int selecao  );

@@ -1,7 +1,7 @@
 #ifndef __INICIALIZAR_H_
 #define __INICIALIZAR_H_
 
-        #include "structsgraficos.h"
+        #include "estruturascomplexas.h"
         #include "definicoes.h"
 
         void IniciarJanela( void );

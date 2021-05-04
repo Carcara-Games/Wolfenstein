@@ -2,6 +2,7 @@
 
 #include "inicializar.h"
 #include "definicoes.h"
+#include "fisica.h"
 
 
 /** \brief Inicializa a janela no sistema operacional
@@ -104,6 +105,13 @@ void IniciaNovoJogo( JOGO *jogo )
         jogo->jogador.saude = SAUDE_TOTAL_JOGADOR;
         jogo->jogador.vidas = VIDAS_INICIAIS_JOGADOR;
         jogo->jogador.pontos = 0;
+        jogo->jogador.cor = WHITE;
+        jogo->jogador.latencia = 0;
+        jogo->jogador.DANO = 0;
+        jogo->jogador.atualArma = 0;
+
+        /// Municao
+        jogo->jogador.municao[ 0 ] = 15;
 
         ///Posicao no MUNDO
         jogo->jogador.PosMundo.x = 102;
@@ -135,6 +143,7 @@ void IniciaNovoJogo( JOGO *jogo )
 
         ///Passagem de portas
         jogo->PASSAGEM = 0;
+
  }
 
 
@@ -229,6 +238,24 @@ void IniciaNovoJogo( JOGO *jogo )
         jogo->infoIniT.saude[ 2 ] = 2;
         inicializarInimigosSalas( jogo);
 
+        /// Pontos Dropados
+        jogo->infoIniT.xpDrop[ 0 ] = 10;
+        jogo->infoIniT.xpDrop[ 1 ] = 50;
+        jogo->infoIniT.xpDrop[ 2 ] = 40;
+
+        /// Largura no Mundo
+        jogo->infoIniT.largMundo[ 0 ] = 30;
+        jogo->infoIniT.largMundo[ 1 ] = 30;
+        jogo->infoIniT.largMundo[ 2 ] = 30;
+
+        /// Altura no Mundo
+        jogo->infoIniT.altMundo[ 0 ] = 30;
+        jogo->infoIniT.altMundo[ 1 ] = 30;
+        jogo->infoIniT.altMundo[ 2 ] = 30;
+
+
+        inicializarInimigosSalas( jogo);
+
         spriteT1( jogo);
         spriteT0( jogo);
 
@@ -294,6 +321,10 @@ void carregarTexturasFontes( JOGO *jogo )
         ///Sprites
         carregarSpritesPersonagem( jogo);      //Jogador
         carregarSpritesPes( jogo );           //Pes do jogador
+
+        ///Baus
+        jogo->Res.BauFechado = LoadTexture( "Sprites/Baús/BauVermelho.png");
+        jogo->Res.BauAberto = LoadTexture( "Sprites/Baús/BauVermelhoAberto.png");
 }
 //##############################################################################
 
@@ -589,11 +620,11 @@ void CriaPortas( JOGO *jogo)
         };
 
         int status[ QTDSALAS ][ 10 ] = {           //O status de trancada/destrancada das portas ( destrancada=1 , trancada = 0 ) de cada porta de cada sala
-                {  1 /*p1*/ , 1/*p2*/ },     //sala00
+                {  1 /*p1*/ , 0/*p2*/ },     //sala00
                 {  1 /*p1*/ },      //sala01
-                {  1 /*p1*/ , 1/*p2*/ },      //sala02
+                {  1 /*p1*/ , 0/*p2*/ },      //sala02
                 {  1 /*p1*/ , 1/*p2*/ },      //sala03
-                {  1 /*p1*/ , 1/*p2*/ },      //sala04
+                {  0 /*p1*/ , 0/*p2*/ },      //sala04
                 {  1 /*p1*/ , 1/*p2*/ },      //sala05
                 {  1 /*p1*/ , 1/*p2*/ , 1/*p3*/ },      //sala06
                 {  1 /*p1*/ },      //sala07
@@ -1083,8 +1114,26 @@ void CriaBaus( JOGO *jogo ){
 }
 
 void CarregarBaus( JOGO *jogo ){
-        jogo->Res.BauFechado = LoadTexture( "Sprites/Baús/BauVermelho.png");
-        jogo->Res.BauAberto = LoadTexture( "Sprites/Baús/BauVermelhoAberto.png");
+        int i;
+        int j;
+        int k;
+
+        jogo->qtd_items_liberados = 0;
+
+        for( i = 0 ; i < MAX_ITENS_MUNDO ; i++){
+                jogo->items[ i ].recolhido = 0;
+        }
+
+
+        for( i = 0 ; i < QTDSALAS ; i++)
+                for( j = 0 ; j < jogo->salas[ i ].qtdBaus ; j++){
+                        jogo->salas[ i ].baus[ j ].QtdItens = nmrRand( 1 , 3 );
+                        for( k = 0 ; k < jogo->salas[ i ].baus[ j ].QtdItens ; k++){
+                                jogo->salas[ i ].baus[ j ].CodItens[ k ] = nmrRand( 1 , TIPOS_ITEMS - 1);
+                        }
+                }
+
+
 
 }
 
@@ -1093,9 +1142,9 @@ void inicializarInimigosSalas( JOGO *jogo ){
         int i;
 
         /// Porta que sera liberada ao se matar todos os inimigos necessarios
-        jogo->salas[0].porta_a_ser_liberada = 2;
-        jogo->salas[2].porta_a_ser_liberada = 2;
-        jogo->salas[4].porta_a_ser_liberada = 2;
+        jogo->salas[0].porta_a_ser_liberada = 1;
+        jogo->salas[2].porta_a_ser_liberada = 1;
+        jogo->salas[4].porta_a_ser_liberada = 1;
         jogo->salas[5].porta_a_ser_liberada = 2;
         jogo->salas[6].porta_a_ser_liberada = 3;
         jogo->salas[8].porta_a_ser_liberada = 3;
@@ -1137,8 +1186,8 @@ void inicializarInimigosSalas( JOGO *jogo ){
                 for( j = 0 ; j < jogo->salas[ sala[ i ] ].qtd_inimigos_liberar ; j++){
                         jogo->salas[ sala[ i ] ].inimigos[ j ].posTela.width = MAPA_LQ_T1 * jogo->tela.width / REF_TELA_LARG;
                         jogo->salas[ sala[ i ] ].inimigos[ j ].posTela.height = MAPA_LQ_T1 * jogo->tela.width / REF_TELA_LARG;
-                        jogo->salas[ sala[ i ] ].inimigos[ j ].posTelaSolid.width = MAPA_LQ_T1 * jogo->tela.width / REF_TELA_LARG;
-                        jogo->salas[ sala[ i ] ].inimigos[ j ].posTelaSolid.height = MAPA_LQ_T1 * jogo->tela.width / REF_TELA_LARG;
+                        jogo->salas[ sala[ i ] ].inimigos[ j ].recMundo.width = MAPA_LQ_T1 * jogo->tela.width / REF_TELA_LARG;
+                        jogo->salas[ sala[ i ] ].inimigos[ j ].recMundo.height = MAPA_LQ_T1 * jogo->tela.width / REF_TELA_LARG;
 
                 }
 }
@@ -1197,7 +1246,7 @@ void spriteT1( JOGO *jogo ){
 
 
 
-/** \brief Carrega as spites do inimigos tipo T0 e define valores
+/** \brief Carrega as sprites do inimigos tipo T0 e define valores
  *
  * \param *jogo
  *
@@ -1206,47 +1255,6 @@ void spriteT1( JOGO *jogo ){
 void spriteT0( JOGO *jogo ){
         jogo->Res.T0 = LoadTexture("Sprites/aranhas2.png");
 
-//        jogo->spriteDef.QTD_FRAMES_T1[ 0 ] = 7; //Andando
-//        jogo->spriteDef.QTD_FRAMES_T1[ 1 ] = 4; //morrendo
-//
-//
-//        int status , frame;
-//        char nmr[10];
-//        const char comum[] = "Sprites/T1/";
-//        char pasta[][100] = {
-//                "movimento/",
-//                "ataque/",
-//                " ",
-//                " ",
-//                " "
-//        };
-//
-//        char fim[] = ".png";
-//        char arquivo[100];
-//
-//                for( status = 0 ; status < QTD_STATUS_T1 ; status++ )
-//                        for( frame = 0 ; frame < jogo->spriteDef.QTD_FRAMES_T1[ status ] ; frame++ )
-//                        {
-//                                TextCopy( arquivo , comum );
-//                                strcat( arquivo , pasta[status] );
-//
-//                                IntParaString( frame , nmr );
-//                                strcat( arquivo , nmr );
-//
-//                                strcat( arquivo , fim );
-//
-//                                jogo->Res.T1[status][frame] = LoadTexture( arquivo );
-//                        }
-//
-//        //Jogador extracao de textura
-//        jogo->spriteDef.SrcT1.height = SRC_LQ_T1_0;
-//        jogo->spriteDef.SrcT1.width = SRC_LQ_T1_0;
-//        jogo->spriteDef.SrcT1.x = SRC_X_T1_0;
-//        jogo->spriteDef.SrcT1.y = SRC_Y_T1_0;
-//
-//        //Origin
-//        jogo->spriteDef.OriginT1.x = MAPA_LQ_T1 / 2.0;
-//        jogo->spriteDef.OriginT1.y = MAPA_LQ_T1 / 2.0;
 }
 
 

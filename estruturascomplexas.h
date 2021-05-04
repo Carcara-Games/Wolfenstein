@@ -35,6 +35,7 @@ typedef struct
         int QTD_FRAMES_T1[ QTD_STATUS_T1 ];
         int atualFrame_T1[ MAX_INI_TELA ];       //Para cada T1 na tela
 
+        ///T0
 
 } SpriteDef;
 
@@ -82,6 +83,11 @@ typedef struct
 
 } Recursos;
 
+typedef struct{
+        int codItem;        // Codigo do item
+        Vector2 posMundo;       // Posicao no mapa
+        BOOL recolhido;         // Se ja foi recolhido ou nao
+} ITEM;
 
 typedef struct
 {
@@ -98,7 +104,7 @@ typedef struct
 {
         int tipo; // T0 , T1 , T2
         Vector2 posMundo;       // Posicao do centro do inimigo no mundo
-        Vector2 recMundo;       // Area que inimigo ocupa no mundo
+        Rectangle recMundo;       // Area que inimigo ocupa no mundo
         Rectangle posTela;      // Posicao na tela
         float Rotac;
 
@@ -107,6 +113,10 @@ typedef struct
         int latenciaAtaque;
 
         int codItem; // Codigo do item que ira dropar
+        int xpDrop;     // Qtd de pontos que ira liberar
+
+        Color cor;
+        BOOL dano;
 
         unsigned VIVO : 1;
 } Inim;
@@ -115,6 +125,10 @@ typedef struct{
         float dist_manter[ 3 ];
         float vel[ 3 ];
         int saude[ 3 ];
+        int xpDrop[ 3 ];     // Qtd de pontos que ira liberar
+        int largMundo[ 3 ];
+        int altMundo[ 3 ];
+
 
 }infoTipoIni;
 
@@ -240,7 +254,8 @@ typedef struct
         Jogador jogador;
         int atualSala;
 
-        Tiro tiro[QTD_BALAS_RENDER];
+        Tiro tirosJog[QTD_BALAS_RENDER];
+        int qtd_tirosJog;
 
         //                int atualLevel;
         //                DadosLevel dadosLevel;
@@ -251,6 +266,9 @@ typedef struct
         Vector2 escalaGeral;
 
         infoTipoIni infoIniT;
+
+        int qtd_items_liberados;
+        ITEM items[ MAX_ITENS_MUNDO ];   // Items do jogo
 } JOGO;
 
 

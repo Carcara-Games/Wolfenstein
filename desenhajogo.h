@@ -1,7 +1,7 @@
 #ifndef __DESENHAJOGO_H_
 #define __DESENHAJOGO_H_
 
-        #include "structsgraficos.h"
+        #include "estruturascomplexas.h"
 
         void DesenhaLevel( JOGO *jogo);
         void DesenhaMapa( JOGO *jogo);
@@ -11,7 +11,9 @@
         void DesenhaDebug( JOGO *jogo );
         void PassagemPorta( void );
         void DesenhaTiro(JOGO *jogo);
+
         void DesenhaObjetos( JOGO *jogo );
+        void DesenhaItems( JOGO *jogo );
         void DesenhaBaus( JOGO *jogo );
         void DesenhaInimigos( JOGO *jogo);
         void DesenhaSpawns( JOGO *jogo);

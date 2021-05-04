@@ -66,7 +66,7 @@
 
         ///INIMIGOS T1
         #define QTD_MAX_T1_SALA 50
-        #define PASSO_T1 0.75*PASSO
+        #define PASSO_T1 0.65*PASSO
         #define CONSTANTE_ANITFLICK 5
 
 
@@ -118,15 +118,25 @@
         #define DELTA_PES 50
 
         ///BAUS
+        #define DIST_ABRIR_BAUS 15
         #define QTD_DROP_MAX_BAUS 3             //Quantidade maxima de itens que os baus podem chegar a dropar( fornecer )
         #define MAX_BAUS_SALA 8
         #define BAU_LARGURA 31
         #define BAU_COMPRIMENTO 21
+        #define DIST_DROP 7
+        #define DELTA_DIST_DROP 4
 
         ///PORTAS
         #define TOL_ENTRAR_PORTAS 10
         #define SALTO_PORTA 105
+        #define LARG_PORTAS 105
+        #define ALT_PORTAS 135
 
         ///RASTREAMENTO DE ALVO
         #define PASSO_RASTREAMENTO 2
+
+        ///ITEMS
+        #define MAX_ITENS_MUNDO 300
+        #define TIPOS_ITEMS 7
+
 #endif // __DEFINICOES_H_

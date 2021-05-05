@@ -168,7 +168,7 @@ void DesenhaInimigos( JOGO *jogo){
                                 {
                                         case 0:
                                                 DrawRectanglePro( (Rectangle){ jogo->salas[ aSal ].inimigos[ i ].posTela.x , jogo->salas[ aSal ].inimigos[ i ].posTela.y , jogo->infoIniT.largMundo[ 0 ] , jogo->infoIniT.altMundo[ 0 ] } , (Vector2){ 15 , 15} , jogo->salas[ aSal ].inimigos[ i ].Rotac , PURPLE );
-        //                                        DrawTexturePro( jogo->Res.T0 , (Rectangle){ 0 , 10 , 71 , 71 } ,(Rectangle){ jogo->salas[ aSal ].inimigos[ i ].posTela.x , jogo->salas[ aSal ].inimigos[ i ].posTela.y , 130 , 130 } , (Vector2){0 , 0} , jogo->salas[ aSal ].inimigos[ i ].Rotac ,  WHITE );
+//                                                DrawTexturePro( jogo->Res.T0 , (Rectangle){ 0 , 10 , 71 , 71 } ,(Rectangle){ jogo->salas[ aSal ].inimigos[ i ].posTela.x , jogo->salas[ aSal ].inimigos[ i ].posTela.y , 130 , 130 } , (Vector2){0 , 0} , jogo->salas[ aSal ].inimigos[ i ].Rotac ,  WHITE );
                                                 break;
                                         case 1:
         //                                        DrawRectangle( jogo->salas[ aSal ].inimigos[ i ].posTela.x , jogo->salas[ aSal ].inimigos[ i ].posTela.y , 30 , 30 , ORANGE );

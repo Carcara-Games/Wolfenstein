@@ -100,7 +100,7 @@
 1619912417 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicamenu.h
 	"raylib.h"
 
-1620135543 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\inicializar.c
+1620137077 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\inicializar.c
 	"inicializar.h"
 	"definicoes.h"
 	"fisica.h"
@@ -110,7 +110,7 @@
 	"estruturascomplexas.h"
 	"definicoes.h"
 
-1620136968 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.c
+1620137443 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.c
 	"logicajogo.h"
 	"definicoes.h"
 	"fisica.h"

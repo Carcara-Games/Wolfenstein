@@ -13,6 +13,7 @@ void DesenhaLevel(JOGO *jogo)
         DesenhaMapa(jogo);
 
         DesenhaTiro(jogo);
+        DesenhaFaca(jogo);
 
         DesenhaObjetos( jogo );
 
@@ -37,7 +38,7 @@ void DesenhaLevel(JOGO *jogo)
 void DesenhaObjetos( JOGO *jogo ){
         DesenhaBaus( jogo );
         DesenhaPortas( jogo );
-        DesenhaSpawns( jogo );
+//        DesenhaSpawns( jogo );
         DesenhaItems( jogo );
 
 }
@@ -53,9 +54,20 @@ void DesenhaItems( JOGO *jogo ){
         int i;
 
         for( i = 0 ; i < jogo->qtd_items_liberados ; i++ )
-                if( !jogo->items[ i ].recolhido ){
-                        DrawRectangle( 100 , 1000 , 30 , 30 , DARKPURPLE );
-                }
+                if( !jogo->items[ i ].recolhido )
+                        if( CheckCollisionPointRec( jogo->items[ i ].posMundo , jogo->MapaDesenho ) )
+                                switch( jogo->items[ i ].codItem ){
+                                        case 1:
+                                                DrawTexturePro( jogo->Res.KitMed , (Rectangle){ 0 , 0 , jogo->Res.KitMed.width , jogo->Res.KitMed.height } , (Rectangle){ ( jogo->items[ i ].posMundo.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( jogo->items[ i ].posMundo.y - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 40 , 40 } , (Vector2){ 40/2 , 40/2 } , 0 , WHITE );
+                                                break;
+                                        case 2:
+                                                DrawTexturePro( jogo->Res.KitEnergia , (Rectangle){ 0 , 0 , jogo->Res.KitEnergia.width , jogo->Res.KitEnergia.height } , (Rectangle){ ( jogo->items[ i ].posMundo.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( jogo->items[ i ].posMundo.y - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 40 , 40 } , (Vector2){ 40/2 , 40/2 } , 0 , WHITE );
+                                                break;
+                                        case 3:
+                                                DrawTexturePro( jogo->Res.Municao , (Rectangle){ 0 , 0 , jogo->Res.Municao.width , jogo->Res.Municao.height } , (Rectangle){ ( jogo->items[ i ].posMundo.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( jogo->items[ i ].posMundo.y - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 40 , 40 } , (Vector2){ 40/2 , 40/2 } , 0 , WHITE );
+                                                break;
+//                                        DrawRectangle( ( jogo->items[ i ].posMundo.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( jogo->items[ i ].posMundo.y - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 30 , 30 , RAYWHITE );
+                                }
 
 
 }
@@ -104,13 +116,36 @@ void DesenhaTiro(JOGO *jogo)
                 DrawTexturePro(jogo->Res.Bala, (Rectangle){0, 0, jogo->Res.Bala.width, jogo->Res.Bala.height},
                                (Rectangle){jogo->tirosJog[i].posTela.x, jogo->tirosJog[i].posTela.y,
                                            3 * jogo->tela.width / PIXEL_LARGURA_MAPA, 3 * jogo->tela.height / PIXEL_ALTURA_MAPA},
-                               (Vector2){3 * (jogo->tela.width / PIXEL_LARGURA_MAPA) / 2, 3 * (jogo->tela.height / PIXEL_ALTURA_MAPA) / 2}, 0, WHITE);
+//                               (Vector2){3 * (jogo->tela.width / PIXEL_LARGURA_MAPA) / 2, 3 * (jogo->tela.height / PIXEL_ALTURA_MAPA) / 2}, 0, WHITE);
+                               (Vector2){3 * (jogo->tela.width / PIXEL_LARGURA_MAPA) / 2 - 60, 3 * (jogo->tela.height / PIXEL_ALTURA_MAPA) / 2 - 40}, jogo->tirosJog[i].Rotac, WHITE);
         }
 }
 
-///
-void DesenhaPortas(JOGO *jogo)
+
+
+void DesenhaFaca(JOGO *jogo)
+
 {
+        if (jogo->faca.ativo == 1)
+        {
+                DrawTexturePro(jogo->Res.Faca, (Rectangle){0, 0, jogo->Res.Faca.width, jogo->Res.Faca.height},
+                               jogo->faca.hitbox,
+                               (Vector2){(18 * (jogo->tela.width / PIXEL_LARGURA_MAPA) / 2), (6 * (jogo->tela.height / PIXEL_ALTURA_MAPA) / 2)}, jogo->faca.Rotac, WHITE);
+        }
+}
+
+
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
+void DesenhaPortas(JOGO *jogo){
         int i;
         Vector2 posic;
 
@@ -118,8 +153,8 @@ void DesenhaPortas(JOGO *jogo)
                 if ( !jogo->salas[jogo->atualSala].portas[i].DESTRANCADA )
                         if ( CheckCollisionPointRec( jogo->salas[jogo->atualSala].portas[i].pos , jogo->MapaDesenho ) )
                         {
-                                posic.x = ( jogo->salas[jogo->atualSala].portas[i].pos.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x - 0.5 * LARG_PORTAS * REF_TELA_LARG / jogo->tela.width;
-                                posic.y = ( jogo->salas[jogo->atualSala].portas[i].pos.y - jogo->MapaDesenho.y )  * jogo->escalaGeral.y - 0.5 * ALT_PORTAS * REF_TELA_ALT / jogo->tela.height ;
+                                posic.x = ( jogo->salas[jogo->atualSala].portas[i].pos.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x - cos( ( PI / 180 ) * jogo->salas[ jogo->atualSala ].portas[ i ].rotac ) * 0.5 * LARG_PORTAS * REF_TELA_LARG / jogo->tela.width;
+                                posic.y = ( jogo->salas[jogo->atualSala].portas[i].pos.y - jogo->MapaDesenho.y )  * jogo->escalaGeral.y - 0.5 * sin( ( PI / 180 ) * jogo->salas[ jogo->atualSala ].portas[ i ].rotac + PI / 2 ) *ALT_PORTAS * REF_TELA_ALT / jogo->tela.height ;
 
                                 DrawTextureEx( jogo->Res.Portas, posic, jogo->salas[ jogo->atualSala ].portas[ i ].rotac, 4.5 , WHITE );
 //                                DrawTexturePro( jogo->Res.Portas, posic, jogo->salas[ jogo->atualSala ].portas[ i ].rotac, 5 , WHITE );

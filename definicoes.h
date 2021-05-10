@@ -109,7 +109,7 @@
         #define QTD_ARMAS 1
         #define QTD_STATUS_MAX 7
         #define DESVIO_MIRA 5
-        #define QTD_BALAS_RENDER 20
+        #define QTD_BALAS_RENDER 100
 
         ///PERSONAGEM PRINCIPAL - JOGADOR
         #define ESC_PER 1

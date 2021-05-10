@@ -23,6 +23,7 @@
 
         void AtualizaFrameJogador( JOGO *jogo );
         void AtualizaAtirar( JOGO *jogo );
+        void AtualizaFaca ( JOGO *jogo);
         void abrirBaus( JOGO *jogo );
         void destrancarPortas( JOGO *jogo );
 

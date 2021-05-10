@@ -314,6 +314,10 @@ void carregarTexturasFontes( JOGO *jogo )
         jogo->Res.Portas =    LoadTexture("Mapa/Portas.png");
         jogo->Res.Bala = LoadTexture("Sprites/Bala.png");
 
+        jogo->Res.KitMed = LoadTexture("Sprites/kitMed2.png");
+        jogo->Res.KitEnergia = LoadTexture("Sprites/energiaDrop.png");
+        jogo->Res.Municao = LoadTexture("Sprites/DropMunicao.png");
+
         ///Fontes
         jogo->Res.fonteWolfen =    LoadFontEx("Fontes/ReturnToCastle-MZnx.ttf"  ,96 , 0 , 0);
         jogo->Res.fonteWolfen2 =    LoadFontEx("Fontes/wolfenstein.ttf"  ,96 , 0 , 0);
@@ -1089,7 +1093,7 @@ void CriaBaus( JOGO *jogo ){
         jogo->salas[ 15 ].qtdBaus =  3;
 
         ///Atribuicao
-        int sala , bau;
+        int sala , bau , item;
         for( sala = 0 ; sala < QTDSALAS ; sala++ )
                 for( bau = 0 ; bau < jogo->salas[ sala ].qtdBaus ; bau++ ){
                         jogo->salas[ sala ].baus[ bau ].posMapa.x = pos[ sala ][ bau ].x;
@@ -1107,6 +1111,10 @@ void CriaBaus( JOGO *jogo ){
 
                         jogo->salas[ sala ].baus[ bau ].src = (Rectangle){ 0 , 0 , jogo->Res.BauFechado.width , jogo->Res.BauFechado.height };
                         jogo->salas[ sala ].baus[ bau ].ABERTO = 0;
+
+                        jogo->salas[ sala ].baus[ bau ].QtdItens = nmrRand( 1 , 3 );
+                        for( item = 0 ; item <  jogo->salas[ sala ].baus[ bau ].QtdItens ; item++ )
+                                jogo->salas[ sala ].baus[ bau ].CodItens[ item ] = nmrRand( 1 , 3 );
 
 //                        jogo->salas[ sala ].baus[ bau ].origin.x = jogo->escalaGeral.x * jogo->Res.BauFechado.width / 2;
 //                        jogo->salas[ sala ].baus[ bau ].origin.y = jogo->escalaGeral.y * jogo->Res.BauFechado.height / 2;

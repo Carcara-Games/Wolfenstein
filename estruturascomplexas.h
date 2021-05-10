@@ -47,6 +47,7 @@ typedef struct
         Texture2D FundoConfirmarSair; //Janela de fundo da confirmacao de saida
         Texture2D Logo;               // Imagem de fundo (Logo)
         Texture2D Bala;
+        Texture2D Faca;
         Font fonteWolfen;             // Fonte Estilizada Wolfenstein
         Font fonteWolfen2;            // Fonte Estilizada Wolfenstein 2
 
@@ -78,6 +79,10 @@ typedef struct
         Texture2D Portas;  // Imagem das portas
         Texture2D BauAberto;
         Texture2D BauFechado;
+
+        Texture2D KitMed;
+        Texture2D KitEnergia;
+        Texture2D Municao;
 
 
 
@@ -237,6 +242,28 @@ typedef struct
 } Tiro;
 
 
+
+typedef struct
+{
+
+        Vector2 direcao; // x=cosseno  y= seno   do angulo
+        Vector2 pos;
+        Vector2 posTela; // origem = jogador + distancia pra arma
+        Vector2 posInicial;
+        Rectangle hitbox;
+        bool ativo;
+        float Rotac; // mesma que jogador
+        float speed;
+        float nx;
+        float ny;
+        float distancia;
+
+        bool disponivel : 1;
+
+} Faca;
+
+
+
 typedef struct
 {
         int NivelMenu; //Nivel atual do menu( 0->Principal , 1- Algum dos secundarios , 2->Menu interno do jogo , 3 - Jogando)
@@ -256,6 +283,7 @@ typedef struct
 
         Tiro tirosJog[QTD_BALAS_RENDER];
         int qtd_tirosJog;
+        Faca faca;
 
         //                int atualLevel;
         //                DadosLevel dadosLevel;

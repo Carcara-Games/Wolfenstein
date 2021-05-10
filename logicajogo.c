@@ -10,7 +10,7 @@ void AtualizaLevel(JOGO *jogo)
 {
         AtualizaMira(jogo);
         //        AtualizaArma( &jogo );
-
+        AtualizaFaca(jogo);
         AtualizaTirosJogador( jogo );
         AtualizaColisaoTirosJogador( jogo );
         //        AtualizaRecarga( &jogo );
@@ -75,6 +75,7 @@ void abrirBaus( JOGO *jogo ){
                                         jogo->salas[ jogo->atualSala ].baus[ i ].ABERTO = 1;
 
                                         for( j = 0 ; j < jogo->salas[ jogo->atualSala ].baus[ i ].QtdItens ; j++ ){
+                                                jogo->items[ jogo->qtd_items_liberados ].recolhido =  NAO;
                                                 jogo->items[ jogo->qtd_items_liberados ].posMundo.x =  jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.x + (DIST_DROP + j * DELTA_DIST_DROP ) * sin( jogo->salas[ jogo->atualSala ].baus[ i ].Rotac * ( PI / 180 ) );
                                                 jogo->items[ jogo->qtd_items_liberados ].posMundo.y =  jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.y + (DIST_DROP + j * DELTA_DIST_DROP ) * cos( jogo->salas[ jogo->atualSala ].baus[ i ].Rotac * ( PI / 180 ) );
                                                 jogo->items[ jogo->qtd_items_liberados ].codItem =  jogo->salas[ jogo->atualSala ].baus[ i ].CodItens[ j ];
@@ -663,8 +664,7 @@ void AtualizaFrameT1(JOGO *jogo)
 
 
 
-void AtualizaSrcPes(JOGO *jogo)
-{
+void AtualizaSrcPes(JOGO *jogo){
         jogo->spriteDef.SrcPes.width = jogo->Res.Pes[jogo->jogador.atualMovTipo][0].width;
         jogo->spriteDef.SrcPes.height = jogo->Res.Pes[jogo->jogador.atualMovTipo][0].height;
 }
@@ -1244,7 +1244,7 @@ void AtualizaDanoInimigo( JOGO *jogo ){
 void AtualizaTirosJogador( JOGO *jogo ){
         int i;
 
-        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)  &&  !jogo->jogador.latencia){
+        if ( IsMouseButtonPressed(MOUSE_LEFT_BUTTON)  &&  !jogo->jogador.latencia ){
                 jogo->tirosJog[ jogo->qtd_tirosJog ].pos.x = jogo->jogador.PosMundo.x;
                 jogo->tirosJog[ jogo->qtd_tirosJog ].pos.y = jogo->jogador.PosMundo.y;
                 jogo->tirosJog[ jogo->qtd_tirosJog ].speed = 5;
@@ -1285,7 +1285,7 @@ void AtualizaColisaoTirosJogador( JOGO *jogo ){
         int i , j , k;
         int colisao;
 
-        for ( j = 0 ; j < jogo->qtd_tirosJog ; j++){
+        for ( j = 0 ; j < jogo->qtd_tirosJog ; j++ ){
                 colisao = 1;
 
                 for ( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtdZonas ; i++ )
@@ -1293,10 +1293,11 @@ void AtualizaColisaoTirosJogador( JOGO *jogo ){
                                 colisao = 0;
 
                 for ( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados ; i++ )
-                        if ( CheckCollisionPointRec( jogo->tirosJog[ j ].pos , jogo->salas[ jogo->atualSala ].inimigos[ i ].recMundo ) ){
-                                jogo->salas[ jogo->atualSala ].inimigos[ i ].dano = 1;
-                                colisao = 1;
-                        }
+                        if ( jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO ) ){
+                                if ( CheckCollisionPointRec( jogo->tirosJog[ j ].pos , jogo->salas[ jogo->atualSala ].inimigos[ i ].recMundo ) ){
+                                        jogo->salas[ jogo->atualSala ].inimigos[ i ].dano = 1;
+                                        colisao = 1;
+                                }
 
 
                 if( colisao ){
@@ -1310,6 +1311,62 @@ void AtualizaColisaoTirosJogador( JOGO *jogo ){
         }
 }
 
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
+void AtualizaFaca(JOGO *jogo)
+{
+
+        if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON) && jogo->faca.disponivel == 1)
+        {
+                jogo->faca.pos.x = jogo->jogador.PosMundo.x;
+                jogo->faca.pos.y = jogo->jogador.PosMundo.y;
+                jogo->faca.speed = 3;
+                jogo->faca.Rotac = jogo->jogador.Rotac * PI / 180;
+                jogo->faca.ativo = 1;
+                jogo->faca.direcao.x = cos(jogo->faca.Rotac);
+                jogo->faca.direcao.y = sin(jogo->faca.Rotac);
+                jogo->faca.posInicial.x = jogo->jogador.PosMundo.x;
+                jogo->faca.posInicial.y = jogo->jogador.PosMundo.y;
+                jogo->faca.disponivel = 0;
+        }
+
+        jogo->faca.hitbox = (Rectangle){jogo->faca.posTela.x,
+                                        jogo->faca.posTela.y,
+                                        18 * jogo->tela.width / PIXEL_LARGURA_MAPA,
+                                        6 * jogo->tela.height / PIXEL_ALTURA_MAPA};
+
+        jogo->faca.distancia = sqrt(pow(jogo->faca.pos.x - jogo->faca.posInicial.x, 2) + pow(jogo->faca.pos.y - jogo->faca.posInicial.y, 2));
+
+        if (jogo->faca.distancia < 60)
+        {
+                jogo->faca.nx = jogo->faca.speed * jogo->faca.direcao.x;
+                jogo->faca.ny = jogo->faca.speed * jogo->faca.direcao.y;
+
+                jogo->faca.pos.x += jogo->faca.nx;
+                jogo->faca.pos.y += jogo->faca.ny;
+                jogo->faca.Rotac += jogo->faca.speed * 10;
+        }
+        else
+        {
+                if ( CheckCollisionRecs( jogo->faca.hitbox, jogo->jogador.PosTela ))
+
+                {
+                        jogo->faca.ativo = 0;
+                        jogo->faca.disponivel = 1;
+                }
+        }
+
+        jogo->faca.posTela.x = (jogo->faca.pos.x - jogo->MapaDesenho.x) * (jogo->tela.width / PIXEL_LARGURA_MAPA);
+        jogo->faca.posTela.y = (jogo->faca.pos.y - jogo->MapaDesenho.y) * (jogo->tela.height / PIXEL_ALTURA_MAPA);
+}
 
 
 

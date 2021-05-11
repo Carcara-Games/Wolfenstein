@@ -105,13 +105,14 @@ void IniciaNovoJogo( JOGO *jogo )
         jogo->jogador.saude = SAUDE_TOTAL_JOGADOR;
         jogo->jogador.vidas = VIDAS_INICIAIS_JOGADOR;
         jogo->jogador.pontos = 0;
+        jogo->jogador.energia = ENERGIA_TOTAL;
         jogo->jogador.cor = WHITE;
         jogo->jogador.latencia = 0;
         jogo->jogador.DANO = 0;
         jogo->jogador.atualArma = 0;
 
         /// Municao
-        jogo->jogador.municao[ 0 ] = 15;
+        jogo->jogador.municao[ 0 ] = 25;
 
         ///Posicao no MUNDO
         jogo->jogador.PosMundo.x = 102;
@@ -316,7 +317,7 @@ void carregarTexturasFontes( JOGO *jogo )
 
         jogo->Res.KitMed = LoadTexture("Sprites/kitMed2.png");
         jogo->Res.KitEnergia = LoadTexture("Sprites/energiaDrop.png");
-        jogo->Res.Municao = LoadTexture("Sprites/DropMunicao.png");
+        jogo->Res.Municao = LoadTexture("Sprites/DropMunicao3.png");
 
         ///Fontes
         jogo->Res.fonteWolfen =    LoadFontEx("Fontes/ReturnToCastle-MZnx.ttf"  ,96 , 0 , 0);
@@ -628,13 +629,13 @@ void CriaPortas( JOGO *jogo)
                 {  1 /*p1*/ },      //sala01
                 {  1 /*p1*/ , 0/*p2*/ },      //sala02
                 {  1 /*p1*/ , 1/*p2*/ },      //sala03
-                {  0 /*p1*/ , 0/*p2*/ },      //sala04
-                {  1 /*p1*/ , 1/*p2*/ },      //sala05
-                {  1 /*p1*/ , 1/*p2*/ , 1/*p3*/ },      //sala06
+                {  1 /*p1*/ , 0/*p2*/ },      //sala04
+                {  1 /*p1*/ , 0/*p2*/ },      //sala05
+                {  1 /*p1*/ , 1/*p2*/ , 0/*p3*/ },      //sala06
                 {  1 /*p1*/ },      //sala07
-                {  1 /*p1*/ , 1/*p2*/ , 1/*p3*/ },      //sala08
+                {  1 /*p1*/ , 0/*p2*/ , 0/*p3*/ },      //sala08
                 {  1 /*p1*/ },      //sala09
-                {  1 /*p1*/ , 1/*p2*/ , 1/*p3*/ },      //sala10
+                {  1 /*p1*/ , 0/*p2*/ , 0/*p3*/ },      //sala10
                 {  1 /*p1*/ , 1/*p2*/ , 1/*p3*/ },      //sala11
                 {  1 /*p1*/ },      //sala12
                 {  1 /*p1*/ },      //sala13
@@ -1112,7 +1113,8 @@ void CriaBaus( JOGO *jogo ){
                         jogo->salas[ sala ].baus[ bau ].src = (Rectangle){ 0 , 0 , jogo->Res.BauFechado.width , jogo->Res.BauFechado.height };
                         jogo->salas[ sala ].baus[ bau ].ABERTO = 0;
 
-                        jogo->salas[ sala ].baus[ bau ].QtdItens = nmrRand( 1 , 3 );
+//                        jogo->salas[ sala ].baus[ bau ].QtdItens = nmrRand( 1 , 3 );
+                        jogo->salas[ sala ].baus[ bau ].QtdItens = 1;
                         for( item = 0 ; item <  jogo->salas[ sala ].baus[ bau ].QtdItens ; item++ )
                                 jogo->salas[ sala ].baus[ bau ].CodItens[ item ] = nmrRand( 1 , 3 );
 
@@ -1137,7 +1139,7 @@ void CarregarBaus( JOGO *jogo ){
                 for( j = 0 ; j < jogo->salas[ i ].qtdBaus ; j++){
                         jogo->salas[ i ].baus[ j ].QtdItens = nmrRand( 1 , 3 );
                         for( k = 0 ; k < jogo->salas[ i ].baus[ j ].QtdItens ; k++){
-                                jogo->salas[ i ].baus[ j ].CodItens[ k ] = nmrRand( 1 , TIPOS_ITEMS - 1);
+                                jogo->salas[ i ].baus[ j ].CodItens[ k ] = nmrRand( 1 , TIPOS_ITEMS );
                         }
                 }
 
@@ -1149,13 +1151,16 @@ void inicializarInimigosSalas( JOGO *jogo ){
         int sala[QTD_SALAS_SPAWN] = {0, 2, 4, 5, 6, 8, 10, 12, 13};
         int i;
 
+        /// Probabilidade do Inimigo Dropar um Item
+        jogo->jogador.probabilidadeDrop = 25;     // %
+
         /// Porta que sera liberada ao se matar todos os inimigos necessarios
         jogo->salas[0].porta_a_ser_liberada = 1;
         jogo->salas[2].porta_a_ser_liberada = 1;
         jogo->salas[4].porta_a_ser_liberada = 1;
-        jogo->salas[5].porta_a_ser_liberada = 2;
-        jogo->salas[6].porta_a_ser_liberada = 3;
-        jogo->salas[8].porta_a_ser_liberada = 3;
+        jogo->salas[5].porta_a_ser_liberada = 1;
+        jogo->salas[6].porta_a_ser_liberada = 2;
+        jogo->salas[8].porta_a_ser_liberada = 2;
         jogo->salas[10].porta_a_ser_liberada = 2;
         jogo->salas[12].porta_a_ser_liberada = 1; //N precisa
         jogo->salas[13].porta_a_ser_liberada = 1; //N precisa
@@ -1164,7 +1169,7 @@ void inicializarInimigosSalas( JOGO *jogo ){
         jogo->salas[0].qtd_inimigos_liberar = 5;
         jogo->salas[2].qtd_inimigos_liberar = 8;
         jogo->salas[4].qtd_inimigos_liberar = 7;
-        jogo->salas[5].qtd_inimigos_liberar = 8;
+        jogo->salas[5].qtd_inimigos_liberar = 6;
         jogo->salas[6].qtd_inimigos_liberar = 15;
         jogo->salas[8].qtd_inimigos_liberar = 3;
         jogo->salas[10].qtd_inimigos_liberar = 2;

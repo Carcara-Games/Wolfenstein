@@ -147,17 +147,26 @@ void DesenhaFaca(JOGO *jogo)
 
 void DesenhaPortas(JOGO *jogo){
         int i;
-        Vector2 posic;
+        int ang;
+//        Vector2 posic;
 
         for ( i = 0; i < jogo->salas[ jogo->atualSala ].qtdPortas ; i++)
                 if ( !jogo->salas[jogo->atualSala].portas[i].DESTRANCADA )
                         if ( CheckCollisionPointRec( jogo->salas[jogo->atualSala].portas[i].pos , jogo->MapaDesenho ) )
                         {
-                                posic.x = ( jogo->salas[jogo->atualSala].portas[i].pos.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x - cos( ( PI / 180 ) * jogo->salas[ jogo->atualSala ].portas[ i ].rotac ) * 0.5 * LARG_PORTAS * REF_TELA_LARG / jogo->tela.width;
-                                posic.y = ( jogo->salas[jogo->atualSala].portas[i].pos.y - jogo->MapaDesenho.y )  * jogo->escalaGeral.y - 0.5 * sin( ( PI / 180 ) * jogo->salas[ jogo->atualSala ].portas[ i ].rotac + PI / 2 ) *ALT_PORTAS * REF_TELA_ALT / jogo->tela.height ;
+//                                posic.x = ( jogo->salas[jogo->atualSala].portas[i].pos.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x - cos( ( PI / 180 ) * jogo->salas[ jogo->atualSala ].portas[ i ].rotac ) * 0.5 * LARG_PORTAS * REF_TELA_LARG / jogo->tela.width;
+//                                posic.y = ( jogo->salas[jogo->atualSala].portas[i].pos.y - jogo->MapaDesenho.y )  * jogo->escalaGeral.y - 0.5 * sin( ( PI / 180 ) * jogo->salas[ jogo->atualSala ].portas[ i ].rotac + PI / 2 ) *ALT_PORTAS * REF_TELA_ALT / jogo->tela.height ;
+//
+//                                DrawTextureEx( jogo->Res.Portas, posic, jogo->salas[ jogo->atualSala ].portas[ i ].rotac, 4.5 , WHITE );
+                                ang = jogo->salas[ jogo->atualSala ].portas[ i ].rotac;
 
-                                DrawTextureEx( jogo->Res.Portas, posic, jogo->salas[ jogo->atualSala ].portas[ i ].rotac, 4.5 , WHITE );
-//                                DrawTexturePro( jogo->Res.Portas, posic, jogo->salas[ jogo->atualSala ].portas[ i ].rotac, 5 , WHITE );
+                                if( ang == 90  ||  ang == -90 ){
+                                        ( ang == -90 ) ? ang = 90 : 1;
+                                        ( ang == 90 ) ? ang = -90 : 1;
+                                        DrawTexturePro( jogo->Res.Portas , (Rectangle){ 0  , 0 , jogo->Res.Portas.width , jogo->Res.Portas.height } , (Rectangle){ ( jogo->salas[jogo->atualSala].portas[i].pos.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( jogo->salas[jogo->atualSala].portas[i].pos.y - jogo->MapaDesenho.y )  * jogo->escalaGeral.y , LARG_PORTAS * REF_TELA_LARG / jogo->tela.width , ALT_PORTAS * REF_TELA_ALT / jogo->tela.height } , (Vector2){ 0.78 * ALT_PORTAS * REF_TELA_ALT / jogo->tela.height , 0.5 * LARG_PORTAS * REF_TELA_LARG / jogo->tela.width} , ang , WHITE );
+                                        return;
+                                }
+                                DrawTexturePro( jogo->Res.Portas , (Rectangle){ 0  , 0 , jogo->Res.Portas.width , jogo->Res.Portas.height } , (Rectangle){ ( jogo->salas[jogo->atualSala].portas[i].pos.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( jogo->salas[jogo->atualSala].portas[i].pos.y - jogo->MapaDesenho.y )  * jogo->escalaGeral.y , LARG_PORTAS * REF_TELA_LARG / jogo->tela.width , ALT_PORTAS * REF_TELA_ALT / jogo->tela.height } , (Vector2){ 0.5 * LARG_PORTAS * REF_TELA_LARG / jogo->tela.width , 0.78 * ALT_PORTAS * REF_TELA_ALT / jogo->tela.height } , ang , WHITE );
                         }
         //                                DrawTexture( jogo->Res.Portas , ESCALA * (jogo->salas[ jogo->atualSala ].portas[ 0 ].pos.x -  jogo->MapaDesenho.x) , ESCALA * (jogo->salas[ jogo->atualSala ].portas[ 0 ].pos.y -  jogo->MapaDesenho.y) , WHITE );
 }
@@ -310,11 +319,13 @@ void DesenhaDebug(JOGO *jogo)
 
 
         ///JOGADOR
-        DrawText( TextFormat("SAUDE: %d" , jogo->jogador.saude ) , 20 , 630 , 25 , YELLOW );
-        DrawText( TextFormat("VIDAS: %d" , jogo->jogador.vidas ) , 20 , 660 , 25 , YELLOW );
-        DrawText( TextFormat("ARMA: %d" , jogo->jogador.atualArma ) , 20 , 690 , 25 , YELLOW );
-        DrawText( TextFormat("PONTOS: %d" , jogo->jogador.pontos ) , 20 , 720 , 25 , YELLOW );
-        DrawText( TextFormat("NMR_ABATIDOS: %d" , jogo->salas[ jogo->atualSala ].qtd_abatidos ) , 20 , 750 , 25 , YELLOW );
+        DrawText( TextFormat("ENERGIA: %d" , jogo->jogador.energia ) , 20 , 490 , 25 , GREEN );
+        DrawText( TextFormat("MUNIÇÃO: %d" , jogo->jogador.municao[ 0 ] ) , 20 , 520 , 25 , GREEN );
+        DrawText( TextFormat("SAUDE: %d" , jogo->jogador.saude ) , 20 , 550 , 25 , YELLOW );
+        DrawText( TextFormat("VIDAS: %d" , jogo->jogador.vidas ) , 20 , 580 , 25 , YELLOW );
+        DrawText( TextFormat("ARMA: %d" , jogo->jogador.atualArma ) , 20 , 610 , 25 , YELLOW );
+        DrawText( TextFormat("PONTOS: %d" , jogo->jogador.pontos ) , 20 , 640 , 25 , YELLOW );
+        DrawText( TextFormat("NMR_ABATIDOS: %d" , jogo->salas[ jogo->atualSala ].qtd_abatidos ) , 20 , 670 , 25 , YELLOW );
 }
 //##############################################################################
 

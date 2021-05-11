@@ -53,6 +53,10 @@
 
         BOOL mesmaZona( JOGO *jogo , Vector2 pos1 , Vector2 pos2 );
 
+         void AtualizaItems( JOGO *jogo );
+
+        void Pause( JOGO *jogo , int tipo );
+
 
 
 

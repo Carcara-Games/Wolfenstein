@@ -28,7 +28,11 @@ int sinalNumero( float nmr ){
  */
 
 int nmrRand( int mini , int maxi ){
-        srand( time(NULL) );
+        static int flag = 1;
+        if( flag ){
+                srand( time( NULL ) );
+                flag = 0 ;
+        }
 
         return mini + rand() % ( maxi + 1 - mini );
 }

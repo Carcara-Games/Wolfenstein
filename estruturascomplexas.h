@@ -215,6 +215,7 @@ typedef struct
         int pontos; //Pontuacao do jogador
         int saude;  //Pontos de saude.
         int vidas;  //Vidas gerais. Cada vez que saude zera perde uma vida.
+        int energia;
 
         int atualArma;
         int atualStatus;
@@ -225,6 +226,8 @@ typedef struct
         BOOL DANO;
         Color cor;
 
+        int dificuldade;
+        int probabilidadeDrop;          // Em percentagem
         /**   lembra de excluir    */ int testeFlagTiro; //excluir depois no final
 } Jogador;
 
@@ -297,6 +300,7 @@ typedef struct
 
         int qtd_items_liberados;
         ITEM items[ MAX_ITENS_MUNDO ];   // Items do jogo
+
 } JOGO;
 
 

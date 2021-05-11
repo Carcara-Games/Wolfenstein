@@ -130,13 +130,21 @@
         #define TOL_ENTRAR_PORTAS 10
         #define SALTO_PORTA 105
         #define LARG_PORTAS 105
-        #define ALT_PORTAS 135
+        #define ALT_PORTAS 90
 
         ///RASTREAMENTO DE ALVO
         #define PASSO_RASTREAMENTO 2
 
         ///ITEMS
         #define MAX_ITENS_MUNDO 300
-        #define TIPOS_ITEMS 7
+        #define TIPOS_ITEMS 3
+        #define DIST_COLETAR_ITEMS 5
+        #define QTD_MUNICAO_DROP  25
+
+        ///ENERGIA
+        #define ENERGIA_TOTAL 200
+
+        ///PAUSE
+        #define DELAY_PAUSE 20000
 
 #endif // __DEFINICOES_H_

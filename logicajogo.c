@@ -44,6 +44,10 @@ void AtualizaLevel(JOGO *jogo)
         AtualizaDanoInimigo( jogo );
 
 
+        if( IsKeyPressed( KEY_P ) )
+                Pause( jogo , 0 );
+
+
         GeraInimigos( jogo );
 }
 //##############################################################################
@@ -53,6 +57,7 @@ void AtualizaLevel(JOGO *jogo)
     */
 void AtualizaObjetos( JOGO *jogo ){
         AtualizaBausDesenho( jogo );
+        AtualizaItems( jogo );
 
 
 }
@@ -69,15 +74,35 @@ void abrirBaus( JOGO *jogo ){
         int i , j;
 
         for( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtdBaus ; i++)
-                if( Deslocamento( jogo->jogador.PosMundo , (Vector2){ jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.x , jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.y} ) < DIST_ABRIR_BAUS )
+//                if( Deslocamento( jogo->jogador.PosMundo , (Vector2){ jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.x , jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.y} ) < DIST_ABRIR_BAUS )
+                if( CheckCollisionPointRec( (Vector2){ jogo->jogador.PosMundo.x + DIST_ABRIR_BAUS * cos( ( PI / 180 ) * jogo->jogador.Rotac ) , jogo->jogador.PosMundo.y + DIST_ABRIR_BAUS * sin( ( PI / 180 ) * jogo->jogador.Rotac ) } ,  jogo->salas[ jogo->atualSala ].baus[ i ].posMapa ) )
                         if( !jogo->salas[ jogo->atualSala ].baus[ i ].ABERTO )
                                 if( IsKeyPressed( KEY_E ) ){
                                         jogo->salas[ jogo->atualSala ].baus[ i ].ABERTO = 1;
 
                                         for( j = 0 ; j < jogo->salas[ jogo->atualSala ].baus[ i ].QtdItens ; j++ ){
                                                 jogo->items[ jogo->qtd_items_liberados ].recolhido =  NAO;
-                                                jogo->items[ jogo->qtd_items_liberados ].posMundo.x =  jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.x + (DIST_DROP + j * DELTA_DIST_DROP ) * sin( jogo->salas[ jogo->atualSala ].baus[ i ].Rotac * ( PI / 180 ) );
-                                                jogo->items[ jogo->qtd_items_liberados ].posMundo.y =  jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.y + (DIST_DROP + j * DELTA_DIST_DROP ) * cos( jogo->salas[ jogo->atualSala ].baus[ i ].Rotac * ( PI / 180 ) );
+//                                                jogo->items[ jogo->qtd_items_liberados ].posMundo.x =  jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.x + jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.width / 2 + (DIST_DROP + j * DELTA_DIST_DROP ) * sin( jogo->salas[ jogo->atualSala ].baus[ i ].Rotac * ( PI / 180 ) );
+//                                                jogo->items[ jogo->qtd_items_liberados ].posMundo.y =  jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.y + (DIST_DROP + j * DELTA_DIST_DROP ) * cos( jogo->salas[ jogo->atualSala ].baus[ i ].Rotac * ( PI / 180 ) );
+                                                jogo->items[ jogo->qtd_items_liberados ].posMundo.x =  jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.x + jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.width / 2 ;
+                                                jogo->items[ jogo->qtd_items_liberados ].posMundo.y =  jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.y + jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.height / 2 ;
+
+                                                if( jogo->salas[ jogo->atualSala ].baus[ i ].Rotac  == 90  ||  jogo->salas[ jogo->atualSala ].baus[ i ].Rotac  == -90 ){
+                                                        jogo->items[ jogo->qtd_items_liberados ].posMundo.x +=  -jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.width / 2 + jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.height / 2 ;
+                                                        jogo->items[ jogo->qtd_items_liberados ].posMundo.y += -jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.height / 2 + jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.width / 2 ;
+                                                        if( jogo->salas[ jogo->atualSala ].baus[ i ].Rotac  == 90 ){
+                                                                jogo->items[ jogo->qtd_items_liberados ].posMundo.x -= 5 * REF_TELA_LARG / jogo->tela.width  ;
+                                                        }
+
+//                                                        jogo->items[ jogo->qtd_items_liberados ].posMundo.y += - (jogo->salas[ jogo->atualSala ].baus[ i ].QtdItens - 1 - i ) * DELTA_DIST_DROP ;
+
+                                                }
+
+
+                                                if( jogo->salas[ jogo->atualSala ].baus[ i ].Rotac  == 180 )
+                                                        jogo->items[ jogo->qtd_items_liberados ].posMundo.y -= 5 * REF_TELA_ALT / jogo->tela.height  ;
+
+
                                                 jogo->items[ jogo->qtd_items_liberados ].codItem =  jogo->salas[ jogo->atualSala ].baus[ i ].CodItens[ j ];
                                                 jogo->qtd_items_liberados++;
                                         }
@@ -154,10 +179,17 @@ void AtualizaPosicao(JOGO *jogo)
         //Velocidade - Se usuario pressionar ctrl a velocidade aumenta
         float passo = PASSO;
 
-        if (IsKeyDown(KEY_LEFT_CONTROL))
-        {
-                passo = PASSO_CORRENDO;
-                movimentoTipo = 2;
+        if( jogo->jogador.energia ){
+                if ( IsKeyDown( KEY_LEFT_CONTROL ) ){
+                        passo = PASSO_CORRENDO;
+                        movimentoTipo = 2;
+                        jogo->jogador.energia--;
+                }
+                else{
+                        status = 1;
+                        movimentoTipo = 1;
+                }
+
         }
         else
         {
@@ -509,10 +541,11 @@ void AtualizaAtirar(JOGO *jogo)
         //Pistola
         if (jogo->jogador.atualArma == 0)
         {
-                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
-                {
-                        jogo->jogador.atualStatus = 2;
-
+                if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)){
+                        if( jogo->jogador.municao[ 0 ] ){
+                                jogo->jogador.atualStatus = 2;
+                                jogo->jogador.municao[ 0 ]--;
+                        }
                 }
 
         }
@@ -1102,6 +1135,11 @@ void GeraInimigos( JOGO *jogo ){
 
                         jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].xpDrop = jogo->infoIniT.xpDrop[ jogo->salas[ jogo->atualSala ].spawns[ spawn ].tipo ];
 
+                        if( jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].tipo == 1)
+                                jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].codItem = 3;
+                        else
+                                jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].codItem = nmrRand( 1 , 3 );
+
                         jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].recMundo.width = jogo->infoIniT.largMundo[ jogo->salas[ jogo->atualSala ].spawns[ spawn ].tipo ];
                         jogo->salas[ jogo->atualSala ].inimigos[ qtdAtual ].recMundo.height = jogo->infoIniT.altMundo[ jogo->salas[ jogo->atualSala ].spawns[ spawn ].tipo ];
 
@@ -1186,6 +1224,8 @@ BOOL mesmaZona( JOGO *jogo , Vector2 pos1 , Vector2 pos2 ){
         return 0;
 }
 
+
+
 /** \brief AtualizaDanoInimigo
  *
  * \param
@@ -1211,13 +1251,24 @@ void AtualizaDanoInimigo( JOGO *jogo ){
                                 jogo->salas[ jogo->atualSala ].inimigos[ i ].cor = RED;
 
                                 if( !jogo->salas[ jogo->atualSala ].inimigos[ i ].saude ){
+
                                         jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO = 0;
-                                        jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO = 0;
+
                                         jogo->salas[ jogo->atualSala ].qtd_abatidos++;
+
                                         jogo->jogador.pontos += jogo->salas[ jogo->atualSala ].inimigos[ i ].xpDrop;
+
+                                        if( !nmrRand( 0 , -1 + 100 / jogo->jogador.probabilidadeDrop ) ){
+                                                jogo->items[ jogo->qtd_items_liberados ].recolhido =  NAO;
+                                                jogo->items[ jogo->qtd_items_liberados ].posMundo = jogo->salas[ jogo->atualSala ].inimigos[ i ].posMundo;
+                                                jogo->items[ jogo->qtd_items_liberados ].codItem = jogo->salas[ jogo->atualSala ].inimigos[ i ].codItem;
+                                                jogo->qtd_items_liberados++;
+                                        }
+
                                 }
 
                                 jogo->salas[ aSal ].inimigos[ i ].dano = 0;
+
                         }
                         else{
                                 if( !delayCor[ i ] )
@@ -1233,6 +1284,7 @@ void AtualizaDanoInimigo( JOGO *jogo ){
 
 
 
+
 /** \brief Atualiza a posicao dos tirosJogs do jogador
  *
  * \param JOGO*
@@ -1244,16 +1296,18 @@ void AtualizaDanoInimigo( JOGO *jogo ){
 void AtualizaTirosJogador( JOGO *jogo ){
         int i;
 
-        if ( IsMouseButtonPressed(MOUSE_LEFT_BUTTON)  &&  !jogo->jogador.latencia ){
-                jogo->tirosJog[ jogo->qtd_tirosJog ].pos.x = jogo->jogador.PosMundo.x;
-                jogo->tirosJog[ jogo->qtd_tirosJog ].pos.y = jogo->jogador.PosMundo.y;
-                jogo->tirosJog[ jogo->qtd_tirosJog ].speed = 5;
-                jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac = jogo->jogador.Rotac * PI / 180;
-                jogo->tirosJog[ jogo->qtd_tirosJog ].ativo = 1;
-                jogo->tirosJog[ jogo->qtd_tirosJog ].direcao.x = cos(jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac);
-                jogo->tirosJog[ jogo->qtd_tirosJog ].direcao.y = sin(jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac);
-                jogo->jogador.latencia = 10;
-                jogo->qtd_tirosJog++;
+        if( jogo->jogador.municao[ 0 ] ){
+                if ( IsMouseButtonPressed(MOUSE_LEFT_BUTTON)  &&  !jogo->jogador.latencia ){
+                        jogo->tirosJog[ jogo->qtd_tirosJog ].pos.x = jogo->jogador.PosMundo.x;
+                        jogo->tirosJog[ jogo->qtd_tirosJog ].pos.y = jogo->jogador.PosMundo.y;
+                        jogo->tirosJog[ jogo->qtd_tirosJog ].speed = 5;
+                        jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac = jogo->jogador.Rotac * PI / 180;
+                        jogo->tirosJog[ jogo->qtd_tirosJog ].ativo = 1;
+                        jogo->tirosJog[ jogo->qtd_tirosJog ].direcao.x = cos(jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac);
+                        jogo->tirosJog[ jogo->qtd_tirosJog ].direcao.y = sin(jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac);
+                        jogo->jogador.latencia = 10;
+                        jogo->qtd_tirosJog++;
+                }
         }
 
         for ( i = 0; i < jogo->qtd_tirosJog; i++){
@@ -1293,7 +1347,7 @@ void AtualizaColisaoTirosJogador( JOGO *jogo ){
                                 colisao = 0;
 
                 for ( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados ; i++ )
-                        if ( jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO ) ){
+                        if ( jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO )
                                 if ( CheckCollisionPointRec( jogo->tirosJog[ j ].pos , jogo->salas[ jogo->atualSala ].inimigos[ i ].recMundo ) ){
                                         jogo->salas[ jogo->atualSala ].inimigos[ i ].dano = 1;
                                         colisao = 1;
@@ -1366,14 +1420,75 @@ void AtualizaFaca(JOGO *jogo)
 
         jogo->faca.posTela.x = (jogo->faca.pos.x - jogo->MapaDesenho.x) * (jogo->tela.width / PIXEL_LARGURA_MAPA);
         jogo->faca.posTela.y = (jogo->faca.pos.y - jogo->MapaDesenho.y) * (jogo->tela.height / PIXEL_ALTURA_MAPA);
+
 }
 
 
 
+/** \brief Atualiza Status do Items
+ *
+ * \param *JOGO
+ *
+ */
+
+ void AtualizaItems( JOGO *jogo ){
+        int i;
+
+        for( i = 0 ; i < jogo->qtd_items_liberados ; i++ )
+                if( !jogo->items[ i ].recolhido )
+                        if( Deslocamento( jogo->items[ i ].posMundo , jogo->jogador.PosMundo ) < DIST_COLETAR_ITEMS ){
+                                jogo->items[ i ].recolhido = 1;
+                                switch( jogo->items[ i ].codItem ){
+                                        case 1:
+                                                jogo->jogador.saude += SAUDE_TOTAL_JOGADOR / 2 ;
+                                                if( SAUDE_TOTAL_JOGADOR % 2)
+                                                                 jogo->jogador.saude++;
+                                                if( jogo->jogador.saude > SAUDE_TOTAL_JOGADOR )
+                                                        jogo->jogador.saude = 15;
+                                                return;
+
+                                        case 2:
+                                                jogo->jogador.energia = ENERGIA_TOTAL;
+                                                return;
+                                        case 3:
+                                                jogo->jogador.municao[ 0 ] += QTD_MUNICAO_DROP;
+                                                return;
+                                }
+        }
+ }
 
 
 
 
+ /** \brief
+  *
+  * \param
+  * \param
+  * \return
+  *
+  */
+#include "desenhamenu.h"
+void Pause( JOGO *jogo , int tipo ){
+        int i;
+        int aux= 0 ;
+
+        switch( tipo ){
+                case 0:
+                        do{
+                                aux++;
+                                i=aux;
+                                aux = i;
+                                BeginDrawing();
+                                DrawTextEx( jogo->Res.fonteWolfen , "PAUSE" , (Vector2){  CentraTextoXEX( jogo->Res.fonteWolfen2 , "PAUSE" , 40 , 3) , jogo->tela.height / 2 } , 40 , 3 , GOLD );
+                                EndDrawing();
+                        }while( !IsKeyPressed( KEY_P ) );
+                        break;
+
+
+
+        }
+
+}
 
 
 

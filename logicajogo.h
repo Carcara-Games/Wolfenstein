@@ -12,7 +12,7 @@
         BOOL ChecaMov(JOGO jogo, Vector2 posAtual , int varx, int vary);
         int ChecaPortas( JOGO jogo );
         void EntraEmPortas( JOGO *jogo );
-        void pausa( int tempo);
+        void pausa( float tempo);
 
         void AtualizaOrigin( JOGO *jogo );
         void AtualizaOriginPes( JOGO *jogo );
@@ -57,6 +57,9 @@
 
         void Pause( JOGO *jogo , int tipo );
 
+        void ExibirLevel1( JOGO *jogo );
+
+        void AtualizaLevelAtual( JOGO *jogo );
 
 
 

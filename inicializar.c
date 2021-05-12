@@ -110,6 +110,7 @@ void IniciaNovoJogo( JOGO *jogo )
         jogo->jogador.latencia = 0;
         jogo->jogador.DANO = 0;
         jogo->jogador.atualArma = 0;
+        jogo->jogador.atualLevel = 0;
 
         /// Municao
         jogo->jogador.municao[ 0 ] = 25;

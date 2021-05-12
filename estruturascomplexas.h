@@ -220,6 +220,7 @@ typedef struct
         int atualArma;
         int atualStatus;
         int atualMovTipo;
+        int atualLevel;
 
         int latencia;
 
@@ -288,7 +289,7 @@ typedef struct
         int qtd_tirosJog;
         Faca faca;
 
-        //                int atualLevel;
+
         //                DadosLevel dadosLevel;
 
         Recursos Res; //Recursos do jogo

@@ -56,7 +56,7 @@ void IniciarJanela( void )
 
 
 
-/** \brief Crias as salas do jogo , definindo posição de portas e de baús , limites de vizualização ,  etc
+/** \brief Crias as salas do jogo , definindo posiï¿½ï¿½o de portas e de baï¿½s , limites de vizualizaï¿½ï¿½o ,  etc
  *
  * \param *JOGO
  *
@@ -111,6 +111,7 @@ void IniciaNovoJogo( JOGO *jogo )
         jogo->jogador.DANO = 0;
         jogo->jogador.atualArma = 0;
         jogo->jogador.atualLevel = 0;
+        jogo->faca.disponivel = 1;
 
         /// Municao
         jogo->jogador.municao[ 0 ] = 25;
@@ -315,6 +316,7 @@ void carregarTexturasFontes( JOGO *jogo )
         jogo->Res.Mapa =    LoadTexture("Mapa/Mapa.png");
         jogo->Res.Portas =    LoadTexture("Mapa/Portas.png");
         jogo->Res.Bala = LoadTexture("Sprites/Bala.png");
+        jogo->Res.Faca = LoadTexture("Sprites/faca.png");
 
         jogo->Res.KitMed = LoadTexture("Sprites/kitMed2.png");
         jogo->Res.KitEnergia = LoadTexture("Sprites/energiaDrop.png");
@@ -329,8 +331,8 @@ void carregarTexturasFontes( JOGO *jogo )
         carregarSpritesPes( jogo );           //Pes do jogador
 
         ///Baus
-        jogo->Res.BauFechado = LoadTexture( "Sprites/Baús/BauVermelho.png");
-        jogo->Res.BauAberto = LoadTexture( "Sprites/Baús/BauVermelhoAberto.png");
+        jogo->Res.BauFechado = LoadTexture( "Sprites/Baus/BauVermelho.png");
+        jogo->Res.BauAberto = LoadTexture( "Sprites/Baus/BauVermelhoAberto.png");
 }
 //##############################################################################
 
@@ -346,7 +348,7 @@ void CarregarLevel( JOGO *jogo)
 //        switch( jogo->Level )
         {
 //                case 1:
-                        // Definindo Informações do level
+                        // Definindo Informaï¿½ï¿½es do level
 //                        jogo->dadosLevel.TERMINADO = 0 ;
 //                        jogo->dadosLevel.qtdBaus = 1 ;//alet md
 //                        jogo->dadosLevel.qtdInimT1 = 1 ;//alet md
@@ -354,7 +356,7 @@ void CarregarLevel( JOGO *jogo)
 //                        jogo->dadosLevel.qtdPortas = 1 ;//alet md
 //                        jogo->dadosLevel.qtdSpawnsT1 = 2 ;//alet md
 
-                        // Definindo Baús
+                        // Definindo Baï¿½s
 //                        jogo->dadosLevel.baus = (Bau *)malloc( jogo->dadosLevel.qtdBaus * sizeof( Bau) );  // Alocando dinamicamente array dos baus
 
                         //Itens
@@ -385,7 +387,7 @@ void CarregarLevel( JOGO *jogo)
 
 
 
-/**     Função CriaZonas() : Crias as zonas da sala , definindo limites de deslocamento
+/**     Funï¿½ï¿½o CriaZonas() : Crias as zonas da sala , definindo limites de deslocamento
    */
 
 void CriaZonas( JOGO *jogo)
@@ -518,7 +520,7 @@ void CriaZonas( JOGO *jogo)
 
 
 
-/**     Função CriaPortas() : Crias as portas da sala , definindo posicao de entrada e posicao de destino
+/**     Funï¿½ï¿½o CriaPortas() : Crias as portas da sala , definindo posicao de entrada e posicao de destino
    *                    obs: Portas se comportam como teleportes - alteram posicao do jogado
    */
 
@@ -1027,7 +1029,8 @@ void CriaBaus( JOGO *jogo ){
                 },
 
                 { //sala 11
-                        //Nenhum                },
+                        //Nenhum
+                },
 
                 { //sala 12
                         { 2263 , 964 }    //b1
@@ -1190,7 +1193,8 @@ void inicializarInimigosSalas( JOGO *jogo ){
         int j;
         for( i = 0 ; i < QTD_SALAS_SPAWN ; i++)
                 for( j = 0 ; j < jogo->salas[ sala[ i ] ].qtd_inimigos_liberar ; j++){
-                        jogo->salas[ sala[ i ] ].inimigos[ i ].VIVO = 1;                        jogo->salas[ sala[ i ] ].inimigos[ i ].latenciaAtaque = 0;
+                        jogo->salas[ sala[ i ] ].inimigos[ i ].VIVO = 1;
+                        jogo->salas[ sala[ i ] ].inimigos[ i ].latenciaAtaque = 0;
 
                 }
 

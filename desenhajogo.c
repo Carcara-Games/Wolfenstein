@@ -65,7 +65,8 @@ void DesenhaItems( JOGO *jogo ){
                                                 break;
                                         case 3:
                                                 DrawTexturePro( jogo->Res.Municao , (Rectangle){ 0 , 0 , jogo->Res.Municao.width , jogo->Res.Municao.height } , (Rectangle){ ( jogo->items[ i ].posMundo.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( jogo->items[ i ].posMundo.y - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 40 , 40 } , (Vector2){ 40/2 , 40/2 } , 0 , WHITE );
-                                                break;
+                                                break;
+
 //                                        DrawRectangle( ( jogo->items[ i ].posMundo.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( jogo->items[ i ].posMundo.y - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 30 , 30 , RAYWHITE );
                                 }
 
@@ -131,6 +132,7 @@ void DesenhaFaca(JOGO *jogo)
                 DrawTexturePro(jogo->Res.Faca, (Rectangle){0, 0, jogo->Res.Faca.width, jogo->Res.Faca.height},
                                jogo->faca.hitbox,
                                (Vector2){(18 * (jogo->tela.width / PIXEL_LARGURA_MAPA) / 2), (6 * (jogo->tela.height / PIXEL_ALTURA_MAPA) / 2)}, jogo->faca.Rotac, WHITE);
+                              
         }
 }
 
@@ -320,7 +322,7 @@ void DesenhaDebug(JOGO *jogo)
 
         ///JOGADOR
         DrawText( TextFormat("ENERGIA: %d" , jogo->jogador.energia ) , 20 , 490 , 25 , GREEN );
-        DrawText( TextFormat("MUNIÇÃO: %d" , jogo->jogador.municao[ 0 ] ) , 20 , 520 , 25 , GREEN );
+        DrawText( TextFormat("MUNIï¿½ï¿½O: %d" , jogo->jogador.municao[ 0 ] ) , 20 , 520 , 25 , GREEN );
         DrawText( TextFormat("SAUDE: %d" , jogo->jogador.saude ) , 20 , 550 , 25 , YELLOW );
         DrawText( TextFormat("VIDAS: %d" , jogo->jogador.vidas ) , 20 , 580 , 25 , YELLOW );
         DrawText( TextFormat("ARMA: %d" , jogo->jogador.atualArma ) , 20 , 610 , 25 , YELLOW );

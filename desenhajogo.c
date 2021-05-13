@@ -41,8 +41,38 @@ void DesenhaObjetos( JOGO *jogo ){
 //        DesenhaSpawns( jogo );
         DesenhaItems( jogo );
 
+        if( jogo->jogador.atualLevel  == 1 )
+                if( jogo->salas[ 4 ].qtd_abatidos >= 5 )
+                        DesenhaItemMapa( jogo );
+
 }
 
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
+void DesenhaItemMapa( JOGO *jogo ){
+        static int flag_cor = 1;
+        Color cor;
+
+        if( flag_cor ){
+                cor = GREEN;
+                flag_cor = 0;
+        }
+        else{
+                cor = ORANGE;
+                flag_cor = 1;
+        }
+
+        DrawRectanglePro( (Rectangle){ ( 404 - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( 408 - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 106 , 106 } , (Vector2){ 53 , 53 } , 0 , cor );
+        DrawTexturePro( jogo->Res.ItemMapa , (Rectangle){ 0 , 0 , jogo->Res.ItemMapa.width , jogo->Res.ItemMapa.height } , (Rectangle){ ( 404 - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( 408 - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 100 , 100 } , (Vector2){ 50 , 50 } , 0 , WHITE );
+}
 
 
 /** \brief Desenha os items nao-recolhidos
@@ -132,7 +162,15 @@ void DesenhaFaca(JOGO *jogo)
                 DrawTexturePro(jogo->Res.Faca, (Rectangle){0, 0, jogo->Res.Faca.width, jogo->Res.Faca.height},
                                jogo->faca.hitbox,
                                (Vector2){(18 * (jogo->tela.width / PIXEL_LARGURA_MAPA) / 2), (6 * (jogo->tela.height / PIXEL_ALTURA_MAPA) / 2)}, jogo->faca.Rotac, WHITE);
-                              
+
+//                DrawTexturePro(jogo->Res.Faca, (Rectangle){0, 0, jogo->Res.Faca.width, jogo->Res.Faca.height},
+//                               jogo->faca.hitbox,
+//                               (Vector2){  jogo->faca.hitbox.width / 2 , jogo->faca.hitbox.height / 2 }, jogo->faca.Rotac , WHITE);
+
+//                        DrawTexturePro( jogo->Res.Faca, (Rectangle){0, 0, jogo->Res.Faca.width, jogo->Res.Faca.height},
+//                               (Rectangle){ jogo->faca.pos.x , jogo->faca.pos.y , 10 , 10 } ,
+//                               (Vector2){  10 / 2 , 10 / 2 }, jogo->faca.Rotac , WHITE);
+//
         }
 }
 

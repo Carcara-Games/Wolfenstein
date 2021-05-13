@@ -58,8 +58,11 @@
         void Pause( JOGO *jogo , int tipo );
 
         void ExibirLevel1( JOGO *jogo );
+        void ExibirLevel2( JOGO *jogo );
 
         void AtualizaLevelAtual( JOGO *jogo );
+
+        void AtualizaFacaColisao( JOGO *jogo );
 
 
 

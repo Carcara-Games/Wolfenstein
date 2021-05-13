@@ -48,8 +48,10 @@ typedef struct
         Texture2D Logo;               // Imagem de fundo (Logo)
         Texture2D Bala;
         Texture2D Faca;
+        Texture2D ItemMapa;     // Item dropada do level 1 para o 2
         Font fonteWolfen;             // Fonte Estilizada Wolfenstein
         Font fonteWolfen2;            // Fonte Estilizada Wolfenstein 2
+
 
         ///Mapa
         Texture2D Mapa; // Imagem do mapa
@@ -261,6 +263,8 @@ typedef struct
         float nx;
         float ny;
         float distancia;
+
+        int flag_colisao;
 
         bool disponivel : 1;
 

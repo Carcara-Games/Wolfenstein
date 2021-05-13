@@ -13,6 +13,7 @@ void AtualizaLevel(JOGO *jogo)
         AtualizaMira(jogo);
         //        AtualizaArma( &jogo );
         AtualizaFaca(jogo);
+        AtualizaFacaColisao(jogo);
         AtualizaTirosJogador( jogo );
         AtualizaColisaoTirosJogador( jogo );
         //        AtualizaRecarga( &jogo );
@@ -1379,9 +1380,45 @@ void AtualizaColisaoTirosJogador( JOGO *jogo ){
  *
  */
 
+/** \brief Checa se Faca esta colidindo com obstaculo
+ *
+ * \param JOGO*
+ * \param
+ * \return
+ *
+ */
+void AtualizaFacaColisao( JOGO *jogo ){
+        int i ;
+
+        if( jogo->faca.ativo ){
+                jogo->faca.flag_colisao = 1;
+
+                for ( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtdZonas ; i++ )
+                        if ( CheckCollisionPointRec( jogo->faca.pos , jogo->salas[ jogo->atualSala ].zonas[ i ] ) )
+                                jogo->faca.flag_colisao = 0;
+
+                for ( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados ; i++ )
+                        if ( jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO )
+        //                        if ( CheckCollisionRecs( jogo->faca.hitbox , jogo->salas[ jogo->atualSala ].inimigos[ i ].recMundo ) ){
+                                if ( CheckCollisionRecs( jogo->faca.hitbox , jogo->salas[ jogo->atualSala ].inimigos[ i ].posTela ) ){
+                                        jogo->salas[ jogo->atualSala ].inimigos[ i ].dano = 1;
+                                        jogo->faca.flag_colisao = 1;
+                                }
+        }
+}
+
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
 void AtualizaFaca(JOGO *jogo)
 {
-
         if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON) && jogo->faca.disponivel == 1)
         {
                 jogo->faca.pos.x = jogo->jogador.PosMundo.x;
@@ -1403,7 +1440,7 @@ void AtualizaFaca(JOGO *jogo)
 
         jogo->faca.distancia = sqrt(pow(jogo->faca.pos.x - jogo->faca.posInicial.x, 2) + pow(jogo->faca.pos.y - jogo->faca.posInicial.y, 2));
 
-        if (jogo->faca.distancia < 60)
+        if (jogo->faca.distancia < 60  &&  !jogo->faca.flag_colisao)
         {
                 jogo->faca.nx = jogo->faca.speed * jogo->faca.direcao.x;
                 jogo->faca.ny = jogo->faca.speed * jogo->faca.direcao.y;
@@ -1511,11 +1548,14 @@ void AtualizaLevelAtual( JOGO *jogo ){
                 ExibirLevel1( jogo );
         }
 
-//        if( jogo->jogador.atualLevel == 1 )
-//                if( jogo->atualSala == 4){
-//                        jogo->jogador.atualLevel = 2;
-//                        ExibirLevel2( jogo );
-//                }
+        if( jogo->jogador.atualLevel == 1 )
+                if( jogo->atualSala ==  4 )
+                        if( jogo->salas[ jogo->atualSala ].qtd_abatidos >=  5)
+//                                if( CheckCollisionRecs( jogo->jogador.PosTela , (Rectangle){ 404 - 50 , 408 -50 , 100 , 100 } ) ){
+                                if( CheckCollisionRecs( jogo->jogador.PosTela , (Rectangle){ ( 404 - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( 408 - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 100 , 100 } ) ){
+                                        jogo->jogador.atualLevel++;
+                                        ExibirLevel2( jogo );
+                                }
 
 
 
@@ -1546,7 +1586,7 @@ void ExibirLevel1( JOGO *jogo ){
                 "naquelas intalacoes e mantenham prisioneiros la dentro. Sua missao",
                 " e invadir o castelo e descobrir mais sobre isso.",
                 "Um ultimo aviso: ",
-                "       As coisa mudaram um pouco desde a ultima vez que enfrentou eles....."
+                "       As coisa mudaram um pouco desde a ultima vez que os enfrentou....."
                 "",
                 "",
                 "",
@@ -1555,60 +1595,76 @@ void ExibirLevel1( JOGO *jogo ){
                 "MISSAO: Encontre o mapa com a localizacao dos prisioneiros.",
         };
 
-//                BeginDrawing();
-//                        ClearBackground( BLACK );
-////                        DrawRectangleRec( jogo->tela , BLACK );
-////                        DrawText(TextFormat("i=%d    j=%d" , i , j) , 500 , 500 , 50 , WHITE);
-//                        DrawTextEx( jogo->Res.fonteWolfen2 , "LEVEL 1" , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen2 , "LEVEL 1" , 40 , 3 ) , 20 } , 40 , 3 , MAROON );
-////                EndDrawing();
-////                pausa(1);
-//
-//                for( i = 0 ; i < 17 ; i++ )
-//                        for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
-////                                BeginDrawing();
-////                                        ClearBackground( BLACK );
-//                                        DrawText( TextFormat("%c" , msg[ i ][ j ] ) , 27 + 19 * j , 100 + 35 * i , 30 , WHITE );
-////                                EndDrawing();
-//        //                        pausa( 20 );
-//                        }
-//
-//                EndDrawing();
-//                pausa( 1 );
 
-                int x , y , k;
+        int x , y , k;
 
-                for( i = 0 ; i < 16 ; i++ )
-                        for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
-                                BeginDrawing();
-                                        ClearBackground( BLACK );
-                                        DrawTextEx( jogo->Res.fonteWolfen2 , "LEVEL 1" , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen2 , "LEVEL 1" , 40 , 3 ) , 20 } , 40 , 3 , MAROON );
+        for( i = 0 ; i < 16 ; i++ )
+                for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
+                        BeginDrawing();
+                                ClearBackground( BLACK );
+                                DrawTextEx( jogo->Res.fonteWolfen2 , "LEVEL 1" , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen2 , "LEVEL 1" , 40 , 3 ) , 20 } , 40 , 3 , MAROON );
 
-                                        for( y = 0 ; y < i ; y++ )
-                                                DrawText( msg[ y ] , 27 , 100 + 35 * y , 30 , WHITE );
+                                for( y = 0 ; y < i ; y++ )
+                                        DrawText( msg[ y ] , 27 , 100 + 35 * y , 30 , WHITE );
 
-                                        for( x = 0 ; x <= j ; x++ )
-                                                DrawText( TextFormat("%c" , msg[ i ][ x ] ) , 27 + 19 * x , 100 + 35 * i , 30 , WHITE );
+                                for( x = 0 ; x <= j ; x++ )
+                                        DrawText( TextFormat("%c" , msg[ i ][ x ] ) , 27 + 19 * x , 100 + 35 * i , 30 , WHITE );
 //                                                        DrawTextCodepoint( GetFontDefault() , msg[ y ][ x ] , (Vector2){ 27 + 19 * x , 100 + 35 * y } , 30 , WHITE );
 
-                                for ( k =  3000 * FPS  ; k ; k-- );
+                        for ( k =  3000 * FPS  ; k ; k-- );
 
-                                EndDrawing();
-                        }
+                        EndDrawing();
+                }
+        pausa( 7 );
+}
 
-                pausa( 7 );
 
 
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+#include <string.h>
+void ExibirLevel2( JOGO *jogo ){
+        int i , j;
 
-//                                BeginDrawing();
-//                                        ClearBackground( BLACK );
-//                                        DrawTextEx( jogo->Res.fonteWolfen2 , "LEVEL 1" , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen2 , "LEVEL 1" , 40 , 3 ) , 20 } , 40 , 3 , MAROON );
-//
-//                                        for( i = 0 ; i < 17 ; i++ )
-//                                                for( j = 0 ; j < strlen( msg[ i ] ) ; j++ )
-//                                                        DrawText( TextFormat("%c" , msg[ i ][ j ] ) , 27 + 19 * j , 100 + 35 * i , 30 , WHITE );
-////                                                        DrawTextCodepoint( GetFontDefault() , msg[ y ][ x ] , (Vector2){ 27 + 19 * x , 100 + 35 * y } , 30 , WHITE );
-//                                EndDrawing();
-//
-//
-//                pausa( 1 );
+        char msg[][200] = {
+                "Muito bem, bravo guerreiro.....",
+                "",
+                "",
+                "",
+                "       Com esse mapa vamos localizar e libertar os prisioneiros!",
+                "Eles estao numa ala prisional ao sul do castelo. Siga lutando, ",
+                "e olho vivo, nunca se sabe o que pode-se encontrar a frente... ",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "MISSAO: Encontre e liberte os prisioneiros.",
+        };
+
+
+        int x , y , k;
+
+        for( i = 0 ; i < 13 ; i++ )
+                for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
+                        BeginDrawing();
+                                ClearBackground( BLACK );
+                                DrawTextEx( jogo->Res.fonteWolfen2 , "LEVEL 2" , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen2 , "LEVEL 2" , 40 , 3 ) , 20 } , 40 , 3 , MAROON );
+
+                                for( y = 0 ; y < i ; y++ )
+                                        DrawText( msg[ y ] , 27 , 100 + 35 * y , 30 , WHITE );
+
+                                for( x = 0 ; x <= j ; x++ )
+                                        DrawText( TextFormat("%c" , msg[ i ][ x ] ) , 27 + 19 * x , 100 + 35 * i , 30 , WHITE );
+
+                        for ( k =  3000 * FPS  ; k ; k-- );
+
+                        EndDrawing();
+                }
+        pausa( 7 );
 }

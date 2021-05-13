@@ -112,6 +112,8 @@ void IniciaNovoJogo( JOGO *jogo )
         jogo->jogador.atualArma = 0;
         jogo->jogador.atualLevel = 0;
         jogo->faca.disponivel = 1;
+        jogo->faca.ativo = false;
+        jogo->faca.flag_colisao = 0;
 
         /// Municao
         jogo->jogador.municao[ 0 ] = 25;
@@ -317,6 +319,7 @@ void carregarTexturasFontes( JOGO *jogo )
         jogo->Res.Portas =    LoadTexture("Mapa/Portas.png");
         jogo->Res.Bala = LoadTexture("Sprites/Bala.png");
         jogo->Res.Faca = LoadTexture("Sprites/faca.png");
+        jogo->Res.ItemMapa = LoadTexture("Sprites/ItemMap3.png");
 
         jogo->Res.KitMed = LoadTexture("Sprites/kitMed2.png");
         jogo->Res.KitEnergia = LoadTexture("Sprites/energiaDrop.png");

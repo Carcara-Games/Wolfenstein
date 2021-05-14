@@ -22,12 +22,15 @@ void DesenhaLevel(JOGO *jogo)
         DesenhaPes( jogo);
         DesenhaJogador(jogo);
 
-        DesenhaDebug(jogo);
+//        DesenhaDebug(jogo);
+
+        DesenhaHUD( jogo );
 
         EndDrawing();
 
         if (jogo->PASSAGEM)
                 PassagemPorta();
+
 }
 //##############################################################################
 
@@ -370,3 +373,51 @@ void DesenhaDebug(JOGO *jogo)
 //##############################################################################
 
 
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
+void DesenhaHUD( JOGO *jogo ){
+        DrawTexturePro( jogo->Res.Hud_SCE , (Rectangle){ 0 , 0 , jogo->Res.Hud_SCE.width , jogo->Res.Hud_SCE.height } , (Rectangle){ 0 , 0 , HUD_LARG , HUD_ALT } , (Vector2){ 0 , 0 } , 0 , WHITE );
+
+        // Barra da Vida
+        DrawRectangle( X_0_ATRIB , Y_0_ATRIB_SAUDE , LARG_RET_ATRIB * jogo->jogador.saude / SAUDE_TOTAL_JOGADOR , ALT_RET_ATRIB , RED  );
+
+        // Barra da Energia
+        DrawRectangle( X_0_ATRIB , Y_0_ATRIB_ENERGIA , LARG_RET_ATRIB * jogo->jogador.energia / ENERGIA_TOTAL , ALT_RET_ATRIB , GREEN  );
+
+        // Coracao
+        DrawTexturePro( jogo->Res.coracao , (Rectangle){ 0 , 0 , jogo->Res.coracao.width , jogo->Res.coracao.height } , (Rectangle){ X_CORAC , Y_CORAC , LARG_CORAC , ALT_CORAC } , (Vector2){ 0 , 0 } , 0 , WHITE );
+
+        // Energia
+        DrawTexturePro( jogo->Res.KitEnergia , (Rectangle){ 0 , 0 , jogo->Res.KitEnergia.width , jogo->Res.KitEnergia.height } , (Rectangle){ X_ENERG , Y_ENERG , LARG_ENERG , ALT_ENERG } , (Vector2){ 0 , 0 } , 0 , WHITE );
+
+        // xP
+        DrawText( TextFormat("%d" , jogo->jogador.pontos ) , XP_X , XP_Y , XP_FONT_S , WHITE );
+
+        // MUNICAO
+        DrawText( TextFormat("%3d" , jogo->jogador.municao[ 0 ] ) , MUN_X , MUN_Y , MUN_FONT_S , YELLOW );
+
+        // Level
+        DrawText( TextFormat("%d" , jogo->jogador.atualLevel ) , LEVEL_X , LEVEL_Y , LEVEL_FONT_S , WHITE );
+
+        // Faca
+        Color cor_faca , cor_fundo;
+        cor_faca = ( jogo->faca.disponivel )  ?  WHITE : DARKBROWN;
+        cor_fundo = ( jogo->faca.disponivel )  ?  LIGHTGRAY : DARKGRAY;
+
+        DrawRectangle(  X_REC_FACA , Y_REC_FACA , LARG_REC_FACA , ALT_REC_FACA , cor_fundo );
+        DrawTexturePro( jogo->Res.Faca , (Rectangle){ 0 , 0 , jogo->Res.Faca.width , jogo->Res.Faca.height } , (Rectangle){ X_FACA , Y_FACA , LARG_FACA , ALT_FACA } , (Vector2){ 0 , 0 } , 0 , cor_faca );
+
+        // Nome
+//        DrawText( TextFormat("%d" , jogo->jogador.nome ) , NOME_X , NOME_Y , NOME_FONT_S , WHITE );
+        DrawText( "Narciso" , NOME_X , NOME_Y , NOME_FONT_S , WHITE );
+
+        // Vidas
+        DrawText( TextFormat("%d" , jogo->jogador.vidas ) , VIDAS_X , VIDAS_Y , VIDAS_FONT_S , RED );
+}

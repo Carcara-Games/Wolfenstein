@@ -20,6 +20,7 @@
         void DesenhaBaus( JOGO *jogo );
         void DesenhaInimigos( JOGO *jogo);
         void DesenhaSpawns( JOGO *jogo);
+        void DesenhaHUD( JOGO *jogo );
 
 
 

@@ -48,6 +48,8 @@ typedef struct
         Texture2D Logo;               // Imagem de fundo (Logo)
         Texture2D Bala;
         Texture2D Faca;
+        Texture2D Hud_SCE;     //  HUD
+        Texture2D coracao;
         Texture2D ItemMapa;     // Item dropada do level 1 para o 2
         Font fonteWolfen;             // Fonte Estilizada Wolfenstein
         Font fonteWolfen2;            // Fonte Estilizada Wolfenstein 2

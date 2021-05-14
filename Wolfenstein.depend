@@ -74,18 +74,18 @@
 	"raylib.h"
 	"definicoes.h"
 
-1620742469 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\definicoes.h
+1621002543 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\definicoes.h
 	<math.h>
 	<stdio.h>
 	<time.h>
 	<stdlib.h>
 
-1620915875 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhajogo.c
+1621002502 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhajogo.c
 	"desenhajogo.h"
 	"definicoes.h"
 	"estruturascomplexas.h"
 
-1620913818 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhajogo.h
+1620995870 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhajogo.h
 	"estruturascomplexas.h"
 
 1619997258 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhamenu.c
@@ -100,7 +100,7 @@
 1619912417 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicamenu.h
 	"raylib.h"
 
-1620917299 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\inicializar.c
+1621002269 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\inicializar.c
 	"inicializar.h"
 	"definicoes.h"
 	"fisica.h"
@@ -110,7 +110,7 @@
 	"estruturascomplexas.h"
 	"definicoes.h"
 
-1620917436 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.c
+1620996564 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.c
 	"logicajogo.h"
 	"definicoes.h"
 	"fisica.h"
@@ -153,7 +153,7 @@
 1620650126 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\fisica.c
 	"fisica.h"
 
-1620917300 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\estruturascomplexas.h
+1620996658 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\estruturascomplexas.h
 	"raylib.h"
 	"definicoes.h"
 

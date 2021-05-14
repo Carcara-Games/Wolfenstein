@@ -147,4 +147,53 @@
         ///PAUSE
         #define DELAY_PAUSE 20000
 
+        /// HUD
+        #define HUD_LARG 496
+        #define HUD_ALT 158
+        #define X_0_ATRIB 164
+        #define Y_0_ATRIB_SAUDE 45
+        #define Y_0_ATRIB_ENERGIA 80
+        #define LARG_RET_ATRIB 331
+        #define ALT_RET_ATRIB 33
+        #define X_CORAC 173
+        #define Y_CORAC 47
+        #define LARG_CORAC 35
+        #define ALT_CORAC 27
+
+        #define X_ENERG 176
+        #define Y_ENERG 82
+        #define LARG_ENERG 30
+        #define ALT_ENERG 30
+
+        #define XP_X  430
+        #define XP_Y 23
+        #define XP_FONT_S 20
+
+        #define LEVEL_X  463
+        #define LEVEL_Y 2
+        #define LEVEL_FONT_S 20
+
+        #define MUN_X  250
+        #define MUN_Y 119
+        #define MUN_FONT_S 25
+
+        #define X_FACA 347
+        #define Y_FACA 121
+        #define LARG_FACA 65
+        #define ALT_FACA 22
+
+        #define X_REC_FACA 345
+        #define Y_REC_FACA 116
+        #define LARG_REC_FACA 69
+        #define ALT_REC_FACA 31
+
+        #define NOME_X  170
+        #define NOME_Y 6
+        #define NOME_FONT_S 30
+
+        #define VIDAS_X  11
+        #define VIDAS_Y 129
+        #define VIDAS_FONT_S 25
+
+
 #endif // __DEFINICOES_H_

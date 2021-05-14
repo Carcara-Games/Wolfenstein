@@ -1614,8 +1614,14 @@ void ExibirLevel1( JOGO *jogo ){
                         for ( k =  3000 * FPS  ; k ; k-- );
 
                         EndDrawing();
+
+                        if( IsKeyPressed( KEY_ENTER ) )
+                                goto TEXTO_COMPLETO_1;
                 }
-        pausa( 7 );
+
+        TEXTO_COMPLETO_1:
+        while( !IsKeyPressed( KEY_ENTER ) )
+                pausa( 1 );
 }
 
 

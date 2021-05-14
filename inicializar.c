@@ -320,6 +320,8 @@ void carregarTexturasFontes( JOGO *jogo )
         jogo->Res.Bala = LoadTexture("Sprites/Bala.png");
         jogo->Res.Faca = LoadTexture("Sprites/faca.png");
         jogo->Res.ItemMapa = LoadTexture("Sprites/ItemMap3.png");
+        jogo->Res.Hud_SCE = LoadTexture("HUD/HUD4.png");
+        jogo->Res.coracao = LoadTexture("HUD/heart.png");
 
         jogo->Res.KitMed = LoadTexture("Sprites/kitMed2.png");
         jogo->Res.KitEnergia = LoadTexture("Sprites/energiaDrop.png");

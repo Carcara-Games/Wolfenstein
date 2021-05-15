@@ -88,7 +88,7 @@
 1621085883 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhajogo.h
 	"estruturascomplexas.h"
 
-1619997258 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhamenu.c
+1621092452 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhamenu.c
 	"desenhamenu.h"
 	"definicoes.h"
 	<math.h>
@@ -100,7 +100,7 @@
 1619912417 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicamenu.h
 	"raylib.h"
 
-1621088467 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\inicializar.c
+1621092351 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\inicializar.c
 	"inicializar.h"
 	"definicoes.h"
 	"fisica.h"
@@ -125,7 +125,7 @@
 1619912417 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicamenu.c
 	"logicamenu.h"
 
-1620001228 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\main.c
+1621090621 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\main.c
 	"raylib.h"
 	"inicializar.h"
 	"OpcoesDoMenu.h"
@@ -140,7 +140,7 @@
 	"desenhamenu.h"
 	"desenhajogo.h"
 
-1621090292 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\opcoesdomenu.c
+1621092565 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\opcoesdomenu.c
 	"OpcoesDoMenu.h"
 	"booleanas.h"
 	<string.h>
@@ -154,7 +154,7 @@
 1620650126 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\fisica.c
 	"fisica.h"
 
-1621088467 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\estruturascomplexas.h
+1621092236 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\estruturascomplexas.h
 	"raylib.h"
 	"definicoes.h"
 

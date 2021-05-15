@@ -11,11 +11,11 @@
 
 void DesenhaMenuPrincipal(JOGO* jogo, int selecao)
 {
-        int i;
-        const int FONT_SIZE = 30;   // Tamanho da fonte do menu
-        const int ALTURA_ITEM_0 = GetScreenWidth() / 4;   //Posicao Y do primeiro item menu
-        const int VARIACAO_ALTURA = FONT_SIZE * 1.5;    // Variacao de altura entre cada item dado pelo tamanho da letra
-        const int QTD_OPCOES = 7;     // Quantidade de opcoes no menu
+//        int i;
+//        const int FONT_SIZE = 30;   // Tamanho da fonte do menu
+//        const int ALTURA_ITEM_0 = GetScreenWidth() / 4;   //Posicao Y do primeiro item menu
+//        const int VARIACAO_ALTURA = FONT_SIZE * 1.5;    // Variacao de altura entre cada item dado pelo tamanho da letra
+//        const int QTD_OPCOES = 7;     // Quantidade de opcoes no menu
 
 //        Rectangle imagem;
 //        imagem.height = jogo->Res.TelaDeFundo.height ;
@@ -24,7 +24,6 @@ void DesenhaMenuPrincipal(JOGO* jogo, int selecao)
 //        imagem.y = 0 ;
 
 //        Vector2 pos = (Vector2 ){ 0 , 0 };
-
         BeginDrawing();
         {
                 // Fundo
@@ -34,11 +33,14 @@ void DesenhaMenuPrincipal(JOGO* jogo, int selecao)
 //                DrawTextureEx( jogo->Res.Logo , (Vector2 ){ 5 , 5 } , 0 ,  .2 , WHITE );  //Mini logo no canto superior esquerdo
 
                 // Desenha todos os itens em cor comum
-                for( i = 0 ; i < QTD_OPCOES ; i++)
-                        DrawText( TextFormat( ItensMenuPrincipal( i ) )  , CentraTextoX( ItensMenuPrincipal( i ) , FONT_SIZE ) , ALTURA_ITEM_0 + i * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_COMUM  );
+//                for( int i = 0 ; i < QTD_OPCOES ; i++)
+                for( int i = 0 ; i < 7 ; i++)
+//                        DrawText( TextFormat( ItensMenuPrincipal( i ) )  , CentraTextoX( ItensMenuPrincipal( i ) , FONT_SIZE ) , ALTURA_ITEM_0 + i * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_COMUM  );
+                        DrawText( TextFormat( ItensMenuPrincipal( i ) )  , CentraTextoX( ItensMenuPrincipal( i ) , 30 ) , GetScreenWidth() / 4 + i * 30 * 1.5 , 30 , COR_MENU_COMUM  );
 
                 // Desenha o item em foco em cor de selecao
-                DrawText( TextFormat( ItensMenuPrincipal( selecao ) ) , CentraTextoX( ItensMenuPrincipal( selecao ) , FONT_SIZE ) , ALTURA_ITEM_0 + selecao * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_SELECAO  );
+//                DrawText( TextFormat( ItensMenuPrincipal( selecao ) ) , CentraTextoX( ItensMenuPrincipal( selecao ) , FONT_SIZE ) , ALTURA_ITEM_0 + selecao * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_SELECAO  );
+                DrawText( TextFormat( ItensMenuPrincipal( selecao ) ) , CentraTextoX( ItensMenuPrincipal( selecao ) , 30 ) , GetScreenWidth() / 4 + selecao * 30 * 1.5 , 30 , COR_MENU_SELECAO  );
         }
         EndDrawing();
 }
@@ -76,30 +78,30 @@ void DesenhaMenuDificuldade( JOGO *jogo , int selecao )
 
 //        Vector2 pos = (Vector2 ){ 0 , 0 };
 
-        {
-                BeginDrawing();
 
-                        //Desenhar Plano de Fundo
-                        ClearBackground( BLUE );
+        BeginDrawing();
+
+                //Desenhar Plano de Fundo
+                ClearBackground( BLUE );
 //                        DrawTexturePro( jogo->Res.TelaDeFundo , imagem , jogo->tela  , pos , 0 , WHITE );
 
-                        DrawText( ItensMenuDificuldade( 5 ) , CentraTextoX( ItensMenuDificuldade( 5 ) , FONT_SIZE_M1 ) , ALTURA_ITEM_0 - 70 , FONT_SIZE_M1 , WHITE);
-                        DrawText( ItensMenuDificuldade( 6 ) , CentraTextoX( ItensMenuDificuldade( 6 ) , FONT_SIZE_M2 ) , GetScreenHeight() - 30 , FONT_SIZE_M2 , WHITE);
+                DrawText( ItensMenuDificuldade( 5 ) , CentraTextoX( ItensMenuDificuldade( 5 ) , FONT_SIZE_M1 ) , ALTURA_ITEM_0 - 70 , FONT_SIZE_M1 , WHITE);
+                DrawText( ItensMenuDificuldade( 6 ) , CentraTextoX( ItensMenuDificuldade( 6 ) , FONT_SIZE_M2 ) , GetScreenHeight() - 30 , FONT_SIZE_M2 , WHITE);
 
-                        //Itens Não Selecionados
-                        for( i = 0 ; i < QTD_OPCOES - 1 ; i++)
-                                DrawText( TextFormat( ItensMenuDificuldade( i ) )  , CentraTextoX( ItensMenuDificuldade( i ) , FONT_SIZE ) , ALTURA_ITEM_0 + i * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_COMUM  );
+                //Itens Não Selecionados
+                for( i = 0 ; i < QTD_OPCOES - 1 ; i++)
+                        DrawText( TextFormat( ItensMenuDificuldade( i ) )  , CentraTextoX( ItensMenuDificuldade( i ) , FONT_SIZE ) , ALTURA_ITEM_0 + i * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_COMUM  );
 
-                        DrawText( ItensMenuDificuldade( VOLTAR ) , CentraTextoX( ItensMenuDificuldade( VOLTAR) , FONT_SIZE) , ALTURA_ITEM_VOLTAR , FONT_SIZE , COR_MENU_COMUM);
+                DrawText( ItensMenuDificuldade( VOLTAR ) , CentraTextoX( ItensMenuDificuldade( VOLTAR) , FONT_SIZE) , ALTURA_ITEM_VOLTAR , FONT_SIZE , COR_MENU_COMUM);
 
-                        //Item Selecionado
-                        if( selecao != VOLTAR)
-                                DrawText( ItensMenuDificuldade( selecao ) , CentraTextoX( ItensMenuDificuldade( selecao) , FONT_SIZE) , ALTURA_ITEM_0 + selecao * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_SELECAO);
-                        else
-                                DrawText( ItensMenuDificuldade( selecao ) , CentraTextoX( ItensMenuDificuldade( selecao) , FONT_SIZE) , ALTURA_ITEM_VOLTAR , FONT_SIZE , COR_MENU_SELECAO);
+                //Item Selecionado
+                if( selecao != VOLTAR)
+                        DrawText( ItensMenuDificuldade( selecao ) , CentraTextoX( ItensMenuDificuldade( selecao) , FONT_SIZE) , ALTURA_ITEM_0 + selecao * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_SELECAO);
+                else
+                        DrawText( ItensMenuDificuldade( selecao ) , CentraTextoX( ItensMenuDificuldade( selecao) , FONT_SIZE) , ALTURA_ITEM_VOLTAR , FONT_SIZE , COR_MENU_SELECAO);
 
-                EndDrawing();
-        }
+        EndDrawing();
+
 
 }
 //##############################################################################
@@ -213,21 +215,22 @@ void DesenhaSobre( JOGO jogo)
 
         int ESPY = 18 , ESPX = 25;
 
+        do{
+                BeginDrawing();
 
-        BeginDrawing();
+                        DrawTexture( jogo.Res.TelaDeFundo , 1 , 1 , WHITE );
+                        NomeWolfenEntrada( &jogo , ITENS_MAIN_MENU - 1 );
+                        DrawTextureEx(  jogo.Res.FundoConfirmarSair , (Vector2 ){ Janela.x , Janela.y } , 0 , escala , WHITE );
 
-                DrawTexture( jogo.Res.TelaDeFundo , 1 , 1 , WHITE );
-                NomeWolfenEntrada( &jogo , ITENS_MAIN_MENU - 1 );
-                DrawTextureEx(  jogo.Res.FundoConfirmarSair , (Vector2 ){ Janela.x , Janela.y } , 0 , escala , WHITE );
+                        DrawTextEx( jogo.Res.fonteWolfen ,    "WOLFENSTEIN 1.0" , (Vector2 ){ Janela.x + ESPX , Janela.y + ESPY } , fonte , 3 , WHITE );
+                        DrawText(TextFormat("Escrito por : ") , Janela.x + 2 * ESPX ,  Janela.y + 3 * ESPY , fonte , WHITE );
+                        DrawText("-Manoel Narciso Filho" , Janela.x + 3 * ESPX ,  Janela.y + 5 * ESPY , fonte , WHITE );
+                        DrawText("-Matheus De Moraes Costa" , Janela.x + 3 * ESPX ,  Janela.y + 7 * ESPY , fonte , WHITE );
+                        DrawText("BRASIL 2021" , Janela.x + ( Janela.width - MeasureText( "BRASIL 2021" , fonte ) ) / 2 , Janela.y + Janela.height - 85 , fonte , WHITE );
+                        DrawText("VOLTAR" , Janela.x + ( Janela.width - MeasureText( "VOLTAR" , fonte ) ) / 2 , Janela.y + Janela.height - 45 , fonte , GOLD );
 
-                DrawTextEx( jogo.Res.fonteWolfen ,    "WOLFENSTEIN 1.0" , (Vector2 ){ Janela.x + ESPX , Janela.y + ESPY } , fonte , 3 , WHITE );
-                DrawText(TextFormat("Escrito por : ") , Janela.x + 2 * ESPX ,  Janela.y + 3 * ESPY , fonte , WHITE );
-                DrawText("-Manoel Narciso Filho" , Janela.x + 3 * ESPX ,  Janela.y + 5 * ESPY , fonte , WHITE );
-                DrawText("-Matheus De Moraes Costa" , Janela.x + 3 * ESPX ,  Janela.y + 7 * ESPY , fonte , WHITE );
-                DrawText("BRASIL 2021" , Janela.x + ( Janela.width - MeasureText( "BRASIL 2021" , fonte ) ) / 2 , Janela.y + Janela.height - 85 , fonte , WHITE );
-                DrawText("VOLTAR" , Janela.x + ( Janela.width - MeasureText( "VOLTAR" , fonte ) ) / 2 , Janela.y + Janela.height - 45 , fonte , GOLD );
-
-        EndDrawing();
+                EndDrawing();
+        }while( !IsKeyPressed( KEY_ENTER ) );
 
 
 }

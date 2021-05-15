@@ -45,6 +45,7 @@ typedef struct
         Texture2D MenuFundo;          // Imagem do plano de fundo principal
         Texture2D TelaDeFundo;        //Tela de fundo somente cores
         Texture2D FundoConfirmarSair; //Janela de fundo da confirmacao de saida
+        Texture2D Ajuda_Menu;
         Texture2D Logo;               // Imagem de fundo (Logo)
         Texture2D Bala;
         Texture2D Faca;

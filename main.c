@@ -1,6 +1,6 @@
 /**     WOLFENSTEIN
     *     Autores: Manoel Narciso Filho e Matheus De Moraes Costa
-    *     Última Modificação: 21/04/2021 16:36
+    *     2021
     *
     */
 
@@ -29,7 +29,8 @@ int main()
                 if (IsKeyPressed(KEY_ENTER))
                         opcao[ selecaoMenu ]( &jogo) , selecaoMenu = 0;
         }
-//        DesenharObrigado();
+
+        DesenharObrigado();
         CloseWindow();
         return 0;
 }

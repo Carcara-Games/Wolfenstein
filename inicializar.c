@@ -315,6 +315,7 @@ void carregarTexturasFontes( JOGO *jogo )
         jogo->Res.MenuFundo =  LoadTexture("Menu_Imagens/MenuPrincipal.png");   // Imagem do plano de fundo
         jogo->Res.TelaDeFundo =  LoadTexture("Menu_Imagens/FundoLimpo.png");
         jogo->Res.FundoConfirmarSair =    LoadTexture("Menu_Imagens/FundoConfirmarSair.png");
+        jogo->Res.Ajuda_Menu =    LoadTexture("Menu_Imagens/Ajuda.png");
         jogo->Res.Mapa =    LoadTexture("Mapa/Mapa2.png");
         jogo->Res.Portas =    LoadTexture("Mapa/Portas.png");
         jogo->Res.Bala = LoadTexture("Sprites/Bala.png");

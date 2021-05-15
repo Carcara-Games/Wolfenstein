@@ -72,24 +72,22 @@ void Configurar( JOGO *jogo)
 
 void Ajuda( JOGO *jogo)
 {
-        while( !IsKeyPressed( KEY_A ) )
-        {
+        do{
 
                 BeginDrawing();
-                        ClearBackground( WHITE );
-                        DrawText(" Ajuda " , 300 , 300 , 50 , GREEN );
+                        ClearBackground( BLACK );
+                        DrawTexture( jogo->Res.Ajuda_Menu , jogo->tela.width / 2 - 500 , jogo->tela.height / 2 - 267 , WHITE );
                 EndDrawing();
-        }
+        }while( !IsKeyPressed( KEY_ENTER ) );
 
 }
 
 
 void Sobre( JOGO *jogo)
 {
-        do{
-                DesenhaSobre( *jogo );
 
-        }while( IsKeyPressed( KEY_ENTER ) );
+        DesenhaSobre( *jogo );
+
 }
 
 

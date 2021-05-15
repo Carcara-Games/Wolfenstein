@@ -4,9 +4,9 @@
 /**     Funcao IsGameOver(): Retorn TRUE se jogador recebeu game over
     */
 
-BOOL IsGameOver( JOGO jogo )
+BOOL IsGameOver( JOGO* jogo )
 {
-        if( !jogo.jogador.vidas )
+        if( !jogo->jogador.vidas )
         {
                 return SIM;
         }
@@ -20,15 +20,13 @@ BOOL IsGameOver( JOGO jogo )
 /**     Funcao IsEndGame(): Retorn TRUE se jogador recebeu zerou o jogo
     */
 
-//BOOL IsEndGame( JOGO jogo )
-//{
-//        if( jogo.atualLevel > MAXLEVEL )
-//        {
-//                return SIM;
-//        }
-//        else
-//                return NAO;
-//}
+BOOL IsEndGame( JOGO* jogo )
+{
+        if( jogo->jogador.venceu )
+                return SIM;
+        else
+                return NAO;
+}
 //##############################################################################
 
 

@@ -20,4 +20,9 @@
         void Sobre( JOGO *jogo);
         void Sair( JOGO *jogo);
 
+
+
+        void CriarNovoJogador( JOGO* jogo );
+
+
 #endif // __OPCOESDOMENU_H_

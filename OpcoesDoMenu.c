@@ -6,29 +6,25 @@
 void NovoJOGO( JOGO *jogo )
 {
         int selecaoMenu = 0;
+        static int sair_menuP = 0;
 
         do
         {
                 DesenhaMenuDificuldade( jogo , selecaoMenu );   // Desenha Menu secundário para escolher dificuldade
                 AtualizaMenu( &selecaoMenu , ITENS_NOVO_JOGO );   //Atualiza Menu secundário Novo jogo
 
-                if( selecaoMenu != ITENS_NOVO_JOGO - 1 && IsKeyPressed( KEY_ENTER )  )
-                {
-//                                      CriarNovoJogador();   //  Definir nome do jogador
-//                                                        while( !IsGameOver( jogo ) && !IsEndGame( jogo ) ) //Continua avançando de level a menos que usuário receba game over, zere o jogo ou volte para o menu
+                if( selecaoMenu != ITENS_NOVO_JOGO - 1 && IsKeyPressed( KEY_ENTER )  ){
+                        sair_menuP = 1;
+                        CriarNovoJogador( jogo );   //  Definir nome do jogador
+
+                        while(  !IsGameOver( jogo )  &&  !IsKeyPressed( KEY_HOME )  && !IsEndGame( jogo ) )
                         {
-//                                                                CarregarLevel( &jogo ); //Carrega as fases em sequência. Se Jogador recebe game over, zera ou pede para voltar para o menu ativa as respectivas flags
-//                                                                while( !IsGameOver( jogo )  &&  !IsLevelEnd( jogo )  &&  !IsVoltarMenu( jogo )  )
-                                while(  !IsGameOver( *jogo )  &&  !IsKeyPressed( KEY_HOME ) )
-                                {
-                                        AtualizaLevel( jogo );
-                                        DesenhaLevel( jogo );
-                                }
-//                                jogo->atualLevel++;
+                                AtualizaLevel( jogo );
+                                DesenhaLevel( jogo );
                         }
                 }
         }
-        while( !(selecaoMenu == ITENS_NOVO_JOGO - 1 && IsKeyPressed( KEY_ENTER ) ) );
+        while( !(selecaoMenu == ITENS_NOVO_JOGO - 1 && IsKeyPressed( KEY_ENTER ) )  &&  !sair_menuP);
 }
 
 
@@ -109,4 +105,30 @@ void Sair( JOGO *jogo)
         jogo->FECHAR = SIM;
 }
 
+#include <string.h>
+void CriarNovoJogador( JOGO* jogo ){
+        char msg[ 100 ] = "Seu nome soldado:";
+        char nome[ 100 ] = { 0 };
+        char add[ 2 ] = { '\0' , '\0' };
+        do{
+                BeginDrawing();
+                        ClearBackground( MAROON );
+                        DrawText( msg , CentraTextoX( msg , 35 ) , jogo->tela.height / 2 - 50 , 35 , RAYWHITE );
+                        DrawRectangle( jogo->tela.width / 2 - 255 , jogo->tela.height / 2 , 510 , 50 , BLACK );
+                        DrawRectangle( jogo->tela.width / 2 - 250 , jogo->tela.height / 2 + 5, 500 , 40 , DARKGRAY );
 
+
+                        DrawText( nome , CentraTextoX( nome , 35 ) , jogo->tela.height / 2 + 5 , 35 , RAYWHITE );
+
+                EndDrawing();
+
+                add[ 0 ] = GetCharPressed();
+                strcat( nome , add );
+
+                if( IsKeyPressed( KEY_BACKSPACE )  &&  strlen( nome ) )
+                        nome[ strlen( nome ) - 1 ] = '\0';
+
+        }while( !IsKeyPressed( KEY_ENTER ) );
+
+        TextCopy( jogo->jogador.nome , nome );
+}

@@ -47,8 +47,7 @@ void AtualizaLevel(JOGO *jogo)
         AtualizaDanoInimigo( jogo );
 
 
-        if( IsKeyPressed( KEY_P ) )
-                Pause( jogo , 0 );
+        if( IsKeyPressed( KEY_P ) ) Pause( jogo , 0 );
 
 
         GeraInimigos( jogo );
@@ -1541,6 +1540,8 @@ void Pause( JOGO *jogo , int tipo ){
  */
 
 void AtualizaLevelAtual( JOGO *jogo ){
+        static int tempo_para_vencer = FPS * 10;
+        static int ativar_vitoria = 0;
 
 
         if( !jogo->jogador.atualLevel ){
@@ -1557,7 +1558,20 @@ void AtualizaLevelAtual( JOGO *jogo ){
                                         ExibirLevel2( jogo );
                                 }
 
+        if( jogo->jogador.atualLevel == 2 )
+                if( jogo->atualSala ==  15 ){
+                        ativar_vitoria = 1;
+                }
 
+        if( ativar_vitoria ){
+                tempo_para_vencer--;
+        }
+        if( !tempo_para_vencer ){
+                jogo->jogador.pontos += 500;
+                ExibirVitoria( jogo );
+                jogo->jogador.venceu = 1;
+
+        }
 
 }
 
@@ -1621,7 +1635,7 @@ void ExibirLevel1( JOGO *jogo ){
 
         TEXTO_COMPLETO_1:
         while( !IsKeyPressed( KEY_ENTER ) )
-                pausa( 1 );
+                pausa( 2 );
 }
 
 
@@ -1671,6 +1685,87 @@ void ExibirLevel2( JOGO *jogo ){
                         for ( k =  3000 * FPS  ; k ; k-- );
 
                         EndDrawing();
+
+                        if( IsKeyPressed( KEY_ENTER ) )
+                                goto TEXTO_COMPLETO_2;
+
+                }
+        TEXTO_COMPLETO_2:
+        while( !IsKeyPressed( KEY_ENTER ) )
+                pausa( 1 );
+}
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+void ExibirVitoria( JOGO *jogo ){
+        int i , j;
+
+        char msg[][200] = {
+                "Parabéns!!!!!!!!!!!!! ...",
+                "",
+                "",
+                "",
+                "       Voce conseguiu invadir uma fortaleza nazista e salvar",
+                "todas essa pessoas! Nunca duvidei de voce, guerreiro... ",
+                "",
+                "",
+                "",
+                "",
+                "                             Ate a proxima...                      ",
+                "",
+                "",
+        };
+
+
+        int x , y , k;
+
+        for( i = 0 ; i < 13 ; i++ )
+                for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
+                        BeginDrawing();
+                                ClearBackground( BLACK );
+                                DrawTextEx( jogo->Res.fonteWolfen2 , "VITORIA" , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen2 , "VITORIA" , 40 , 3 ) , 20 } , 40 , 3 , GREEN );
+
+                                for( y = 0 ; y < i ; y++ )
+                                        DrawText( msg[ y ] , 27 , 100 + 35 * y , 30 , WHITE );
+
+                                for( x = 0 ; x <= j ; x++ )
+                                        DrawText( TextFormat("%c" , msg[ i ][ x ] ) , 27 + 19 * x , 100 + 35 * i , 30 , WHITE );
+
+                        for ( k =  3000 * FPS  ; k ; k-- );
+
+                        EndDrawing();
                 }
         pausa( 7 );
 }
+
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+//void AtualizaRefens( JOGO* jogo ){
+//        for( int i = 0 ; i < QTD_REFENS ; i++){
+//                float distV = jogo->jogador.PosMundo.y - jogo->spriteDef.refens[ i ].posMundo.y;
+//                float distH = jogo->jogador.PosMundo.x - jogo->spriteDef.refens[ i ].posMundo.x;
+//
+//                if( distH > distV ){
+//                         jogo->spriteDef.refens[ i ].posMundo.x += PASSO * 0.9 *sinalNumero( distH );
+//                }else{
+//                        jogo->spriteDef.refens[ i ].posMundo.y += PASSO * 0.9 *sinalNumero( distV );
+//                }
+//
+//                 jogo->spriteDef.refens[ i ].posTela.x = ( jogo->spriteDef.refens[ i ].posMundo.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x;
+//                 jogo->spriteDef.refens[ i ].posTela.y = ( jogo->spriteDef.refens[ i ].posMundo.y - jogo->MapaDesenho.y ) * jogo->escalaGeral.y;
+//        }
+//
+//}

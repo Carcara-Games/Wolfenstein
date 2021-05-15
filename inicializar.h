@@ -22,6 +22,8 @@
 
         void carregarTexturasFontes( JOGO *jogo );
         void carregarSpritesPersonagem( JOGO *jogo );
+
+        void CriarRefens( JOGO* jogo );
 //#################################################################################################
 
         /// Inicializar NovoJogo

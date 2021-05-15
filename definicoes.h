@@ -139,7 +139,7 @@
         #define MAX_ITENS_MUNDO 300
         #define TIPOS_ITEMS 3
         #define DIST_COLETAR_ITEMS 5
-        #define QTD_MUNICAO_DROP  25
+        #define QTD_MUNICAO_DROP  15
 
         ///ENERGIA
         #define ENERGIA_TOTAL 200
@@ -195,5 +195,7 @@
         #define VIDAS_Y 129
         #define VIDAS_FONT_S 25
 
+        /// REFENS
+        #define QTD_REFENS 15
 
 #endif // __DEFINICOES_H_

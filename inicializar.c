@@ -49,7 +49,6 @@ void IniciarJanela( void )
 
 
 
-
         /// Retorno
         return pre_jogo;
  }
@@ -114,6 +113,7 @@ void IniciaNovoJogo( JOGO *jogo )
         jogo->faca.disponivel = 1;
         jogo->faca.ativo = false;
         jogo->faca.flag_colisao = 0;
+        jogo->jogador.venceu = 0;
 
         /// Municao
         jogo->jogador.municao[ 0 ] = 25;
@@ -315,7 +315,7 @@ void carregarTexturasFontes( JOGO *jogo )
         jogo->Res.MenuFundo =  LoadTexture("Menu_Imagens/MenuPrincipal.png");   // Imagem do plano de fundo
         jogo->Res.TelaDeFundo =  LoadTexture("Menu_Imagens/FundoLimpo.png");
         jogo->Res.FundoConfirmarSair =    LoadTexture("Menu_Imagens/FundoConfirmarSair.png");
-        jogo->Res.Mapa =    LoadTexture("Mapa/Mapa.png");
+        jogo->Res.Mapa =    LoadTexture("Mapa/Mapa2.png");
         jogo->Res.Portas =    LoadTexture("Mapa/Portas.png");
         jogo->Res.Bala = LoadTexture("Sprites/Bala.png");
         jogo->Res.Faca = LoadTexture("Sprites/faca.png");
@@ -641,7 +641,7 @@ void CriaPortas( JOGO *jogo)
                 {  1 /*p1*/ , 0/*p2*/ },      //sala05
                 {  1 /*p1*/ , 1/*p2*/ , 0/*p3*/ },      //sala06
                 {  1 /*p1*/ },      //sala07
-                {  1 /*p1*/ , 0/*p2*/ , 0/*p3*/ },      //sala08
+                {  1 /*p1*/ , 1/*p2*/ , 0/*p3*/ },      //sala08
                 {  1 /*p1*/ },      //sala09
                 {  1 /*p1*/ , 0/*p2*/ , 0/*p3*/ },      //sala10
                 {  1 /*p1*/ , 1/*p2*/ , 1/*p3*/ },      //sala11
@@ -931,7 +931,7 @@ void CriaSpawns(JOGO *jogo)
      };
 
         int tipo[QTDSALAS][ MAX_SPAWN_SALAS ] = {
-                {  1 /*s1*/ , 0/*s2*/ , 0 /*s3*/ , 0/*s4*/ , 0/*s5*/  },     //sala00
+                {  0 /*s1*/ , 0/*s2*/ , 0 /*s3*/ , 0/*s4*/ , 0/*s5*/  },     //sala00
                 {  /*NENHUM*/ },      //sala01
                 {  1 /*s1*/ , 0/*s2*/ },      //sala02
                 {  /*NENHUM*/ },      //sala03
@@ -939,12 +939,12 @@ void CriaSpawns(JOGO *jogo)
                 {  0 /*s1*/ , 0/*s2*/ },      //sala05
                 {  0 /*s1*/ , 0/*s2*/ , 1/*p3*/ },      //sala06
                 {  /*NENHUM*/ },      //sala07
-                {  1 /*s1*/ , 2/*s2*/ , 0/*p3*/ },      //sala08
+                {  1 /*s1*/ , 1/*s2*/ , 0/*p3*/ },      //sala08
                 {  /*NENHUM*/ },      //sala09
-                {  0 /*s1*/ , 1/*s2*/ , 0 /*s3*/ , 1/*s4*/ , 0/*s5*/ , 2/*s6*/ , 2/*s7*/ },      //sala10
+                {  0 /*s1*/ , 1/*s2*/ , 0 /*s3*/ , 1/*s4*/ , 0/*s5*/ , 1/*s6*/ , 1/*s7*/ },      //sala10
                 { /*NENHUM*/  },      //sala11
                 {  0 /*s1*/ , 0/*s2*/ , 0 /*s3*/ , 0/*s4*/ },      //sala12
-                {  1 /*s1*/ , 2 /*s1*/ },      //sala13
+                {  1 /*s1*/ , 1 /*s1*/ },      //sala13
                 {  /*NENHUM*/  },      //sala14
                 { /*NENHUM*/ }      //sala15
 
@@ -1282,8 +1282,25 @@ void spriteT0( JOGO *jogo ){
 
 
 
-
-
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+//void CriarRefens( JOGO* jogo ){
+//
+//        jogo->spriteDef.refens_ativos = 0;
+//        for( int i = 0 ; i < QTD_REFENS ; i++ ){
+//                jogo->spriteDef.refens[ i ].posMundo = (Vector2){ 100 , 100 };
+//                jogo->spriteDef.refens[ i ].tipo = nmrRand( 1 , 7 );
+//        }
+//
+//
+//
+//}
+//
 
 
 

@@ -64,6 +64,7 @@
 
         void AtualizaFacaColisao( JOGO *jogo );
 
-
+        void AtualizaRefens( JOGO* jogo );
+        void ExibirVitoria( JOGO *jogo );
 
 #endif // __LOGICAJOGO_H_

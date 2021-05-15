@@ -4,8 +4,8 @@
         #include "estruturascomplexas.h"
         #include "definicoes.h"
 
-        BOOL IsGameOver( JOGO jogo );
-        BOOL IsEndGame( JOGO jogo );
+        BOOL IsGameOver( JOGO* jogo );
+        BOOL IsEndGame( JOGO* jogo );
         BOOL IsVoltarMenu( JOGO jogo );
         BOOL IsLevelEnd( JOGO jogo );
         BOOL TestaLimVizual( JOGO jogo );

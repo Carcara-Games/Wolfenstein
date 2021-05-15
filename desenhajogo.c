@@ -26,6 +26,7 @@ void DesenhaLevel(JOGO *jogo)
 
         DesenhaHUD( jogo );
 
+
         EndDrawing();
 
         if (jogo->PASSAGEM)
@@ -421,3 +422,44 @@ void DesenhaHUD( JOGO *jogo ){
         // Vidas
         DrawText( TextFormat("%d" , jogo->jogador.vidas ) , VIDAS_X , VIDAS_Y , VIDAS_FONT_S , RED );
 }
+
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+//void DesenhaRefens( JOGO* jogo ){
+//        Color cor;
+//
+//        for( int i = 0 ; i < QTD_REFENS ; i++ )
+//                if( CheckCollisionPointRec( jogo->spriteDef.refens[ i ].posMundo , jogo->MapaDesenho ) ){
+//                        switch( jogo->spriteDef.refens[ i ].tipo ){
+//                                case 1:
+//                                        cor = BLUE;
+//                                        break;
+//                                case 2:
+//                                        cor = GREEN;
+//                                        break;
+//                                case 3:
+//                                        cor = PURPLE;//                                        break;
+//                                case 4:
+//                                        cor = PINK;//                                        break;
+//                                case 5:
+//                                        cor = DARKBLUE;
+//                                        break;
+//                                case 6:
+//                                        cor = DARKBROWN;
+//                                        break;
+//                                case 7:
+//                                        cor = VIOLET;
+//                                        break;
+//                        }
+//
+//                        DrawRectangleV( jogo->spriteDef.refens[ i ].posTela , (Vector2){ 30 , 30 } , cor );
+//                        DrawRectangleV( jogo->spriteDef.refens[ i ].posTela , (Vector2){ 30 , 30 } , BLUE );
+//                }
+//}

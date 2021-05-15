@@ -22,7 +22,7 @@
         void DesenhaSpawns( JOGO *jogo);
         void DesenhaHUD( JOGO *jogo );
 
-
+        void DesenhaRefens( JOGO* jogo );
 
 
 #endif // __DESENHAJOGO_H_

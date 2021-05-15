@@ -51,6 +51,7 @@ typedef struct
         Texture2D Hud_SCE;     //  HUD
         Texture2D coracao;
         Texture2D ItemMapa;     // Item dropada do level 1 para o 2
+        Texture2D spriteRefens;
         Font fonteWolfen;             // Fonte Estilizada Wolfenstein
         Font fonteWolfen2;            // Fonte Estilizada Wolfenstein 2
 
@@ -194,7 +195,7 @@ typedef struct
         int porta_a_ser_liberada;     // O numero da porta que sera destrancada depois de qtd_abatidos atingir qtd_inimigos_liberar
 
         int max_ativos; //Maximo de inimigos ativos na sala. A ser definido pela dificuldade do jogo
-        Inim inimigos[ QTD_MAX_T1_SALA ];   // O array com os inimigos da sala
+        Inim inimigos[ QTD_MAX_T1_SALA ];   // O array com os inimigos da
 } Sala;
 typedef struct
 {
@@ -225,6 +226,7 @@ typedef struct
         int atualStatus;
         int atualMovTipo;
         int atualLevel;
+        BOOL venceu;
 
         int latencia;
 
@@ -271,6 +273,7 @@ typedef struct
         bool disponivel : 1;
 
 } Faca;
+
 
 
 
@@ -367,3 +370,8 @@ typedef struct //Um retangulo definido pelos limites
         float sup;
 } RecLim;
 */
+/*typedef struct{
+        Vector2 posMundo;
+        Vector2 posTela;
+        int tipo;
+}REFEM;*/

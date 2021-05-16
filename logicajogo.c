@@ -326,7 +326,7 @@ void AtualizaMira(JOGO *jogo)
         //        difY =
         //        const int tanangulo = ( 180 / PI ) * tan( jogo->jogador.Rotac );
 
-        jogo->jogador.Rotac = (180 / PI) * atan2((GetMouseY() - jogo->jogador.PosTela.y), (GetMouseX() - jogo->jogador.PosTela.x));
+        jogo->jogador.Rotac = (180 / PI) * atan2((GetMouseY() - jogo->jogador.PosTela.y), (GetMouseX() - jogo->jogador.PosTela.x)) - 6;
         //        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y - deltaY[ arm ] ) ,  ( GetMouseX() - jogo->jogador.PosTela.x - deltaX[ arm ] ) ) - delta[ arm ];
         //        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y + deltaY[ arm ] ) ,  ( GetMouseX() - jogo->jogador.PosTela.x + deltaX[ arm ] ) );
         //        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y + deltaY[ arm ] * tanangulo ) ,  ( GetMouseX() - jogo->jogador.PosTela.x + deltaX[ arm ] * tanangulo ) ) - delta[ arm ] ;
@@ -346,6 +346,10 @@ void AtualizaMapa(JOGO *jogo)
 
         //        if( novoy > jogo->salas[ jogo->atualSala ].limSup  &&  novoy < jogo->salas[ jogo->atualSala ].limInf )
         jogo->MapaDesenho.y = novoy;
+
+        // atualizacao da faca em relacao a posicao do mapa
+        jogo->faca.posTela.x = (jogo->faca.pos.x - jogo->MapaDesenho.x) * (jogo->tela.width / PIXEL_LARGURA_MAPA);
+        jogo->faca.posTela.y = (jogo->faca.pos.y - jogo->MapaDesenho.y) * (jogo->tela.height / PIXEL_ALTURA_MAPA);
 }
 //##############################################################################
 
@@ -1116,7 +1120,8 @@ Vector2 AtualizaPosTela( JOGO *jogo , Vector2 posMundo ){
 
 void GeraInimigos( JOGO *jogo ){
         static int espera = 2;
-        int qtdAtual = jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados;
+        int qtdAtual = jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados;
+
 
 
         if( qtdAtual  <  jogo->salas[ jogo->atualSala ].qtd_inimigos_liberar ){
@@ -1305,7 +1310,7 @@ void AtualizaTirosJogador( JOGO *jogo ){
                         jogo->tirosJog[ jogo->qtd_tirosJog ].pos.x = jogo->jogador.PosMundo.x;
                         jogo->tirosJog[ jogo->qtd_tirosJog ].pos.y = jogo->jogador.PosMundo.y;
                         jogo->tirosJog[ jogo->qtd_tirosJog ].speed = 5;
-                        jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac = jogo->jogador.Rotac * PI / 180;
+                        jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac = jogo->jogador.Rotac * PI / 180 ;
                         jogo->tirosJog[ jogo->qtd_tirosJog ].ativo = 1;
                         jogo->tirosJog[ jogo->qtd_tirosJog ].direcao.x = cos(jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac);
                         jogo->tirosJog[ jogo->qtd_tirosJog ].direcao.y = sin(jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac);
@@ -1438,6 +1443,9 @@ void AtualizaFaca(JOGO *jogo)
                                         6 * jogo->tela.height / PIXEL_ALTURA_MAPA};
 
         jogo->faca.distancia = sqrt(pow(jogo->faca.pos.x - jogo->faca.posInicial.x, 2) + pow(jogo->faca.pos.y - jogo->faca.posInicial.y, 2));
+       
+       // jogo->faca.posTela.x = (jogo->faca.pos.x - jogo->MapaDesenho.x) * (jogo->tela.width / PIXEL_LARGURA_MAPA);
+      //  jogo->faca.posTela.y = (jogo->faca.pos.y - jogo->MapaDesenho.y) * (jogo->tela.height / PIXEL_ALTURA_MAPA);
 
         if (jogo->faca.distancia < 60  &&  !jogo->faca.flag_colisao)
         {
@@ -1447,6 +1455,8 @@ void AtualizaFaca(JOGO *jogo)
                 jogo->faca.pos.x += jogo->faca.nx;
                 jogo->faca.pos.y += jogo->faca.ny;
                 jogo->faca.Rotac += jogo->faca.speed * 10;
+
+                
         }
         else
         {
@@ -1458,8 +1468,7 @@ void AtualizaFaca(JOGO *jogo)
                 }
         }
 
-        jogo->faca.posTela.x = (jogo->faca.pos.x - jogo->MapaDesenho.x) * (jogo->tela.width / PIXEL_LARGURA_MAPA);
-        jogo->faca.posTela.y = (jogo->faca.pos.y - jogo->MapaDesenho.y) * (jogo->tela.height / PIXEL_ALTURA_MAPA);
+        
 
 }
 

@@ -4,24 +4,25 @@
 #include "fisica.h"
 #include <math.h>
 
+
+
 /**     Funcao AtualizaLevel(): Atualiza os dados do level atual
     */
 void AtualizaLevel(JOGO *jogo)
 {
         AtualizaLevelAtual( jogo );
-
+//
         AtualizaMira(jogo);
-        //        AtualizaArma( &jogo );
+//        //        AtualizaArma( &jogo );
         AtualizaFaca(jogo);
         AtualizaFacaColisao(jogo);
         AtualizaTirosJogador( jogo );
         AtualizaColisaoTirosJogador( jogo );
-        //        AtualizaRecarga( &jogo );
-
+//        //        AtualizaRecarga( &jogo );
         AtualizaPosicao(jogo);
         AtualizaMapa(jogo);
 
-        //        AtualizaSrcPer( jogo );
+//        //        AtualizaSrcPer( jogo );
         AtualizaSrcPes(jogo);
         AtualizaOrigin(jogo);
         AtualizaOriginPes(jogo);
@@ -35,7 +36,6 @@ void AtualizaLevel(JOGO *jogo)
         AtualizaFrameJogador( jogo );
         AtualizaFramePes( jogo );
         AtualizaFrameT1( jogo );
-//        AtualizaFrameT0( jogo );
 
         AtualizaObjetos( jogo );
 
@@ -52,6 +52,10 @@ void AtualizaLevel(JOGO *jogo)
 
         GeraInimigos( jogo );
 
+        if( jogo->jogador.atualLevel == 1 )
+                UpdateMusicStream( jogo->Res.musica_missao_impo );
+        if( jogo->jogador.atualLevel == 2 )
+                UpdateMusicStream( jogo->Res.musica_missao_impo );
 
 }
 //##############################################################################
@@ -84,6 +88,7 @@ void abrirBaus( JOGO *jogo ){
                                 if( IsKeyPressed( KEY_E ) ){
                                         jogo->salas[ jogo->atualSala ].baus[ i ].ABERTO = 1;
 
+
                                         for( j = 0 ; j < jogo->salas[ jogo->atualSala ].baus[ i ].QtdItens ; j++ ){
                                                 jogo->items[ jogo->qtd_items_liberados ].recolhido =  NAO;
 //                                                jogo->items[ jogo->qtd_items_liberados ].posMundo.x =  jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.x + jogo->salas[ jogo->atualSala ].baus[ i ].posMapa.width / 2 + (DIST_DROP + j * DELTA_DIST_DROP ) * sin( jogo->salas[ jogo->atualSala ].baus[ i ].Rotac * ( PI / 180 ) );
@@ -113,6 +118,8 @@ void abrirBaus( JOGO *jogo ){
 
                                         jogo->salas[ jogo->atualSala ].baus[ i ].ABERTO = 1;
                                         jogo->salas[ jogo->atualSala ].baus[ i ].imagem = jogo->Res.BauAberto;
+
+                                        PlaySound( LoadSound("Som/bauwa.ogg") );
                                 }
 
 
@@ -179,12 +186,13 @@ void AtualizaPosicao(JOGO *jogo)
         int status = 0;
         int ang;                         // Desvio entre a fronte do jogador e o sentido de deslocamento
         const int tol = TOL_MOV_LATERAL; // Tolerancia angular para se considerar o movimento como lateral
+        static int delay_passos = 10;
 
         //Velocidade - Se usuario pressionar ctrl a velocidade aumenta
         float passo = PASSO;
 
         if( jogo->jogador.energia ){
-                if ( IsKeyDown( KEY_LEFT_CONTROL ) ){
+                if ( IsKeyDown( KEY_SPACE ) ){
                         passo = PASSO_CORRENDO;
                         movimentoTipo = 2;
                         jogo->jogador.energia--;
@@ -242,6 +250,16 @@ void AtualizaPosicao(JOGO *jogo)
         }
 
         // Atribuicao
+        if( modVector( desloc ) ){
+                if( !delay_passos ){
+                        PlaySound( jogo->Res.passos );
+                        delay_passos = 20;
+                }else
+                        delay_passos--;
+        }else{
+                        delay_passos = 20;
+        }
+
         jogo->jogador.PosMundo = SomaVectores(jogo->jogador.PosMundo, desloc);
         jogo->jogador.atualStatus = status;
         jogo->jogador.atualMovTipo = movimentoTipo;
@@ -326,7 +344,7 @@ void AtualizaMira(JOGO *jogo)
         //        difY =
         //        const int tanangulo = ( 180 / PI ) * tan( jogo->jogador.Rotac );
 
-        jogo->jogador.Rotac = (180 / PI) * atan2((GetMouseY() - jogo->jogador.PosTela.y), (GetMouseX() - jogo->jogador.PosTela.x)) - 6;
+        jogo->jogador.Rotac = (180 / PI) * atan2((GetMouseY() - jogo->jogador.PosTela.y), (GetMouseX() - jogo->jogador.PosTela.x));
         //        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y - deltaY[ arm ] ) ,  ( GetMouseX() - jogo->jogador.PosTela.x - deltaX[ arm ] ) ) - delta[ arm ];
         //        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y + deltaY[ arm ] ) ,  ( GetMouseX() - jogo->jogador.PosTela.x + deltaX[ arm ] ) );
         //        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y + deltaY[ arm ] * tanangulo ) ,  ( GetMouseX() - jogo->jogador.PosTela.x + deltaX[ arm ] * tanangulo ) ) - delta[ arm ] ;
@@ -346,10 +364,6 @@ void AtualizaMapa(JOGO *jogo)
 
         //        if( novoy > jogo->salas[ jogo->atualSala ].limSup  &&  novoy < jogo->salas[ jogo->atualSala ].limInf )
         jogo->MapaDesenho.y = novoy;
-
-        // atualizacao da faca em relacao a posicao do mapa
-        jogo->faca.posTela.x = (jogo->faca.pos.x - jogo->MapaDesenho.x) * (jogo->tela.width / PIXEL_LARGURA_MAPA);
-        jogo->faca.posTela.y = (jogo->faca.pos.y - jogo->MapaDesenho.y) * (jogo->tela.height / PIXEL_ALTURA_MAPA);
 }
 //##############################################################################
 
@@ -385,6 +399,13 @@ void EntraEmPortas(JOGO *jogo)
                 jogo->jogador.PosMundo.y = jogo->salas[jogo->atualSala].portas[porta].pos.y + addY;
                 jogo->atualSala = jogo->salas[jogo->atualSala].portas[porta].alteraPSala;
                 jogo->PASSAGEM = 1;
+
+                if( jogo->jogador.atualLevel == 1 )
+                        UpdateMusicStream( jogo->Res.musica_missao_impo );
+                if( jogo->jogador.atualLevel == 2 )
+                        UpdateMusicStream( jogo->Res.musica_final );
+
+                jogo->faca.disponivel = 1;
         }
         else
                 jogo->PASSAGEM = 0;
@@ -553,6 +574,7 @@ void AtualizaAtirar(JOGO *jogo)
                         if( jogo->jogador.municao[ 0 ] ){
                                 jogo->jogador.atualStatus = 2;
                                 jogo->jogador.municao[ 0 ]--;
+                                PlaySound( jogo->Res.tiro );
                         }
                 }
 
@@ -889,9 +911,6 @@ Vector2 T1Perseguicao( JOGO *jogo , Vector2 posAtual , Vector2 alvo , int tipo )
         passo.x = jogo->infoIniT.vel[ tipo ] * sinalNumero( alvo.x - posAtual.x );
         passo.y = jogo->infoIniT.vel[ tipo ] * sinalNumero( alvo.y - posAtual.y );
 
-        // Correcao flick
-//        if( passox  >  CONSTANTE_ANITFLICK * passoy ) passoy = 0;
-
 
         // Correcao movimento diagonal
         if( passo.x  &&  passo.y ){
@@ -975,6 +994,23 @@ Vector2 T1Perseguicao( JOGO *jogo , Vector2 posAtual , Vector2 alvo , int tipo )
 
         /// Posicao Final
         posFinal = SomaVectores( posAtual , passo );
+
+        /// Correcao do flick
+//        if( alvo.x - posFinal.x  >  CONSTANTE_ANITFLICK * ( alvo.y - posFinal.y ) )
+//                if( alvo.y - posFinal.y < 20 )
+//                        posFinal.y = posAtual.y;
+//
+//        if( alvo.y - posFinal.y  >  CONSTANTE_ANITFLICK * ( alvo.x - posFinal.x ) )
+//                if( alvo.x - posFinal.x < 20 )
+//                        posFinal.x = posAtual.x;
+        if( alvo.x - posFinal.x  < 20 )
+                if( alvo.y - posFinal.y > 20 )
+                        posFinal.x = posAtual.x;
+
+        if( alvo.y - posFinal.y  < 20 )
+                if( alvo.x - posFinal.x > 20 )
+                        posFinal.y = posAtual.y;
+
 
         return posFinal;
 }
@@ -1120,8 +1156,7 @@ Vector2 AtualizaPosTela( JOGO *jogo , Vector2 posMundo ){
 
 void GeraInimigos( JOGO *jogo ){
         static int espera = 2;
-        int qtdAtual = jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados;
-
+        int qtdAtual = jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados;
 
 
         if( qtdAtual  <  jogo->salas[ jogo->atualSala ].qtd_inimigos_liberar ){
@@ -1310,7 +1345,7 @@ void AtualizaTirosJogador( JOGO *jogo ){
                         jogo->tirosJog[ jogo->qtd_tirosJog ].pos.x = jogo->jogador.PosMundo.x;
                         jogo->tirosJog[ jogo->qtd_tirosJog ].pos.y = jogo->jogador.PosMundo.y;
                         jogo->tirosJog[ jogo->qtd_tirosJog ].speed = 5;
-                        jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac = jogo->jogador.Rotac * PI / 180 ;
+                        jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac = jogo->jogador.Rotac * PI / 180;
                         jogo->tirosJog[ jogo->qtd_tirosJog ].ativo = 1;
                         jogo->tirosJog[ jogo->qtd_tirosJog ].direcao.x = cos(jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac);
                         jogo->tirosJog[ jogo->qtd_tirosJog ].direcao.y = sin(jogo->tirosJog[ jogo->qtd_tirosJog ].Rotac);
@@ -1394,21 +1429,25 @@ void AtualizaColisaoTirosJogador( JOGO *jogo ){
 void AtualizaFacaColisao( JOGO *jogo ){
         int i ;
 
-        if( jogo->faca.ativo ){
-                jogo->faca.flag_colisao = 1;
+        if( !jogo->faca.disponivel  && jogo->faca.ativo ){
 
+                jogo->faca.flag_colisao = 1;
+                jogo->faca.ativo = 0;
                 for ( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtdZonas ; i++ )
                         if ( CheckCollisionPointRec( jogo->faca.pos , jogo->salas[ jogo->atualSala ].zonas[ i ] ) )
-                                jogo->faca.flag_colisao = 0;
+                                jogo->faca.flag_colisao = 0 , jogo->faca.ativo = 1;
 
-                for ( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados ; i++ )
-                        if ( jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO )
-        //                        if ( CheckCollisionRecs( jogo->faca.hitbox , jogo->salas[ jogo->atualSala ].inimigos[ i ].recMundo ) ){
-                                if ( CheckCollisionRecs( jogo->faca.hitbox , jogo->salas[ jogo->atualSala ].inimigos[ i ].posTela ) ){
-                                        jogo->salas[ jogo->atualSala ].inimigos[ i ].dano = 1;
-                                        jogo->faca.flag_colisao = 1;
-                                }
+                if( jogo->faca.ativo ){
+                        for ( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados ; i++ )
+                                if ( jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO )
+                                        if ( CheckCollisionPointRec( jogo->faca.pos , jogo->salas[ jogo->atualSala ].inimigos[ i ].recMundo ) ){
+                                                jogo->salas[ jogo->atualSala ].inimigos[ i ].dano = 1;
+                                                jogo->faca.ativo = 0;
+                                        }
+                }
+
         }
+
 }
 
 
@@ -1421,56 +1460,45 @@ void AtualizaFacaColisao( JOGO *jogo ){
  *
  */
 
+
 void AtualizaFaca(JOGO *jogo)
 {
-        if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON) && jogo->faca.disponivel == 1)
+        if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)  &&  jogo->faca.disponivel == 1)
         {
                 jogo->faca.pos.x = jogo->jogador.PosMundo.x;
                 jogo->faca.pos.y = jogo->jogador.PosMundo.y;
-                jogo->faca.speed = 3;
+                jogo->faca.speed = 4;
                 jogo->faca.Rotac = jogo->jogador.Rotac * PI / 180;
                 jogo->faca.ativo = 1;
-                jogo->faca.direcao.x = cos(jogo->faca.Rotac);
-                jogo->faca.direcao.y = sin(jogo->faca.Rotac);
+                jogo->faca.direcao.x = cos( jogo->faca.Rotac );
+                jogo->faca.direcao.y = sin( jogo->faca.Rotac );
                 jogo->faca.posInicial.x = jogo->jogador.PosMundo.x;
                 jogo->faca.posInicial.y = jogo->jogador.PosMundo.y;
                 jogo->faca.disponivel = 0;
-        }
+        }else{
+                jogo->faca.distancia = sqrt( pow( jogo->faca.pos.x - jogo->faca.posInicial.x, 2) + pow(jogo->faca.pos.y - jogo->faca.posInicial.y, 2));
 
-        jogo->faca.hitbox = (Rectangle){jogo->faca.posTela.x,
-                                        jogo->faca.posTela.y,
-                                        18 * jogo->tela.width / PIXEL_LARGURA_MAPA,
-                                        6 * jogo->tela.height / PIXEL_ALTURA_MAPA};
+                if ( jogo->faca.distancia < 70  &&  !jogo->faca.flag_colisao ){
+                        jogo->faca.nx = jogo->faca.speed * jogo->faca.direcao.x;
+                        jogo->faca.ny = jogo->faca.speed * jogo->faca.direcao.y;
 
-        jogo->faca.distancia = sqrt(pow(jogo->faca.pos.x - jogo->faca.posInicial.x, 2) + pow(jogo->faca.pos.y - jogo->faca.posInicial.y, 2));
-       
-       // jogo->faca.posTela.x = (jogo->faca.pos.x - jogo->MapaDesenho.x) * (jogo->tela.width / PIXEL_LARGURA_MAPA);
-      //  jogo->faca.posTela.y = (jogo->faca.pos.y - jogo->MapaDesenho.y) * (jogo->tela.height / PIXEL_ALTURA_MAPA);
-
-        if (jogo->faca.distancia < 60  &&  !jogo->faca.flag_colisao)
-        {
-                jogo->faca.nx = jogo->faca.speed * jogo->faca.direcao.x;
-                jogo->faca.ny = jogo->faca.speed * jogo->faca.direcao.y;
-
-                jogo->faca.pos.x += jogo->faca.nx;
-                jogo->faca.pos.y += jogo->faca.ny;
-                jogo->faca.Rotac += jogo->faca.speed * 10;
-
-                
-        }
-        else
-        {
-                if ( CheckCollisionRecs( jogo->faca.hitbox, jogo->jogador.PosTela ))
-
-                {
-                        jogo->faca.ativo = 0;
-                        jogo->faca.disponivel = 1;
+                        jogo->faca.pos.x += jogo->faca.nx;
+                        jogo->faca.pos.y += jogo->faca.ny;
+                        jogo->faca.Rotac += jogo->faca.speed * 10;
                 }
+                else
+                        jogo->faca.ativo = 0;
+
+                if ( !jogo->faca.ativo  &&  Deslocamento( jogo->faca.pos, jogo->jogador.PosMundo ) < DIST_COLETAR_ITEMS * 2)
+                        jogo->faca.disponivel = true;
+
+
+
+                jogo->faca.posTela.x = ( jogo->faca.pos.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x;
+                jogo->faca.posTela.y = ( jogo->faca.pos.y - jogo->MapaDesenho.y ) * jogo->escalaGeral.y;
         }
-
-        
-
 }
+
 
 
 
@@ -1487,6 +1515,7 @@ void AtualizaFaca(JOGO *jogo)
                 if( !jogo->items[ i ].recolhido )
                         if( Deslocamento( jogo->items[ i ].posMundo , jogo->jogador.PosMundo ) < DIST_COLETAR_ITEMS ){
                                 jogo->items[ i ].recolhido = 1;
+                                PlaySound( LoadSound("Som/item.wav") );
                                 switch( jogo->items[ i ].codItem ){
                                         case 1:
                                                 jogo->jogador.saude += SAUDE_TOTAL_JOGADOR / 2 ;
@@ -1517,9 +1546,22 @@ void AtualizaFaca(JOGO *jogo)
   *
   */
 #include "desenhamenu.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+void som_enter( void ){
+        Sound som = LoadSound("Som/enter.wav") ;
+        PlaySound( som );
+}
+
 void Pause( JOGO *jogo , int tipo ){
         int i;
         int aux= 0 ;
+        int flag_sair = 0;
+        int sel = 0;
+        FILE* save = NULL;
+        char cam[100] = "Saves/";
+        Color cor[ 3 ] = { GOLD , WHITE , WHITE };
 
         switch( tipo ){
                 case 0:
@@ -1527,14 +1569,55 @@ void Pause( JOGO *jogo , int tipo ){
                                 aux++;
                                 i=aux;
                                 aux = i;
+
+                               cor[ sel ] = GOLD;
+                               for( int cont = 0 ; cont < 3 ; cont++ )
+                                        if( cont != sel )
+                                                cor[ cont ] = WHITE;
+
                                 BeginDrawing();
-                                DrawTextEx( jogo->Res.fonteWolfen , "PAUSE" , (Vector2){  CentraTextoXEX( jogo->Res.fonteWolfen2 , "PAUSE" , 40 , 3) , jogo->tela.height / 2 } , 40 , 3 , GOLD );
+                                DrawTextEx( jogo->Res.fonteWolfen , "PAUSE" , (Vector2){  CentraTextoXEX( jogo->Res.fonteWolfen2 , "PAUSE" , 70 , 3) , jogo->tela.height / 3 - 100 } , 70 , 3 , GOLD );
+
+                                DrawRectangleRec( jogo->spriteDef.item_0 , cor[ 0 ]  );
+                                DrawRectangle( jogo->spriteDef.item_0.x + 3 , jogo->spriteDef.item_0.y + 3 , jogo->spriteDef.item_0.width - 6 , jogo->spriteDef.item_0.height - 6  , BLACK  );
+                                DrawText("RETOMAR" , jogo->spriteDef.item_0.x + jogo->spriteDef.item_0.width / 2 - MeasureText("RETOMAR" , 30 ) / 2 , jogo->spriteDef.item_0.y + ( jogo->spriteDef.item_0.height - 30 ) / 2 , 30 , cor[ 0 ] );
+
+                                DrawRectangleRec( jogo->spriteDef.item_1 , cor[ 1 ]  );
+                                DrawRectangle( jogo->spriteDef.item_1.x + 3 , jogo->spriteDef.item_1.y + 3 , jogo->spriteDef.item_1.width - 6 , jogo->spriteDef.item_1.height - 6  , BLACK  );
+                                DrawText("SALVAR" , jogo->spriteDef.item_1.x + jogo->spriteDef.item_1.width / 2 - MeasureText("SALVAR" , 30 ) / 2 , jogo->spriteDef.item_1.y + ( jogo->spriteDef.item_1.height - 30 ) / 2 , 30 , cor[ 1 ] );
+
+                                DrawRectangleRec( jogo->spriteDef.item_2 , cor[ 2 ]  );
+                                DrawRectangle( jogo->spriteDef.item_2.x + 3 , jogo->spriteDef.item_2.y + 3 , jogo->spriteDef.item_2.width - 6 , jogo->spriteDef.item_2.height - 6  , BLACK  );
+                                DrawText("SAIR" , jogo->spriteDef.item_2.x + jogo->spriteDef.item_2.width / 2 - MeasureText("SAIR" , 30 ) / 2 , jogo->spriteDef.item_2.y + ( jogo->spriteDef.item_2.height - 30 ) / 2 , 30 , cor[ 2 ] );
                                 EndDrawing();
-                        }while( !IsKeyPressed( KEY_P ) );
+
+                                if( IsKeyPressed( KEY_ENTER ) ){
+                                        som_enter();
+                                        switch( sel ){
+                                                case 0:
+                                                        flag_sair = 1;
+                                                        break;
+                                                case 1:
+                                                        strcat( cam , jogo->jogador.nome );
+                                                        save = fopen(  cam , "wb");
+                                                        fwrite( jogo , sizeof(JOGO) , 1 ,  save );
+                                                        fclose(save);
+                                                        flag_sair = 1;
+                                                        break;
+                                                case 2:
+                                                        jogo->VOLTARMENU = 1;
+                                                        flag_sair = 1;
+                                                        break;
+                                        }
+                                }
+
+                                if( IsKeyPressed( KEY_DOWN )  &&  sel < 2 )
+                                        sel++ , PlaySound( LoadSound("Som/setas.wav") );
+                                if( IsKeyPressed( KEY_UP )  &&  sel )
+                                        sel-- , PlaySound( LoadSound("Som/setas.wav") );
+
+                        }while( !IsKeyPressed( KEY_P ) &&  !flag_sair );
                         break;
-
-
-
         }
 
 }
@@ -1552,10 +1635,11 @@ void AtualizaLevelAtual( JOGO *jogo ){
         static int tempo_para_vencer = FPS * 10;
         static int ativar_vitoria = 0;
 
-
         if( !jogo->jogador.atualLevel ){
                 jogo->jogador.atualLevel++;
                 ExibirLevel1( jogo );
+                StopMusicStream( jogo->Res.musica_missao_impo );
+                PlayMusicStream( jogo->Res.musica_missao_impo );
         }
 
         if( jogo->jogador.atualLevel == 1 )
@@ -1565,16 +1649,32 @@ void AtualizaLevelAtual( JOGO *jogo ){
                                 if( CheckCollisionRecs( jogo->jogador.PosTela , (Rectangle){ ( 404 - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( 408 - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 100 , 100 } ) ){
                                         jogo->jogador.atualLevel++;
                                         ExibirLevel2( jogo );
+                                        StopMusicStream( jogo->Res.musica_missao_impo );
+                                        PlayMusicStream( jogo->Res.musica_missao_impo );
                                 }
 
         if( jogo->jogador.atualLevel == 2 )
+                if( jogo->atualSala ==  10 )
+                        if( jogo->jogador.atualLevel == 2 ){
+                                jogo->jogador.atualLevel++;
+                                ExibirLevel3( jogo );
+                                StopMusicStream( jogo->Res.musica_missao_impo );
+                                PlayMusicStream( jogo->Res.musica_missao_impo );
+                        }
+
+        if( jogo->jogador.atualLevel == 3 )
                 if( jogo->atualSala ==  15 ){
                         ativar_vitoria = 1;
+                        StopMusicStream( jogo->Res.musica_missao_impo );
+                        PlayMusicStream( jogo->Res.musica_final );
                 }
 
         if( ativar_vitoria ){
                 tempo_para_vencer--;
+                UpdateMusicStream( jogo->Res.musica_final );
+
         }
+
         if( !tempo_para_vencer ){
                 jogo->jogador.pontos += 500;
                 ExibirVitoria( jogo );
@@ -1699,9 +1799,10 @@ void ExibirLevel2( JOGO *jogo ){
                                 goto TEXTO_COMPLETO_2;
 
                 }
-        TEXTO_COMPLETO_2:
-        while( !IsKeyPressed( KEY_ENTER ) )
-                pausa( 1 );
+        pausa( 7 );
+
+        TEXTO_COMPLETO_2: return;
+
 }
 
 
@@ -1712,9 +1813,120 @@ void ExibirLevel2( JOGO *jogo ){
  * \return
  *
  */
-void ExibirVitoria( JOGO *jogo ){
+#include <string.h>
+void ExibirLevel3( JOGO *jogo ){
         int i , j;
 
+        char msg[][200] = {
+                "Muito bem, esta quase lá.....",
+                "",
+                "",
+                "",
+                "       Siga para o leste e veja se pode encontrar a chave da ",
+                " prisão. ",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "MISSAO: Encontre a chave. Entre na porta da direita.",
+        };
+
+
+        int x , y , k;
+
+        for( i = 0 ; i < 13 ; i++ )
+                for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
+                        BeginDrawing();
+                                ClearBackground( BLACK );
+                                DrawTextEx( jogo->Res.fonteWolfen2 , "LEVEL 3" , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen2 , "LEVEL 3" , 40 , 3 ) , 20 } , 40 , 3 , MAROON );
+
+                                for( y = 0 ; y < i ; y++ )
+                                        DrawText( msg[ y ] , 27 , 100 + 35 * y , 30 , WHITE );
+
+                                for( x = 0 ; x <= j ; x++ )
+                                        DrawText( TextFormat("%c" , msg[ i ][ x ] ) , 27 + 19 * x , 100 + 35 * i , 30 , WHITE );
+
+                        for ( k =  3000 * FPS  ; k ; k-- );
+
+                        EndDrawing();
+
+                        if( IsKeyPressed( KEY_ENTER ) )
+                                goto TEXTO_COMPLETO_3;
+
+                }
+        pausa( 7 );
+
+        TEXTO_COMPLETO_3: return;
+
+}
+
+
+#include <string.h>
+void ExibirLevel4( JOGO *jogo ){
+        int i , j;
+
+        char msg[][200] = {
+                "Agora sim.....",
+                "",
+                "",
+                "",
+                "       Essa é a chave da ala prisional. ",
+                " Siga imediatamente para la e liberte os prisioneiros!",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "MISSAO: Va para o sul do castelo."
+        };
+
+
+        int x , y , k;
+
+        for( i = 0 ; i < 13 ; i++ )
+                for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
+                        BeginDrawing();
+                                ClearBackground( BLACK );
+                                DrawTextEx( jogo->Res.fonteWolfen2 , "LEVEL 4" , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen2 , "LEVEL 4" , 40 , 3 ) , 20 } , 40 , 3 , MAROON );
+
+                                for( y = 0 ; y < i ; y++ )
+                                        DrawText( msg[ y ] , 27 , 100 + 35 * y , 30 , WHITE );
+
+                                for( x = 0 ; x <= j ; x++ )
+                                        DrawText( TextFormat("%c" , msg[ i ][ x ] ) , 27 + 19 * x , 100 + 35 * i , 30 , WHITE );
+
+                        for ( k =  3000 * FPS  ; k ; k-- );
+
+                        EndDrawing();
+
+                        if( IsKeyPressed( KEY_ENTER ) )
+                                goto TEXTO_COMPLETO_4;
+
+                }
+        pausa( 7 );
+
+        TEXTO_COMPLETO_4: return;
+
+}
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+typedef struct{
+        char nome[ 10 ][ 100 ];
+        int pnts[ 10 ];
+}PONTUAC;
+
+void ExibirVitoria( JOGO *jogo ){
+        int i , j;
         char msg[][200] = {
                 "Parabéns!!!!!!!!!!!!! ...",
                 "",
@@ -1731,11 +1943,36 @@ void ExibirVitoria( JOGO *jogo ){
                 "",
         };
 
+        PONTUAC pontuac;
 
         int x , y , k;
+        /// HIGHSCORES
+        FILE* arq;
+        arq = fopen( "HighScores/high_scores" , "rb+");
+
+        fread( &pontuac , sizeof( PONTUAC ) , 1 , arq );
+
+        for( i = 0 ; i < 10 ; i++ ){
+                if( jogo->jogador.pontos > pontuac.pnts[ i ] ){
+                        for( int m = i ; m < 9 ; m++ ){
+                                pontuac.pnts[ m + 1] = pontuac.pnts[ m ];
+                                TextCopy( pontuac.nome[ m + 1] , pontuac.nome[ m ] );
+                        }
+                        pontuac.pnts[ i ] = jogo->jogador.pontos;
+                        TextCopy( pontuac.nome[ i ] , jogo->jogador.nome );
+                        rewind( arq );
+                        fwrite( &pontuac , sizeof( PONTUAC ) , 1 , arq );
+                        fclose( arq );
+                        goto MENSAGEM_VIT;
+                }
+
+        }
+
+        MENSAGEM_VIT:
 
         for( i = 0 ; i < 13 ; i++ )
                 for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
+                       UpdateMusicStream( jogo->Res.musica_final );
                         BeginDrawing();
                                 ClearBackground( BLACK );
                                 DrawTextEx( jogo->Res.fonteWolfen2 , "VITORIA" , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen2 , "VITORIA" , 40 , 3 ) , 20 } , 40 , 3 , GREEN );
@@ -1750,7 +1987,27 @@ void ExibirVitoria( JOGO *jogo ){
 
                         EndDrawing();
                 }
-        pausa( 7 );
+        while( !IsKeyPressed( KEY_ENTER ) ){
+                BeginDrawing();
+                       UpdateMusicStream( jogo->Res.musica_final );
+                EndDrawing();
+        }
+
+        do{
+                UpdateMusicStream( jogo->Res.musica_final );
+                BeginDrawing();
+                        ClearBackground( BLACK );
+                        DrawTextEx( jogo->Res.fonteWolfen2 , "HIGHSCORES" , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen2 , "HIGHSCORES" , 70 , 3 ) , 90 } , 70 , 3 , RED );
+
+                        for( y = 0 ; y < 10 ; y++ ){
+                                DrawText( TextFormat("%4d  -  %s" , pontuac.pnts[ y ] , pontuac.nome[ y ] ) , 300 , 200 + 50 * y , 40 , WHITE );
+                        }
+
+                        for ( k =  3000 * FPS  ; k ; k-- );
+
+                EndDrawing();
+        }while( !IsKeyPressed( KEY_ENTER ) );
+
 }
 
 
@@ -1778,3 +2035,24 @@ void ExibirVitoria( JOGO *jogo ){
 //        }
 //
 //}
+
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+
+void desenharChave( JOGO* jogo ){
+        if( jogo->jogador.atualLevel == 3){
+                        DrawTexture(  LoadTexture("Sprites/chave3.png") , ( 2324 - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( 1496 - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , WHITE );
+                if( Deslocamento( jogo->jogador.PosMundo , (Vector2){ 2324 , 1496 } ) < 30 ){
+                        jogo->jogador.atualLevel = 4;
+                        ExibirLevel4( jogo );
+                }
+        }
+
+}

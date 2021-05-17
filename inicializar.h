@@ -24,6 +24,9 @@
         void carregarSpritesPersonagem( JOGO *jogo );
 
         void CriarRefens( JOGO* jogo );
+
+        void carregarSom( JOGO* jogo );
+
 //#################################################################################################
 
         /// Inicializar NovoJogo

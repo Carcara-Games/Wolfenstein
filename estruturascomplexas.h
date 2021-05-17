@@ -37,6 +37,12 @@ typedef struct
 
         ///T0
 
+
+        ///
+        Rectangle item_0;
+        Rectangle item_1;
+        Rectangle item_2;
+
 } SpriteDef;
 
 typedef struct
@@ -55,6 +61,13 @@ typedef struct
         Texture2D spriteRefens;
         Font fonteWolfen;             // Fonte Estilizada Wolfenstein
         Font fonteWolfen2;            // Fonte Estilizada Wolfenstein 2
+
+        Music musica_missao_impo;
+        Music musica_final;
+
+        Sound passos;
+        Sound tiro;
+
 
 
         ///Mapa
@@ -272,7 +285,6 @@ typedef struct
         int flag_colisao;
 
         bool disponivel : 1;
-
 } Faca;
 
 
@@ -295,7 +307,7 @@ typedef struct
         Jogador jogador;
         int atualSala;
 
-        Tiro tirosJog[QTD_BALAS_RENDER];
+        Tiro tirosJog[ QTD_BALAS_RENDER ];
         int qtd_tirosJog;
         Faca faca;
 

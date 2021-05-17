@@ -43,6 +43,10 @@ void DesenhaMenuPrincipal(JOGO* jogo, int selecao)
                 DrawText( TextFormat( ItensMenuPrincipal( selecao ) ) , CentraTextoX( ItensMenuPrincipal( selecao ) , 30 ) , GetScreenWidth() / 4 + selecao * 30 * 1.5 , 30 , COR_MENU_SELECAO  );
         }
         EndDrawing();
+
+        if( jogo->jogador.venceu )
+                UpdateMusicStream( jogo->Res.musica_final );
+
 }
 //##############################################################################
 
@@ -202,35 +206,59 @@ int CentraTextoXEX( Font fonte , char *texto , float fontsize , float space)
 
 /**     Funcao DesenhaSobre(): Desenha a janela de informações sobre a autoria do jogo
     */
+#include "logicajogo.h"
 void DesenhaSobre( JOGO jogo)
 {
-        const int fonte = 25 ;
-        const int escala = 1.3;
+        long int tempoInicial;
+        BOOL sair = false;
+//        const int fonte = 25 ;
+//        const int escala = 1.3;
 
-        Rectangle Janela ;
-        Janela.width = escala * jogo.Res.FundoConfirmarSair.width;
-        Janela.height = escala * jogo.Res.FundoConfirmarSair.height;
-        Janela.x = ( GetScreenWidth() - Janela.width ) / 2;
-        Janela.y = 2 * ( GetScreenHeight() - Janela.height ) / 3;
-
-        int ESPY = 18 , ESPX = 25;
+//        Rectangle Janela ;
+//        Janela.width = escala * jogo.Res.FundoConfirmarSair.width;
+//        Janela.height = escala * jogo.Res.FundoConfirmarSair.height;
+//        Janela.x = ( GetScreenWidth() - Janela.width ) / 2; // ( jogo->janela.width - Janela.width ) / 2
+//        Janela.y = 2 * ( GetScreenHeight() - Janela.height ) / 3; //2 * ( jogo->janela.height - escala * jogo.Res.FundoConfirmarSair.height ) / 3
+//
+//        int ESPY = 18 , ESPX = 25;
+//
+//        do{
+//                BeginDrawing();
+//
+//                        DrawTexture( jogo.Res.TelaDeFundo , 1 , 1 , WHITE );
+//                        NomeWolfenEntrada( &jogo , ITENS_MAIN_MENU - 1 );
+//                        DrawTextureEx(  jogo.Res.FundoConfirmarSair , (Vector2 ){ Janela.x , Janela.y } , 0 , escala , WHITE );
+//
+//                        DrawTextEx( jogo.Res.fonteWolfen ,    "WOLFENSTEIN 1.0" , (Vector2 ){ Janela.x + ESPX , Janela.y + ESPY } , fonte , 3 , WHITE );
+//                        DrawText(TextFormat("Escrito por : ") , Janela.x + 2 * ESPX ,  Janela.y + 3 * ESPY , fonte , WHITE );
+//                        DrawText("-Manoel Narciso Filho" , Janela.x + 3 * ESPX ,  Janela.y + 5 * ESPY , fonte , WHITE );
+//                        DrawText("-Matheus De Moraes Costa" , Janela.x + 3 * ESPX ,  Janela.y + 7 * ESPY , fonte , WHITE );
+//                        DrawText("BRASIL 2021" , Janela.x + ( Janela.width - MeasureText( "BRASIL 2021" , fonte ) ) / 2 , Janela.y + Janela.height - 85 , fonte , WHITE );
+//                        DrawText("VOLTAR" , Janela.x + ( Janela.width - MeasureText( "VOLTAR" , fonte ) ) / 2 , Janela.y + Janela.height - 45 , fonte , GOLD );
+//
+//                EndDrawing();
+//        }while( !IsKeyPressed( KEY_ENTER ) );
+//
 
         do{
                 BeginDrawing();
-
                         DrawTexture( jogo.Res.TelaDeFundo , 1 , 1 , WHITE );
-                        NomeWolfenEntrada( &jogo , ITENS_MAIN_MENU - 1 );
-                        DrawTextureEx(  jogo.Res.FundoConfirmarSair , (Vector2 ){ Janela.x , Janela.y } , 0 , escala , WHITE );
+//                        NomeWolfenEntrada( &jogo , ITENS_MAIN_MENU - 1 );
+                        DrawTextureEx(  jogo.Res.FundoConfirmarSair , (Vector2 ){( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 , 2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 } , 0 , 1.3 , WHITE );
 
-                        DrawTextEx( jogo.Res.fonteWolfen ,    "WOLFENSTEIN 1.0" , (Vector2 ){ Janela.x + ESPX , Janela.y + ESPY } , fonte , 3 , WHITE );
-                        DrawText(TextFormat("Escrito por : ") , Janela.x + 2 * ESPX ,  Janela.y + 3 * ESPY , fonte , WHITE );
-                        DrawText("-Manoel Narciso Filho" , Janela.x + 3 * ESPX ,  Janela.y + 5 * ESPY , fonte , WHITE );
-                        DrawText("-Matheus De Moraes Costa" , Janela.x + 3 * ESPX ,  Janela.y + 7 * ESPY , fonte , WHITE );
-                        DrawText("BRASIL 2021" , Janela.x + ( Janela.width - MeasureText( "BRASIL 2021" , fonte ) ) / 2 , Janela.y + Janela.height - 85 , fonte , WHITE );
-                        DrawText("VOLTAR" , Janela.x + ( Janela.width - MeasureText( "VOLTAR" , fonte ) ) / 2 , Janela.y + Janela.height - 45 , fonte , GOLD );
-
+                        DrawTextEx( jogo.Res.fonteWolfen ,    "WOLFENSTEIN 1.0" , (Vector2 ){( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + 18 , 2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 25 } , 25 , 3 , WHITE );
+                        DrawText(TextFormat("Escrito por : ") ,( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + 2 * 18 ,  2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 3 * 25 , 25 , WHITE );
+                        DrawText("-Manoel Narciso Filho" ,( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + 3 * 18 ,  2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 5 * 25 , 25 , WHITE );
+                        DrawText("-Matheus De Moraes Costa" ,( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + 3 * 18 ,  2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 7 * 25 , 25 , WHITE );
+//                        DrawText("UFRGS 1° SEMESTRE" ,( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + ( 1.3 * jogo.Res.FundoConfirmarSair.width - MeasureText( "UFRGS 1° SEMESTRE" , 25 ) ) / 2 , 2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 1.3 * jogo.Res.FundoConfirmarSair.height - 85 , 25 , WHITE );
+                        DrawText("BRASIL 2021" ,( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + ( 1.3 * jogo.Res.FundoConfirmarSair.width - MeasureText( "BRASIL 2021" , 25 ) ) / 2 , 2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 1.3 * jogo.Res.FundoConfirmarSair.height - 85 , 25 , WHITE );
+                        DrawText("VOLTAR" ,( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + ( 1.3 * jogo.Res.FundoConfirmarSair.width - MeasureText( "VOLTAR" , 25 ) ) / 2 , 2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 1.3 * jogo.Res.FundoConfirmarSair.height- 45 , 25 , GOLD );
                 EndDrawing();
-        }while( !IsKeyPressed( KEY_ENTER ) );
+                tempoInicial = clock();
+                while( clock() < tempoInicial + 400)
+                        if( IsKeyPressed( KEY_ENTER ) )
+                                sair = true;
+        }while( !sair );
 
 
 }

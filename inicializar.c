@@ -20,6 +20,7 @@ void IniciarJanela( void )
         SetTargetFPS( FPS );
         ToggleFullscreen();
         SetExitKey( EXITKEY );
+
 }
 
 
@@ -46,7 +47,7 @@ void IniciarJanela( void )
 
         CriaSalas( &pre_jogo );             //Criar Salas: zonas , obstaculos fixos , spawns,  portas , baus e pontos de regeneracao
 
-
+        carregarSom( &pre_jogo );
 
 
         /// Retorno
@@ -85,6 +86,20 @@ void IniciaNovoJogo( JOGO *jogo )
         inicializarJogador( jogo );      // Inicializa os dados do jogador para Novo Jogo
 
 
+        jogo->spriteDef.item_1.width = 180;
+        jogo->spriteDef.item_1.height = 40;
+        jogo->spriteDef.item_1.x = jogo->tela.width / 2 - jogo->spriteDef.item_1.width / 2;
+        jogo->spriteDef.item_1.y = jogo->tela.height / 2 + 140;
+
+        jogo->spriteDef.item_2.width = 180;
+        jogo->spriteDef.item_2.height = 40;
+        jogo->spriteDef.item_2.x = jogo->tela.width / 2 - jogo->spriteDef.item_2.width / 2;
+        jogo->spriteDef.item_2.y = 60 + jogo->tela.height / 2 + 140;
+
+        jogo->spriteDef.item_0.width = 180;
+        jogo->spriteDef.item_0.height = 40;
+        jogo->spriteDef.item_0.x = jogo->tela.width / 2 - jogo->spriteDef.item_2.width / 2;
+        jogo->spriteDef.item_0.y = -60 + jogo->tela.height / 2 + 140;
 
 
 
@@ -117,6 +132,7 @@ void IniciaNovoJogo( JOGO *jogo )
 
         /// Municao
         jogo->jogador.municao[ 0 ] = 25;
+         jogo->qtd_tirosJog = 0;
 
         ///Posicao no MUNDO
         jogo->jogador.PosMundo.x = 102;
@@ -340,6 +356,29 @@ void carregarTexturasFontes( JOGO *jogo )
         jogo->Res.BauFechado = LoadTexture( "Sprites/Baus/BauVermelho.png");
         jogo->Res.BauAberto = LoadTexture( "Sprites/Baus/BauVermelhoAberto.png");
 }
+//##############################################################################
+
+
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+void carregarSom( JOGO* jogo ){
+        jogo->Res.musica_missao_impo = LoadMusicStream("Som/ATENUADOMissionImpossibleTheme.mp3");
+        jogo->Res.musica_final = LoadMusicStream("Som/SmokingSnakes-SABATON.mp3");
+
+        jogo->Res.passos = LoadSound("Som/SFX_Footstep_Hard_2.wav" );
+        jogo->Res.tiro = LoadSound("Som/gun-gunshot-01.wav" );
+//        jogo->spriteDef.bauSond = LoadSound("Som/bauwa.ogg" );
+
+
+}
+
 //##############################################################################
 
 
@@ -592,7 +631,7 @@ void CriaPortas( JOGO *jogo)
                 { //sala 11
                         { 1668 , 1112 },    //p1
                         { 2037 , 1113 },    //p2
-                        { 1887 , 1513 }    //p3
+                        { 1875 , 1513 }    //p3
                 },
 
                 { //sala 12
@@ -642,7 +681,7 @@ void CriaPortas( JOGO *jogo)
                 {  1 /*p1*/ , 0/*p2*/ },      //sala05
                 {  1 /*p1*/ , 1/*p2*/ , 0/*p3*/ },      //sala06
                 {  1 /*p1*/ },      //sala07
-                {  1 /*p1*/ , 1/*p2*/ , 0/*p3*/ },      //sala08
+                {  1 /*p1*/ , 1/*p2*/ , 1/*p3*/ },      //sala08
                 {  1 /*p1*/ },      //sala09
                 {  1 /*p1*/ , 0/*p2*/ , 0/*p3*/ },      //sala10
                 {  1 /*p1*/ , 1/*p2*/ , 1/*p3*/ },      //sala11
@@ -888,7 +927,7 @@ void CriaSpawns(JOGO *jogo)
                 {// sala 8
                         {1260, 592},
                         {1260, 730},
-                        {1380, 270}
+                        {1260, 680 }
                 },
 
                 {// sala 9
@@ -1171,7 +1210,7 @@ void inicializarInimigosSalas( JOGO *jogo ){
         jogo->salas[5].porta_a_ser_liberada = 1;
         jogo->salas[6].porta_a_ser_liberada = 2;
         jogo->salas[8].porta_a_ser_liberada = 2;
-        jogo->salas[10].porta_a_ser_liberada = 2;
+        jogo->salas[10].porta_a_ser_liberada = 1;
         jogo->salas[12].porta_a_ser_liberada = 1; //N precisa
         jogo->salas[13].porta_a_ser_liberada = 1; //N precisa
 
@@ -1181,8 +1220,8 @@ void inicializarInimigosSalas( JOGO *jogo ){
         jogo->salas[4].qtd_inimigos_liberar = 7;
         jogo->salas[5].qtd_inimigos_liberar = 6;
         jogo->salas[6].qtd_inimigos_liberar = 15;
-        jogo->salas[8].qtd_inimigos_liberar = 3;
-        jogo->salas[10].qtd_inimigos_liberar = 2;
+        jogo->salas[8].qtd_inimigos_liberar = 1;
+        jogo->salas[10].qtd_inimigos_liberar = 10;
         jogo->salas[12].qtd_inimigos_liberar = 3; //N precisa
         jogo->salas[13].qtd_inimigos_liberar = 3; //N precisa
 
@@ -1277,7 +1316,7 @@ void spriteT1( JOGO *jogo ){
  */
 
 void spriteT0( JOGO *jogo ){
-        jogo->Res.T0 = LoadTexture("Sprites/aranhas2.png");
+        jogo->Res.T0 = LoadTexture("Sprites/aranhas4.png");
 
 }
 

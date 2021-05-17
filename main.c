@@ -9,14 +9,14 @@
 #include "inicializar.h"
 #include "OpcoesDoMenu.h"
 
-
 ///MAIN
 int main()
 {
+
         IniciarJanela();  //Configura as opcoes da janela
+        InitAudioDevice();
         JOGO jogo = definirPreJogo();          // Inicializa fontes, texturas e informacoes gerais do jogo
         IniciaNovoJogo( &jogo );  // Incializa informacoes para Novo Jogo
-
         void (*opcao[])( JOGO* ) = { NovoJOGO , Continuar , ModoHorda , Configurar , Ajuda , Sobre , Sair };            //Ponteiro para as opcoes do MENU
         int selecaoMenu = 0;
 
@@ -26,15 +26,18 @@ int main()
 
                 AtualizaMenu( &selecaoMenu , 7 );   // Retorna opção que jogador apertou enter. 7 é o número de opções do menu principal
 
-                if (IsKeyPressed(KEY_ENTER))
-                        opcao[ selecaoMenu ]( &jogo) , selecaoMenu = 0;
+                if (IsKeyPressed(KEY_ENTER)){
+                        som_enter();
+                        opcao[ selecaoMenu ]( &jogo) , selecaoMenu = 0 ;                }
+
         }
 
         DesenharObrigado();
+
+        CloseAudioDevice();
         CloseWindow();
         return 0;
 }
-
 
 
 

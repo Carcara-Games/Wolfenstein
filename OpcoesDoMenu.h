@@ -23,6 +23,6 @@
 
 
         void CriarNovoJogador( JOGO* jogo );
-
+        void som_enter( void );
 
 #endif // __OPCOESDOMENU_H_

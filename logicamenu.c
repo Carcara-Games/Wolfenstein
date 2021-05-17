@@ -52,12 +52,14 @@ void AtualizaMenu(  int* selecao , int qtd_opcoes )
 
         if( IsKeyPressed( KEY_DOWN)  &&  *selecao < qtd_opcoes - 1  )
         {
+                PlaySound( LoadSound("Som/setas.wav") );
                 (*selecao)++;
                 return;
         }
 
         if( IsKeyPressed( KEY_UP)  &&  *selecao > 0 )
         {
+                PlaySound( LoadSound("Som/setas.wav"));
                 (*selecao)--;
                 return;
         }
@@ -75,12 +77,14 @@ void AtualizaConfirmarSair( int *selecao )
         if( ( IsKeyPressed( KEY_DOWN) || IsKeyPressed( KEY_RIGHT) ) &&  !*selecao  )
         {
                 (*selecao)++;
+                PlaySound( LoadSound("Som/setas.wav") );
                 return;
         }
 
         if( ( IsKeyPressed( KEY_UP) || IsKeyPressed( KEY_LEFT) ) &&  *selecao )
         {
                 (*selecao)--;
+                PlaySound( LoadSound("Som/setas.wav") );
                 return;
         }
 

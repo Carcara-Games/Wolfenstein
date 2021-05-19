@@ -63,7 +63,7 @@
 1618338158 c:\users\narci\onedrive\documentos\ufrgs\1° semestre\algorítmos e programação\wolfenstein\logicajogo.h
 	"structsgraficos.h"
 
-1621089280 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\booleanas.c
+1621385884 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\booleanas.c
 	"booleanas.h"
 
 1621089281 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\booleanas.h
@@ -74,23 +74,26 @@
 	"raylib.h"
 	"definicoes.h"
 
-1621254135 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\definicoes.h
+1621340602 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\definicoes.h
 	<math.h>
 	<stdio.h>
 	<time.h>
 	<stdlib.h>
 
-1621254797 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhajogo.c
+1621389605 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhajogo.c
 	"desenhajogo.h"
 	"definicoes.h"
 	"estruturascomplexas.h"
+	"fisica.h"
+	"logicajogo.h"
+	<math.h>
 
-1621085883 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhajogo.h
+1621361682 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhajogo.h
 	"estruturascomplexas.h"
 
 1620650126 ated upstream
 
-1621196854 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhamenu.c
+1621386412 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhamenu.c
 	"desenhamenu.h"
 	"definicoes.h"
 	<math.h>
@@ -124,14 +127,14 @@
 	"raylib.h"
 	"definicoes.h"
 
-1620013294 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhamenu.h
+1621341685 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\desenhamenu.h
 	"estruturascomplexas.h"
 	"logicamenu.h"
 
 1619912417 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicamenu.h
 	"raylib.h"
 
-1621257201 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\inicializar.c
+1621346023 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\inicializar.c
 	"inicializar.h"
 	"definicoes.h"
 	"fisica.h"
@@ -141,12 +144,13 @@
 	"estruturascomplexas.h"
 	"definicoes.h"
 
-1621257200 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.c
+1621390836 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.c
 	"logicajogo.h"
 	"definicoes.h"
 	"fisica.h"
 	<math.h>
 	"desenhamenu.h"
+	"OpcoesDoMenu.h"
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -155,13 +159,13 @@
 	<string.h>
 	<string.h>
 
-1621256539 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.h
+1621344224 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicajogo.h
 	"estruturascomplexas.h"
 
-1621196854 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicamenu.c
+1621341529 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\logicamenu.c
 	"logicamenu.h"
 
-1621196854 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\main.c
+1621343600 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\main.c
 	"raylib.h"
 	"inicializar.h"
 	"OpcoesDoMenu.h"
@@ -176,9 +180,10 @@
 	"desenhamenu.h"
 	"desenhajogo.h"
 
-1621196854 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\opcoesdomenu.c
+1621390672 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\opcoesdomenu.c
 	"OpcoesDoMenu.h"
 	"booleanas.h"
+	"inicializar.h"
 	<string.h>
 
 1619912796 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\fisica.h
@@ -190,7 +195,7 @@
 1620650126 source:c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\fisica.c
 	"fisica.h"
 
-1621256764 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\estruturascomplexas.h
+1621346095 c:\users\narci\onedrive\documentos\ufrgs\s1\algorítmos e programação\wolfenstein\estruturascomplexas.h
 	"raylib.h"
 	"definicoes.h"
 

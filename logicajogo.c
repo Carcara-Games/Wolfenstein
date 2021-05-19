@@ -57,6 +57,7 @@ void AtualizaLevel(JOGO *jogo)
         if( jogo->jogador.atualLevel == 2 )
                 UpdateMusicStream( jogo->Res.musica_missao_impo );
 
+
 }
 //##############################################################################
 
@@ -192,7 +193,7 @@ void AtualizaPosicao(JOGO *jogo)
         float passo = PASSO;
 
         if( jogo->jogador.energia ){
-                if ( IsKeyDown( KEY_SPACE ) ){
+                if ( IsKeyDown( KEY_LEFT_SHIFT ) ){
                         passo = PASSO_CORRENDO;
                         movimentoTipo = 2;
                         jogo->jogador.energia--;
@@ -320,36 +321,46 @@ void IncrementaPosicao(Vector2 *pos, int addX, int addY)
 /**     Funcao AtualizaMira():
     */
 
+//void AtualizaMira(JOGO *jogo)
+//{
+//        //O angulo formado entre a linha imaginaria do centro de rotacao do personagem e o centro de mira que fica na ponta da arma
+//        //        const int delta[ 3/*QTD_ARMAS*/ ] = { 00 , 25 };
+//        //
+//        //        // A distancia horizontal entre o centro de rotacao e o centro de mira
+//        //        const int deltaX[ 3/*QTD_ARMAS*/ ] = { jogo->Res.Per[0][0][0].width/ DESVIO_MIRA , jogo->Res.Per[1][0][0].width / DESVIO_MIRA , 0};
+//        //
+//        //         // A distancia horizontal entre o centro de rotacao e o centro de mira
+//        //        const int deltaY[ 3/*QTD_ARMAS*/ ] = { jogo->Res.Per[0][0][0].height / DESVIO_MIRA ,  jogo->Res.Per[1][0][0].height / DESVIO_MIRA,0 };
+//        //        const int arm = jogo->jogador.atualArma;
+//        //        const int angulo =  jogo->jogador.Rotac;
+//        //
+//        //        Vector2 CENTRO_DE_MIRA; // CENTRO_DE_MIRA do PERSONAGEM no mapa que varia com a rotacao inclusive
+//        //        int difY; // Diferenca em distancia de tela do ponto CENTRO_DE_MIRA do PERSONAGEM no mapa e o ponteiro do mouse
+//        //        int difX;
+//
+//        //        CENTRO_DE_MIRA.x =
+//        //        CENTRO_DE_MIRA.y =
+//        //
+//        //        difX =
+//        //        difY =
+//        //        const int tanangulo = ( 180 / PI ) * tan( jogo->jogador.Rotac );
+//
+//        jogo->jogador.Rotac = (180 / PI) * atan2((GetMouseY() - jogo->jogador.PosTela.y), (GetMouseX() - jogo->jogador.PosTela.x));
+//        //        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y - deltaY[ arm ] ) ,  ( GetMouseX() - jogo->jogador.PosTela.x - deltaX[ arm ] ) ) - delta[ arm ];
+//        //        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y + deltaY[ arm ] ) ,  ( GetMouseX() - jogo->jogador.PosTela.x + deltaX[ arm ] ) );
+//        //        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y + deltaY[ arm ] * tanangulo ) ,  ( GetMouseX() - jogo->jogador.PosTela.x + deltaX[ arm ] * tanangulo ) ) - delta[ arm ] ;
+//}
+////##############################################################################
 void AtualizaMira(JOGO *jogo)
 {
-        //O angulo formado entre a linha imaginaria do centro de rotacao do personagem e o centro de mira que fica na ponta da arma
-        //        const int delta[ 3/*QTD_ARMAS*/ ] = { 00 , 25 };
-        //
-        //        // A distancia horizontal entre o centro de rotacao e o centro de mira
-        //        const int deltaX[ 3/*QTD_ARMAS*/ ] = { jogo->Res.Per[0][0][0].width/ DESVIO_MIRA , jogo->Res.Per[1][0][0].width / DESVIO_MIRA , 0};
-        //
-        //         // A distancia horizontal entre o centro de rotacao e o centro de mira
-        //        const int deltaY[ 3/*QTD_ARMAS*/ ] = { jogo->Res.Per[0][0][0].height / DESVIO_MIRA ,  jogo->Res.Per[1][0][0].height / DESVIO_MIRA,0 };
-        //        const int arm = jogo->jogador.atualArma;
-        //        const int angulo =  jogo->jogador.Rotac;
-        //
-        //        Vector2 CENTRO_DE_MIRA; // CENTRO_DE_MIRA do PERSONAGEM no mapa que varia com a rotacao inclusive
-        //        int difY; // Diferenca em distancia de tela do ponto CENTRO_DE_MIRA do PERSONAGEM no mapa e o ponteiro do mouse
-        //        int difX;
 
-        //        CENTRO_DE_MIRA.x =
-        //        CENTRO_DE_MIRA.y =
-        //
-        //        difX =
-        //        difY =
-        //        const int tanangulo = ( 180 / PI ) * tan( jogo->jogador.Rotac );
 
-        jogo->jogador.Rotac = (180 / PI) * atan2((GetMouseY() - jogo->jogador.PosTela.y), (GetMouseX() - jogo->jogador.PosTela.x));
-        //        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y - deltaY[ arm ] ) ,  ( GetMouseX() - jogo->jogador.PosTela.x - deltaX[ arm ] ) ) - delta[ arm ];
-        //        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y + deltaY[ arm ] ) ,  ( GetMouseX() - jogo->jogador.PosTela.x + deltaX[ arm ] ) );
-        //        jogo->jogador.Rotac = ( 180 / PI ) * atan2( ( GetMouseY() - jogo->jogador.PosTela.y + deltaY[ arm ] * tanangulo ) ,  ( GetMouseX() - jogo->jogador.PosTela.x + deltaX[ arm ] * tanangulo ) ) - delta[ arm ] ;
+        jogo->jogador.Rotac = (180 / PI) * atan2((GetMouseY() - jogo->jogador.PosTela.y), (GetMouseX() - jogo->jogador.PosTela.x))  - 4 - 50 * pow(0.99, sqrt(pow(GetMouseX()-jogo->jogador.PosTela.x, 2) + pow(GetMouseY()-jogo->jogador.PosTela.y , 2)) ) ;
+
 }
-//##############################################################################
+
+
+
 
 /**     Funcao AtualizaMapa():
     */
@@ -1003,12 +1014,12 @@ Vector2 T1Perseguicao( JOGO *jogo , Vector2 posAtual , Vector2 alvo , int tipo )
 //        if( alvo.y - posFinal.y  >  CONSTANTE_ANITFLICK * ( alvo.x - posFinal.x ) )
 //                if( alvo.x - posFinal.x < 20 )
 //                        posFinal.x = posAtual.x;
-        if( alvo.x - posFinal.x  < 20 )
-                if( alvo.y - posFinal.y > 20 )
+        if( abs( alvo.x - posFinal.x )  < 20 )
+                if( abs( alvo.y - posFinal.y ) > 20 )
                         posFinal.x = posAtual.x;
 
-        if( alvo.y - posFinal.y  < 20 )
-                if( alvo.x - posFinal.x > 20 )
+        if( abs( alvo.y - posFinal.y )  < 20 )
+                if( abs( alvo.x - posFinal.x ) > 20 )
                         posFinal.y = posAtual.y;
 
 
@@ -1153,6 +1164,7 @@ Vector2 AtualizaPosTela( JOGO *jogo , Vector2 posMundo ){
  * \return
  *
  */
+extern int dificuldade;
 
 void GeraInimigos( JOGO *jogo ){
         static int espera = 2;
@@ -1193,7 +1205,7 @@ void GeraInimigos( JOGO *jogo ){
                 }
         }
 
-        espera = ( espera )  ?  espera - 1 : DELAY_SPAWN;
+        espera = ( espera )  ?  espera - 1 : DELAY_SPAWN / ( dificuldade + 1 );
 }
 
 
@@ -1236,10 +1248,13 @@ void AtualizaDanoJogador( JOGO *jogo ){
                 jogo->jogador.cor = RED;
                 delayCor = DELAY_DANO;
                 jogo->jogador.saude--;
+                PlaySound( LoadSound("Som/dano.wav") );
 
                 if(jogo->jogador.saude == 0 ) {
                         jogo->jogador.saude = SAUDE_TOTAL_JOGADOR;
                         jogo->jogador.vidas--;
+                        PlaySound( LoadSound("Som/Death2.wav") );
+
 //                        ReniciarLevel();
                 }
 
@@ -1297,6 +1312,11 @@ void AtualizaDanoInimigo( JOGO *jogo ){
                                 if( !jogo->salas[ jogo->atualSala ].inimigos[ i ].saude ){
 
                                         jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO = 0;
+
+                                        if( jogo->salas[ jogo->atualSala ].inimigos[ i ].tipo == 0 )
+                                                PlaySound( LoadSound( "Som/aranhaC.wav") );
+                                        if( jogo->salas[ jogo->atualSala ].inimigos[ i ].tipo == 1 )
+                                                PlaySound( LoadSound( "Som/EnderDeath.mp3") );
 
                                         jogo->salas[ jogo->atualSala ].qtd_abatidos++;
 
@@ -1461,6 +1481,43 @@ void AtualizaFacaColisao( JOGO *jogo ){
  */
 
 
+//void AtualizaFaca(JOGO *jogo)
+//{
+//        if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)  &&  jogo->faca.disponivel == 1)
+//        {
+//                jogo->faca.pos.x = jogo->jogador.PosMundo.x;
+//                jogo->faca.pos.y = jogo->jogador.PosMundo.y;
+//                jogo->faca.speed = 4;
+//                jogo->faca.Rotac = jogo->jogador.Rotac * PI / 180;
+//                jogo->faca.ativo = 1;
+//                jogo->faca.direcao.x = cos( jogo->faca.Rotac );
+//                jogo->faca.direcao.y = sin( jogo->faca.Rotac );
+//                jogo->faca.posInicial.x = jogo->jogador.PosMundo.x;
+//                jogo->faca.posInicial.y = jogo->jogador.PosMundo.y;
+//                jogo->faca.disponivel = 0;
+//        }else{
+//                jogo->faca.distancia = sqrt( pow( jogo->faca.pos.x - jogo->faca.posInicial.x, 2) + pow(jogo->faca.pos.y - jogo->faca.posInicial.y, 2));
+//
+//                if ( jogo->faca.distancia < 70  &&  !jogo->faca.flag_colisao ){
+//                        jogo->faca.nx = jogo->faca.speed * jogo->faca.direcao.x;
+//                        jogo->faca.ny = jogo->faca.speed * jogo->faca.direcao.y;
+//
+//                        jogo->faca.pos.x += jogo->faca.nx;
+//                        jogo->faca.pos.y += jogo->faca.ny;
+//                        jogo->faca.Rotac += jogo->faca.speed * 10;
+//                }
+//                else
+//                        jogo->faca.ativo = 0;
+//
+//                if ( !jogo->faca.ativo  &&  Deslocamento( jogo->faca.pos, jogo->jogador.PosMundo ) < DIST_COLETAR_ITEMS * 2)
+//                        jogo->faca.disponivel = true;
+//
+//
+//
+//                jogo->faca.posTela.x = ( jogo->faca.pos.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x;
+//                jogo->faca.posTela.y = ( jogo->faca.pos.y - jogo->MapaDesenho.y ) * jogo->escalaGeral.y;
+//        }
+//}
 void AtualizaFaca(JOGO *jogo)
 {
         if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)  &&  jogo->faca.disponivel == 1)
@@ -1468,7 +1525,7 @@ void AtualizaFaca(JOGO *jogo)
                 jogo->faca.pos.x = jogo->jogador.PosMundo.x;
                 jogo->faca.pos.y = jogo->jogador.PosMundo.y;
                 jogo->faca.speed = 4;
-                jogo->faca.Rotac = jogo->jogador.Rotac * PI / 180;
+                jogo->faca.Rotac = (jogo->jogador.Rotac + 4)* PI / 180;
                 jogo->faca.ativo = 1;
                 jogo->faca.direcao.x = cos( jogo->faca.Rotac );
                 jogo->faca.direcao.y = sin( jogo->faca.Rotac );
@@ -1498,6 +1555,7 @@ void AtualizaFaca(JOGO *jogo)
                 jogo->faca.posTela.y = ( jogo->faca.pos.y - jogo->MapaDesenho.y ) * jogo->escalaGeral.y;
         }
 }
+
 
 
 
@@ -1546,13 +1604,10 @@ void AtualizaFaca(JOGO *jogo)
   *
   */
 #include "desenhamenu.h"
+#include "OpcoesDoMenu.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-void som_enter( void ){
-        Sound som = LoadSound("Som/enter.wav") ;
-        PlaySound( som );
-}
 
 void Pause( JOGO *jogo , int tipo ){
         int i;
@@ -1636,7 +1691,7 @@ void AtualizaLevelAtual( JOGO *jogo ){
         static int ativar_vitoria = 0;
 
         if( !jogo->jogador.atualLevel ){
-                jogo->jogador.atualLevel++;
+                jogo->jogador.atualLevel = 1;
                 ExibirLevel1( jogo );
                 StopMusicStream( jogo->Res.musica_missao_impo );
                 PlayMusicStream( jogo->Res.musica_missao_impo );
@@ -1647,22 +1702,23 @@ void AtualizaLevelAtual( JOGO *jogo ){
                         if( jogo->salas[ jogo->atualSala ].qtd_abatidos >=  5)
 //                                if( CheckCollisionRecs( jogo->jogador.PosTela , (Rectangle){ 404 - 50 , 408 -50 , 100 , 100 } ) ){
                                 if( CheckCollisionRecs( jogo->jogador.PosTela , (Rectangle){ ( 404 - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( 408 - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 100 , 100 } ) ){
-                                        jogo->jogador.atualLevel++;
+                                        jogo->jogador.atualLevel = 2;
+                                        PlaySound( LoadSound("Som/winLevel.wav") );
                                         ExibirLevel2( jogo );
                                         StopMusicStream( jogo->Res.musica_missao_impo );
                                         PlayMusicStream( jogo->Res.musica_missao_impo );
                                 }
 
-        if( jogo->jogador.atualLevel == 2 )
-                if( jogo->atualSala ==  10 )
-                        if( jogo->jogador.atualLevel == 2 ){
-                                jogo->jogador.atualLevel++;
+                if( jogo->jogador.atualLevel == 2 )
+                        if( jogo->atualSala ==  10 ){
+                                jogo->jogador.atualLevel = 3;
+                                PlaySound( LoadSound("Som/winLevel.wav") );
                                 ExibirLevel3( jogo );
                                 StopMusicStream( jogo->Res.musica_missao_impo );
                                 PlayMusicStream( jogo->Res.musica_missao_impo );
                         }
 
-        if( jogo->jogador.atualLevel == 3 )
+        if( jogo->jogador.atualLevel == 4 )
                 if( jogo->atualSala ==  15 ){
                         ativar_vitoria = 1;
                         StopMusicStream( jogo->Res.musica_missao_impo );
@@ -1677,9 +1733,16 @@ void AtualizaLevelAtual( JOGO *jogo ){
 
         if( !tempo_para_vencer ){
                 jogo->jogador.pontos += 500;
-                ExibirVitoria( jogo );
                 jogo->jogador.venceu = 1;
-
+                jogo->Res.MenuFundo[ 0 ] = LoadTexture("Menu_Imagens/r0l.png");
+                jogo->Res.MenuFundo[ 1 ] =  LoadTexture("Menu_Imagens/r1.png");   // Imagem do plano de fundo
+                jogo->Res.MenuFundo[ 2 ] =  LoadTexture("Menu_Imagens/r2.png");   // Imagem do plano de fundo
+                jogo->Res.MenuFundo[ 3 ] =  LoadTexture("Menu_Imagens/r3.png");   // Imagem do plano de fundo
+                jogo->Res.MenuFundo[ 4 ] =  LoadTexture("Menu_Imagens/r4.png");   // Imagem do plano de fundo
+                jogo->Res.MenuFundo[ 5 ] =  LoadTexture("Menu_Imagens/r5.png");   // Imagem do plano de fundo
+                jogo->Res.MenuFundo[ 6 ] =  LoadTexture("Menu_Imagens/r6.png");   // Imagem do plano de fundo
+                jogo->Res.MenuFundo[ 6 ] =  LoadTexture("Menu_Imagens/resgatados.png");   // Imagem do plano de fundo
+                ExibirVitoria( jogo );
         }
 
 }
@@ -1721,7 +1784,8 @@ void ExibirLevel1( JOGO *jogo ){
 
         int x , y , k;
 
-        for( i = 0 ; i < 16 ; i++ )
+        for( i = 0 ; i < 16 ; i++ ){
+                PlaySound( LoadSound("Som/type.mp3") );
                 for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
                         BeginDrawing();
                                 ClearBackground( BLACK );
@@ -1741,10 +1805,11 @@ void ExibirLevel1( JOGO *jogo ){
                         if( IsKeyPressed( KEY_ENTER ) )
                                 goto TEXTO_COMPLETO_1;
                 }
+        }
 
-        TEXTO_COMPLETO_1:
-        while( !IsKeyPressed( KEY_ENTER ) )
+//        while( !IsKeyPressed( KEY_ENTER ) )
                 pausa( 2 );
+        TEXTO_COMPLETO_1:return;
 }
 
 
@@ -1779,7 +1844,8 @@ void ExibirLevel2( JOGO *jogo ){
 
         int x , y , k;
 
-        for( i = 0 ; i < 13 ; i++ )
+        for( i = 0 ; i < 13 ; i++ ){
+                PlaySound( LoadSound("Som/type.mp3") );
                 for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
                         BeginDrawing();
                                 ClearBackground( BLACK );
@@ -1797,9 +1863,9 @@ void ExibirLevel2( JOGO *jogo ){
 
                         if( IsKeyPressed( KEY_ENTER ) )
                                 goto TEXTO_COMPLETO_2;
-
                 }
-        pausa( 7 );
+        }
+        pausa( 2 );
 
         TEXTO_COMPLETO_2: return;
 
@@ -1836,7 +1902,8 @@ void ExibirLevel3( JOGO *jogo ){
 
         int x , y , k;
 
-        for( i = 0 ; i < 13 ; i++ )
+        for( i = 0 ; i < 13 ; i++ ){
+                PlaySound( LoadSound("Som/type.mp3") );
                 for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
                         BeginDrawing();
                                 ClearBackground( BLACK );
@@ -1854,9 +1921,9 @@ void ExibirLevel3( JOGO *jogo ){
 
                         if( IsKeyPressed( KEY_ENTER ) )
                                 goto TEXTO_COMPLETO_3;
-
                 }
-        pausa( 7 );
+        }
+        pausa( 2 );
 
         TEXTO_COMPLETO_3: return;
 
@@ -1886,7 +1953,8 @@ void ExibirLevel4( JOGO *jogo ){
 
         int x , y , k;
 
-        for( i = 0 ; i < 13 ; i++ )
+        for( i = 0 ; i < 13 ; i++ ){
+                PlaySound( LoadSound("Som/type.mp3") );
                 for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
                         BeginDrawing();
                                 ClearBackground( BLACK );
@@ -1904,9 +1972,9 @@ void ExibirLevel4( JOGO *jogo ){
 
                         if( IsKeyPressed( KEY_ENTER ) )
                                 goto TEXTO_COMPLETO_4;
-
                 }
-        pausa( 7 );
+        }
+        pausa( 2 );
 
         TEXTO_COMPLETO_4: return;
 
@@ -1954,28 +2022,29 @@ void ExibirVitoria( JOGO *jogo ){
 
         for( i = 0 ; i < 10 ; i++ ){
                 if( jogo->jogador.pontos > pontuac.pnts[ i ] ){
-                        for( int m = i ; m < 9 ; m++ ){
-                                pontuac.pnts[ m + 1] = pontuac.pnts[ m ];
-                                TextCopy( pontuac.nome[ m + 1] , pontuac.nome[ m ] );
+                        for( int m = 9 ; m > i ; m-- ){
+                                pontuac.pnts[ m ] = pontuac.pnts[ m - 1 ];
+                                TextCopy( pontuac.nome[ m ] , pontuac.nome[ m - 1 ] );
                         }
                         pontuac.pnts[ i ] = jogo->jogador.pontos;
                         TextCopy( pontuac.nome[ i ] , jogo->jogador.nome );
                         rewind( arq );
                         fwrite( &pontuac , sizeof( PONTUAC ) , 1 , arq );
-                        fclose( arq );
                         goto MENSAGEM_VIT;
                 }
 
         }
 
         MENSAGEM_VIT:
+        fclose( arq );
 
         for( i = 0 ; i < 13 ; i++ )
                 for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
                        UpdateMusicStream( jogo->Res.musica_final );
                         BeginDrawing();
-                                ClearBackground( BLACK );
-                                DrawTextEx( jogo->Res.fonteWolfen2 , "VITORIA" , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen2 , "VITORIA" , 40 , 3 ) , 20 } , 40 , 3 , GREEN );
+//                                ClearBackground( BLACK );
+                                DrawTexturePro( jogo->Res.MenuFundo[ 6 ] , (Rectangle){ 0 , 0 , jogo->Res.MenuFundo[ 6 ].width , jogo->Res.MenuFundo[ 6 ].height } , jogo->tela , (Vector2){ 0 , 0 } , 0 , WHITE );
+                                DrawTextEx( jogo->Res.fonteWolfen2 , "VITORIA" , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen2 , "VITORIA" , 70 , 3 ) , 20 } , 70 , 5 , GREEN );
 
                                 for( y = 0 ; y < i ; y++ )
                                         DrawText( msg[ y ] , 27 , 100 + 35 * y , 30 , WHITE );
@@ -1993,7 +2062,9 @@ void ExibirVitoria( JOGO *jogo ){
                 EndDrawing();
         }
 
-        do{
+        BeginDrawing();
+                ClearBackground( BLACK );
+        EndDrawing();        do{
                 UpdateMusicStream( jogo->Res.musica_final );
                 BeginDrawing();
                         ClearBackground( BLACK );
@@ -2008,6 +2079,7 @@ void ExibirVitoria( JOGO *jogo ){
                 EndDrawing();
         }while( !IsKeyPressed( KEY_ENTER ) );
 
+        jogo->Res.MenuFundo[ 6 ] =  LoadTexture("Menu_Imagens/r6.png");   // Imagem do plano de fundo
 }
 
 
@@ -2038,21 +2110,3 @@ void ExibirVitoria( JOGO *jogo ){
 
 
 
-/** \brief
- *
- * \param
- * \param
- * \return
- *
- */
-
-void desenharChave( JOGO* jogo ){
-        if( jogo->jogador.atualLevel == 3){
-                        DrawTexture(  LoadTexture("Sprites/chave3.png") , ( 2324 - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( 1496 - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , WHITE );
-                if( Deslocamento( jogo->jogador.PosMundo , (Vector2){ 2324 , 1496 } ) < 30 ){
-                        jogo->jogador.atualLevel = 4;
-                        ExibirLevel4( jogo );
-                }
-        }
-
-}

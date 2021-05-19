@@ -4,17 +4,17 @@
 /**     Funcao ItensMenuPrincipal() :
      */
 
-char *ItensMenuPrincipal(int escolha)
+char *ItensMenuPrincipal( int escolha )
 {
-        static char opcao[ 7 ][ 30 ] =             {
-                                                                                "Novo Jogo" ,  // 0       //Items do menu
-                                                                                "Continuar" ,   // 1
-                                                                                "Modo Horda" ,  // 2
-                                                                                "Configurar" , // 3
-                                                                                "Ajuda" ,    // 4
-                                                                                "Sobre" ,   // 5
-                                                                                "Sair"    // 6
-                                                                        };
+        static char opcao[ 7 ][ 30 ] = {
+                "Novo Jogo" ,  // 0       //Items do menu
+                "Continuar" ,   // 1
+                "Modo Horda" ,  // 2
+                "Configurar" , // 3
+                "Ajuda" ,    // 4
+                "Sobre" ,   // 5
+                "Sair"    // 6
+        };
 
         return opcao[ escolha ];
 }

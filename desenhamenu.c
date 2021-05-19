@@ -9,43 +9,36 @@
 #define COR_MENU_COMUM WHITE          // Cor do texto do menu nao selecionado
 #define COR_MENU_SELECAO GOLD          // Cor do texto do menu selecionado
 
-void DesenhaMenuPrincipal(JOGO* jogo, int selecao)
+void DesenhaMenuPrincipal(JOGO* jogo, int selecao )
 {
-//        int i;
-//        const int FONT_SIZE = 30;   // Tamanho da fonte do menu
-//        const int ALTURA_ITEM_0 = GetScreenWidth() / 4;   //Posicao Y do primeiro item menu
-//        const int VARIACAO_ALTURA = FONT_SIZE * 1.5;    // Variacao de altura entre cada item dado pelo tamanho da letra
+//        int i ;
+//
 //        const int QTD_OPCOES = 7;     // Quantidade de opcoes no menu
+//        const int FONT_SIZE = 30;   // Tamanho da fonte
+//
+//        const int VARIACAO_ALTURA = FONT_SIZE * 1.5;    // Variacao de altura entre cada item dado pelo tamanho da letra
+//        const int ALTURA_ITEM_0 = GetScreenWidth() / 4;   //Posicao Y do primeiro item menu
 
-//        Rectangle imagem;
-//        imagem.height = jogo->Res.TelaDeFundo.height ;
-//        imagem.width = jogo->Res.TelaDeFundo.width ;
-//        imagem.x = 0 ;
-//        imagem.y = 0 ;
-
-//        Vector2 pos = (Vector2 ){ 0 , 0 };
-        BeginDrawing();
-        {
-                // Fundo
-                ClearBackground(BLACK);
-//                DrawTexturePro( jogo->Res.MenuFundo , imagem , jogo->tela  , pos , 0 , WHITE );
-//                NomeWolfenEntrada( jogo , selecao );  //Nome Wolfenstein com efeito de entrada
-//                DrawTextureEx( jogo->Res.Logo , (Vector2 ){ 5 , 5 } , 0 ,  .2 , WHITE );  //Mini logo no canto superior esquerdo
-
-                // Desenha todos os itens em cor comum
-//                for( int i = 0 ; i < QTD_OPCOES ; i++)
-                for( int i = 0 ; i < 7 ; i++)
-//                        DrawText( TextFormat( ItensMenuPrincipal( i ) )  , CentraTextoX( ItensMenuPrincipal( i ) , FONT_SIZE ) , ALTURA_ITEM_0 + i * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_COMUM  );
-                        DrawText( TextFormat( ItensMenuPrincipal( i ) )  , CentraTextoX( ItensMenuPrincipal( i ) , 30 ) , GetScreenWidth() / 4 + i * 30 * 1.5 , 30 , COR_MENU_COMUM  );
-
-                // Desenha o item em foco em cor de selecao
-//                DrawText( TextFormat( ItensMenuPrincipal( selecao ) ) , CentraTextoX( ItensMenuPrincipal( selecao ) , FONT_SIZE ) , ALTURA_ITEM_0 + selecao * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_SELECAO  );
-                DrawText( TextFormat( ItensMenuPrincipal( selecao ) ) , CentraTextoX( ItensMenuPrincipal( selecao ) , 30 ) , GetScreenWidth() / 4 + selecao * 30 * 1.5 , 30 , COR_MENU_SELECAO  );
-        }
-        EndDrawing();
 
         if( jogo->jogador.venceu )
                 UpdateMusicStream( jogo->Res.musica_final );
+
+        BeginDrawing();
+
+                //Desenhar Plano de Fundo
+                DrawTexturePro( jogo->Res.MenuFundo[ selecao ] , (Rectangle){ 0 , 0 , jogo->Res.MenuFundo[ selecao ].width , jogo->Res.MenuFundo[ selecao ].height } , jogo->tela  , (Vector2){ 0 , 0 } , 0 , WHITE );
+//                DrawTexturePro( LoadTexture("Menu_Imagens/MenuPrincipal.png") , (Rectangle){ 0 , 0 , jogo->Res.MenuFundo.width , jogo->Res.MenuFundo.height } , jogo->tela  , (Vector2){ 0 , 0 } , 0 , WHITE );
+//                NomeWolfenEntrada( jogo , selecao );  //Nome Wolfenstein com efeito de entrada
+//                DrawTextureEx( jogo->Res.Logo , (Vector2 ){ 5 , 5 } , 0 ,  .2 , WHITE );  //Mini logo no canto superior esquerdo
+
+//                //Itens Não Selecionados
+//                for( i = 0 ; i < QTD_OPCOES ; i++)
+//                        DrawText( opcoes[ i ]  , CentraTextoX( opcoes[ i ] , FONT_SIZE ) , ALTURA_ITEM_0 + i * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_COMUM  );
+//
+//                //Item Selecionado
+//                DrawText( opcoes[ selecao ] , CentraTextoX( opcoes[ selecao ] , FONT_SIZE) , ALTURA_ITEM_0 + selecao * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_SELECAO);
+//
+        EndDrawing();
 
 }
 //##############################################################################
@@ -65,7 +58,7 @@ void DesenhaMenuDificuldade( JOGO *jogo , int selecao )
 {
         int i ;
 
-        const int QTD_OPCOES = 5;     // Quantidade de opcoes no menu
+        const int QTD_OPCOES = 4;     // Quantidade de opcoes no menu
         const int FONT_SIZE = 30;   // Tamanho da fonte
         const int FONT_SIZE_M1 = 50;   // Tamanho da fonte
         const int FONT_SIZE_M2 = 20;   // Tamanho da fonte
@@ -84,16 +77,14 @@ void DesenhaMenuDificuldade( JOGO *jogo , int selecao )
 
 
         BeginDrawing();
-
                 //Desenhar Plano de Fundo
-                ClearBackground( BLUE );
-//                        DrawTexturePro( jogo->Res.TelaDeFundo , imagem , jogo->tela  , pos , 0 , WHITE );
+                DrawTexturePro( jogo->Res.TelaDeFundo , (Rectangle){ 0 , 0 , jogo->Res.TelaDeFundo.width , jogo->Res.TelaDeFundo.height } , jogo->tela  , (Vector2){ 0 , 0 } , 0 , WHITE );
 
                 DrawText( ItensMenuDificuldade( 5 ) , CentraTextoX( ItensMenuDificuldade( 5 ) , FONT_SIZE_M1 ) , ALTURA_ITEM_0 - 70 , FONT_SIZE_M1 , WHITE);
                 DrawText( ItensMenuDificuldade( 6 ) , CentraTextoX( ItensMenuDificuldade( 6 ) , FONT_SIZE_M2 ) , GetScreenHeight() - 30 , FONT_SIZE_M2 , WHITE);
 
                 //Itens Não Selecionados
-                for( i = 0 ; i < QTD_OPCOES - 1 ; i++)
+                for( i = 0 ; i < QTD_OPCOES ; i++)
                         DrawText( TextFormat( ItensMenuDificuldade( i ) )  , CentraTextoX( ItensMenuDificuldade( i ) , FONT_SIZE ) , ALTURA_ITEM_0 + i * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_COMUM  );
 
                 DrawText( ItensMenuDificuldade( VOLTAR ) , CentraTextoX( ItensMenuDificuldade( VOLTAR) , FONT_SIZE) , ALTURA_ITEM_VOLTAR , FONT_SIZE , COR_MENU_COMUM);
@@ -103,7 +94,6 @@ void DesenhaMenuDificuldade( JOGO *jogo , int selecao )
                         DrawText( ItensMenuDificuldade( selecao ) , CentraTextoX( ItensMenuDificuldade( selecao) , FONT_SIZE) , ALTURA_ITEM_0 + selecao * VARIACAO_ALTURA , FONT_SIZE , COR_MENU_SELECAO);
                 else
                         DrawText( ItensMenuDificuldade( selecao ) , CentraTextoX( ItensMenuDificuldade( selecao) , FONT_SIZE) , ALTURA_ITEM_VOLTAR , FONT_SIZE , COR_MENU_SELECAO);
-
         EndDrawing();
 
 
@@ -209,8 +199,8 @@ int CentraTextoXEX( Font fonte , char *texto , float fontsize , float space)
 #include "logicajogo.h"
 void DesenhaSobre( JOGO jogo)
 {
-        long int tempoInicial;
-        BOOL sair = false;
+//        long int tempoInicial;
+//        BOOL sair = false;
 //        const int fonte = 25 ;
 //        const int escala = 1.3;
 
@@ -239,28 +229,32 @@ void DesenhaSobre( JOGO jogo)
 //                EndDrawing();
 //        }while( !IsKeyPressed( KEY_ENTER ) );
 //
-
-        do{
+        for( int z = 10 ; z ; z-- ){
                 BeginDrawing();
                         DrawTexture( jogo.Res.TelaDeFundo , 1 , 1 , WHITE );
+                EndDrawing();
+        }
+
+
+        for( int z = 10 ; z ; z-- ){
+                BeginDrawing();
 //                        NomeWolfenEntrada( &jogo , ITENS_MAIN_MENU - 1 );
-                        DrawTextureEx(  jogo.Res.FundoConfirmarSair , (Vector2 ){( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 , 2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 } , 0 , 1.3 , WHITE );
+                        DrawTextureEx(  jogo.Res.FundoConfirmarSair , (Vector2 ){( jogo.tela.width - 1.4 * jogo.Res.FundoConfirmarSair.width ) / 2 , 2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 } , 0 , 1.3 , WHITE );
 
                         DrawTextEx( jogo.Res.fonteWolfen ,    "WOLFENSTEIN 1.0" , (Vector2 ){( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + 18 , 2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 25 } , 25 , 3 , WHITE );
                         DrawText(TextFormat("Escrito por : ") ,( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + 2 * 18 ,  2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 3 * 25 , 25 , WHITE );
-                        DrawText("-Manoel Narciso Filho" ,( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + 3 * 18 ,  2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 5 * 25 , 25 , WHITE );
+                        DrawText("-Manoel Narciso Reis Soares Filho" ,( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + 3 * 18 ,  2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 5 * 25 , 25 , WHITE );
                         DrawText("-Matheus De Moraes Costa" ,( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + 3 * 18 ,  2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 7 * 25 , 25 , WHITE );
 //                        DrawText("UFRGS 1° SEMESTRE" ,( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + ( 1.3 * jogo.Res.FundoConfirmarSair.width - MeasureText( "UFRGS 1° SEMESTRE" , 25 ) ) / 2 , 2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 1.3 * jogo.Res.FundoConfirmarSair.height - 85 , 25 , WHITE );
                         DrawText("BRASIL 2021" ,( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + ( 1.3 * jogo.Res.FundoConfirmarSair.width - MeasureText( "BRASIL 2021" , 25 ) ) / 2 , 2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 1.3 * jogo.Res.FundoConfirmarSair.height - 85 , 25 , WHITE );
                         DrawText("VOLTAR" ,( jogo.tela.width - 1.3 * jogo.Res.FundoConfirmarSair.width ) / 2 + ( 1.3 * jogo.Res.FundoConfirmarSair.width - MeasureText( "VOLTAR" , 25 ) ) / 2 , 2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 + 1.3 * jogo.Res.FundoConfirmarSair.height- 45 , 25 , GOLD );
                 EndDrawing();
-                tempoInicial = clock();
-                while( clock() < tempoInicial + 400)
-                        if( IsKeyPressed( KEY_ENTER ) )
-                                sair = true;
-        }while( !sair );
+        }
 
-
+        do{
+                BeginDrawing();
+                EndDrawing();
+        }while( !IsKeyPressed( KEY_ENTER )  );
 }
 //##############################################################################
 

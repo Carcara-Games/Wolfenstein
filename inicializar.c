@@ -328,7 +328,13 @@ void carregarTexturasFontes( JOGO *jogo )
 {
         ///Texturas  Gerais
         jogo->Res.Logo =  LoadTexture("Logo/Logo.png");   // Imagem de fundo (Logo)
-        jogo->Res.MenuFundo =  LoadTexture("Menu_Imagens/MenuPrincipal.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 0 ] =  LoadTexture("Menu_Imagens/MP0.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 1 ] =  LoadTexture("Menu_Imagens/MP1.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 2 ] =  LoadTexture("Menu_Imagens/MP2.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 3 ] =  LoadTexture("Menu_Imagens/MP3.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 4 ] =  LoadTexture("Menu_Imagens/MP4.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 5 ] =  LoadTexture("Menu_Imagens/MP5.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 6 ] =  LoadTexture("Menu_Imagens/MP6.png");   // Imagem do plano de fundo
         jogo->Res.TelaDeFundo =  LoadTexture("Menu_Imagens/FundoLimpo.png");
         jogo->Res.FundoConfirmarSair =    LoadTexture("Menu_Imagens/FundoConfirmarSair.png");
         jogo->Res.Ajuda_Menu =    LoadTexture("Menu_Imagens/Ajuda.png");
@@ -1221,7 +1227,7 @@ void inicializarInimigosSalas( JOGO *jogo ){
         jogo->salas[5].qtd_inimigos_liberar = 6;
         jogo->salas[6].qtd_inimigos_liberar = 15;
         jogo->salas[8].qtd_inimigos_liberar = 1;
-        jogo->salas[10].qtd_inimigos_liberar = 10;
+        jogo->salas[10].qtd_inimigos_liberar = 20;
         jogo->salas[12].qtd_inimigos_liberar = 3; //N precisa
         jogo->salas[13].qtd_inimigos_liberar = 3; //N precisa
 
@@ -1316,7 +1322,7 @@ void spriteT1( JOGO *jogo ){
  */
 
 void spriteT0( JOGO *jogo ){
-        jogo->Res.T0 = LoadTexture("Sprites/aranhas4.png");
+        jogo->Res.T0 = LoadTexture("Sprites/aranhas6.png");
 
 }
 

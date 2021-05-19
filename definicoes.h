@@ -9,6 +9,7 @@
         ///MENU's
         #define ITENS_MAIN_MENU 7
         #define ITENS_NOVO_JOGO 5
+        #define TEMPO_CARREGAR_LOGO 50
 
         ///BOOL
         #define SIM 1
@@ -139,7 +140,7 @@
         #define MAX_ITENS_MUNDO 300
         #define TIPOS_ITEMS 3
         #define DIST_COLETAR_ITEMS 5
-        #define QTD_MUNICAO_DROP  15
+        #define QTD_MUNICAO_DROP  12
 
         ///ENERGIA
         #define ENERGIA_TOTAL 200

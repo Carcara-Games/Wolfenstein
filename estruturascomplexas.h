@@ -48,7 +48,7 @@ typedef struct
 typedef struct
 {
         ///Menus
-        Texture2D MenuFundo;          // Imagem do plano de fundo principal
+        Texture2D MenuFundo[ 7 ];          // Imagem do plano de fundo principal
         Texture2D TelaDeFundo;        //Tela de fundo somente cores
         Texture2D FundoConfirmarSair; //Janela de fundo da confirmacao de saida
         Texture2D Ajuda_Menu;

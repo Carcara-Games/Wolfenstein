@@ -24,5 +24,11 @@
 
         void DesenhaRefens( JOGO* jogo );
 
+        void desenharChave( JOGO* jogo );
+
+        void chefao( JOGO* jogo );
+
+
+
 
 #endif // __DESENHAJOGO_H_

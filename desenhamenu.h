@@ -5,7 +5,7 @@
         #include "logicamenu.h"
 
         void NomeWolfenEntrada( JOGO *jogo , int selecao  );
-        void DesenhaMenuPrincipal(JOGO *jogo, int selecao);
+        void DesenhaMenuPrincipal(JOGO* jogo, int selecao);
         void DesenhaMenuDificuldade( JOGO *jogo , int selecao );
         void DesenharObrigado( void );
         int CentraTextoXEX( Font fonte , char *texto , float fontsize , float space);

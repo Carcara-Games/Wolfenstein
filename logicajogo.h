@@ -68,6 +68,5 @@
         void ExibirVitoria( JOGO *jogo );
         void ExibirLevel3( JOGO *jogo );
         void ExibirLevel4( JOGO *jogo );
-        void desenharChave( JOGO* jogo );
 
 #endif // __LOGICAJOGO_H_

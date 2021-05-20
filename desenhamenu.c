@@ -8,9 +8,10 @@
 
 #define COR_MENU_COMUM WHITE          // Cor do texto do menu nao selecionado
 #define COR_MENU_SELECAO GOLD          // Cor do texto do menu selecionado
-
+Music musMenu;
 void DesenhaMenuPrincipal(JOGO* jogo, int selecao )
 {
+        static int flag_inic = 1;
 //        int i ;
 //
 //        const int QTD_OPCOES = 7;     // Quantidade de opcoes no menu
@@ -19,9 +20,17 @@ void DesenhaMenuPrincipal(JOGO* jogo, int selecao )
 //        const int VARIACAO_ALTURA = FONT_SIZE * 1.5;    // Variacao de altura entre cada item dado pelo tamanho da letra
 //        const int ALTURA_ITEM_0 = GetScreenWidth() / 4;   //Posicao Y do primeiro item menu
 
+        if( flag_inic ){
+                musMenu = LoadMusicStream("Som/MusicMenu2.mp3");
+                PlayMusicStream( musMenu );
+                flag_inic = 0;
+        }
+
 
         if( jogo->jogador.venceu )
                 UpdateMusicStream( jogo->Res.musica_final );
+        else
+                UpdateMusicStream( musMenu );
 
         BeginDrawing();
 
@@ -74,6 +83,8 @@ void DesenhaMenuDificuldade( JOGO *jogo , int selecao )
 //        imagem.y = 0 ;
 
 //        Vector2 pos = (Vector2 ){ 0 , 0 };
+
+        UpdateMusicStream( musMenu );
 
 
         BeginDrawing();
@@ -231,6 +242,9 @@ void DesenhaSobre( JOGO jogo)
 //
         for( int z = 10 ; z ; z-- ){
                 BeginDrawing();
+                        if( jogo.jogador.venceu ) UpdateMusicStream( jogo.
+                                                                    Res.musica_final );
+                        else UpdateMusicStream( musMenu );
                         DrawTexture( jogo.Res.TelaDeFundo , 1 , 1 , WHITE );
                 EndDrawing();
         }
@@ -238,6 +252,7 @@ void DesenhaSobre( JOGO jogo)
 
         for( int z = 10 ; z ; z-- ){
                 BeginDrawing();
+                        UpdateMusicStream( jogo.Res.musica_final );
 //                        NomeWolfenEntrada( &jogo , ITENS_MAIN_MENU - 1 );
                         DrawTextureEx(  jogo.Res.FundoConfirmarSair , (Vector2 ){( jogo.tela.width - 1.4 * jogo.Res.FundoConfirmarSair.width ) / 2 , 2 * ( jogo.tela.height - 1.3 * jogo.Res.FundoConfirmarSair.height ) / 3 } , 0 , 1.3 , WHITE );
 
@@ -275,6 +290,8 @@ void DesenharConfirmarSair( int selecao , JOGO *jogo )
         Color cor1;
 
         BeginDrawing();
+                if( jogo->jogador.venceu ) UpdateMusicStream( jogo->Res.musica_final );
+                else UpdateMusicStream( musMenu );
                 DrawTexture( jogo->Res.TelaDeFundo , 1 , 1 , WHITE );
                 NomeWolfenEntrada( jogo , ITENS_MAIN_MENU - 1 );
 //                DrawTexturePro(  jogo->Res.FundoConfirmarSair , Janela , Janela , (Vector2 ){ Janela.x , Janela.y } ,  0 , WHITE );

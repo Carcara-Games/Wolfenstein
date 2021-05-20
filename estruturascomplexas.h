@@ -42,6 +42,7 @@ typedef struct
         Rectangle item_0;
         Rectangle item_1;
         Rectangle item_2;
+        Rectangle item_3;
 
 } SpriteDef;
 
@@ -85,7 +86,7 @@ typedef struct
         //[2] codigo do frame atual
 
         ///T1
-        Texture2D T1[ QTD_STATUS_T1][100]; // Pernas e pes do Personagem [1�][2�]
+        Texture2D T1[ QTD_STATUS_T1 ][ 100 ]; // Pernas e pes do Personagem [1�][2�]
         //[1] codigo do status atual:  repouso 0 , andando 1 , correndo 2 , lateralEsquerda 3 , lateralDireita 4
         //[2] codigo do frame atual
 

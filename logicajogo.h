@@ -63,6 +63,8 @@
         void AtualizaLevelAtual( JOGO *jogo );
 
         void AtualizaFacaColisao( JOGO *jogo );
+        void AtualizaLevelGeral( JOGO* jogo );
+
 
         void AtualizaRefens( JOGO* jogo );
         void ExibirVitoria( JOGO *jogo );

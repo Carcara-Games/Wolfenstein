@@ -13,6 +13,7 @@ void DesenhaLevel(JOGO *jogo)
         DesenhaMapa(jogo);
 
         DesenhaTiro(jogo);
+
         DesenhaFaca(jogo);
 
         DesenhaObjetos( jogo );
@@ -21,26 +22,24 @@ void DesenhaLevel(JOGO *jogo)
 
         DesenhaPes( jogo);
 
-        static int inicio = 1;
-//        if( jogo->jogador.atualLevel == 4 )
-//                if( jogo->atualSala == 10 ){
-        if( jogo->jogador.atualLevel == 1 )
-                if( jogo->atualSala == 0 ){
-                        if( inicio ){
-                                inicio = 0;
-                                jogo->salas[ 10 ].portas[ 0 ].DESTRANCADA = 0;
-                                jogo->salas[ 10 ].portas[ 1 ].DESTRANCADA = 0;
-                                jogo->salas[ 10 ].portas[ 2 ].DESTRANCADA = 0;
-                                jogo->salas[ 10 ].portas[ 3 ].DESTRANCADA = 0;
-                        }
-
+        if( jogo->jogador.atualLevel == 4 )
+                if( jogo->atualSala == 10 )
+//        if( jogo->jogador.atualLevel == 1 )
+//                if( jogo->atualSala == 0 )
                         chefao( jogo );
-                }
+
+        DesenhaSetas( jogo );
+
         DesenhaJogador(jogo);
 
 //        DesenhaDebug(jogo);
+        nmrHorda( jogo );
+
 
         DesenhaHUD( jogo );
+
+        if( jogo->jogador.atualLevel > 1 ) DesenhaMiniMapa( jogo );
+//        if( jogo->jogador.atualLevel > 0 ) DesenhaMiniMapa( jogo );
 
 
 
@@ -282,13 +281,13 @@ void DesenhaBaus( JOGO *jogo ){
 
         for( i = 0 ; i < jogo->salas[ salaAt ].qtdBaus ; i++)
                 if( CheckCollisionRecs( jogo->salas[ salaAt ].baus[ i ].posMapa , jogo->MapaDesenho ) )
-                        DrawTexturePro( jogo->salas[ salaAt ].baus[ i ].imagem , jogo->salas[ salaAt ].baus[ i ].src , jogo->salas[ salaAt ].baus[ i ].posTela , jogo->salas[ salaAt ].baus[ i ].origin , jogo->salas[ salaAt ].baus[ i ].Rotac , WHITE );
+                        DrawTexturePro( jogo->salas[ salaAt ].baus[ i ].imagem , jogo->salas[ salaAt ].baus[ i ].src , jogo->salas[ salaAt ].baus[ i ].posTela , /*jogo->salas[ salaAt ].baus[ i ].origin*/(Vector2){ 0 , 0} , jogo->salas[ salaAt ].baus[ i ].Rotac , WHITE );
 
 }
 
 
 ///**     Funcao DesenhaInimigosT1():
-
+extern int flagTiro[ QTD_MAX_T1_SALA ];
 void DesenhaInimigos( JOGO *jogo){
         int i;
         int aSal = jogo->atualSala;
@@ -313,7 +312,7 @@ void DesenhaInimigos( JOGO *jogo){
                                         case 1:
         //                                        DrawRectangle( jogo->salas[ aSal ].inimigos[ i ].posTela.x , jogo->salas[ aSal ].inimigos[ i ].posTela.y , 30 , 30 , ORANGE );
 //                                                DrawRectanglePro((Rectangle){ jogo->salas[ aSal ].inimigos[ i ].posTela.x , jogo->salas[ aSal ].inimigos[ i ].posTela.y , 30 , 30 } , (Vector2){ 15 , 15} , jogo->salas[ aSal ].inimigos[ i ].Rotac , ORANGE );
-                                                DrawTexturePro( jogo->Res.T1[ jogo->salas[ aSal ].inimigos[ i ].atacando ][jogo->spriteDef.atualFrame_T1[ i ] ] , jogo->spriteDef.SrcT1 , jogo->salas[ aSal ].inimigos[ i ].posTela , jogo->spriteDef.OriginT1 , jogo->salas[ aSal ].inimigos[ i ].Rotac ,  jogo->salas[ aSal ].inimigos[ i ].cor );
+                                                DrawTexturePro( jogo->Res.T1[ jogo->salas[ aSal ].inimigos[ i ].atacando  ||  flagTiro[ i ]  ][ jogo->spriteDef.atualFrame_T1[ i ] ] , jogo->spriteDef.SrcT1 , jogo->salas[ aSal ].inimigos[ i ].posTela , jogo->spriteDef.OriginT1 , jogo->salas[ aSal ].inimigos[ i ].Rotac ,  jogo->salas[ aSal ].inimigos[ i ].cor );
                                                 break;
                                         case 2:
                                                 break;
@@ -434,6 +433,8 @@ void DesenhaDebug(JOGO *jogo)
  * \return
  *
  */
+extern int mHorda;
+extern int nHorda;
 
 void DesenhaHUD( JOGO *jogo ){
         static int cpy_pnts;
@@ -466,7 +467,8 @@ void DesenhaHUD( JOGO *jogo ){
         DrawText( TextFormat("%3d" , jogo->jogador.municao[ 0 ] ) , MUN_X , MUN_Y , MUN_FONT_S , YELLOW );
 
         // Level
-        DrawText( TextFormat("%d" , jogo->jogador.atualLevel ) , LEVEL_X , LEVEL_Y , LEVEL_FONT_S , WHITE );
+        if( !mHorda ) DrawText( TextFormat("%d" , jogo->jogador.atualLevel ) , LEVEL_X , LEVEL_Y , LEVEL_FONT_S , WHITE );
+        else DrawText( TextFormat("%d" , nHorda ) , LEVEL_X , LEVEL_Y , LEVEL_FONT_S , WHITE );
 
         // Faca
         Color cor_faca , cor_fundo;
@@ -567,9 +569,17 @@ void desenharChave( JOGO* jogo ){
 #define DM 15
 #define vmh 70
 
+
+#ifndef L_MM
+        #define L_MM 300
+#endif
+#ifndef H_MM
+        #define H_MM 300
+#endif // H_MM
+int vidas = vmh;
 void chefao( JOGO* jogo ){
-//        static Vector2 posMundo = (Vector2){ xh0 , yh0 };
-        static Vector2 posMundo = (Vector2){ 110 , 600 };
+        static Vector2 posMundo = (Vector2){ xh0 , yh0 };
+//        static Vector2 posMundo = (Vector2){ 110 , 600 };
         static Vector2 missil[ 14 ];
         static Vector2 missil_dire[ 14 ];
         static int missil_rot[ 14 ] = { 0 };
@@ -583,7 +593,6 @@ void chefao( JOGO* jogo ){
         static int inic = 1;
         static int inic_2 = 1;
         static int inic_3 = 3 * FPS;
-        static int vidas = vmh;
 //        static int vidas = 10;
         static int delay_dano = 0;
         static int delay_dano_j = 0;
@@ -598,14 +607,14 @@ void chefao( JOGO* jogo ){
         else clock = 10;
 
         if( inic ){
-                jogo->Res.Per[0][0][90] = LoadTexture( "Sprites/h4.png" );
-                jogo->Res.Per[0][0][91] = LoadTexture( "Sprites/th2.png" );
-                jogo->Res.Per[0][0][92] = LoadTexture( "Sprites/exp.png" );
+
                 PlayMusicStream( jogo->Res.musica_missao_impo = LoadMusicStream("Som/chefao.mp3") );
 //                jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados = 0;
 //                jogo->salas[ jogo->atualSala ].qtd_inimigos_liberar = 100;
 //                jogo->salas[ jogo->atualSala ].qtd_abatidos = 0;
-
+                jogo->salas[ 10 ].portas[ 0 ].DESTRANCADA = 0;
+                jogo->salas[ 10 ].portas[ 1 ].DESTRANCADA = 0;
+                jogo->salas[ 10 ].portas[ 2 ].DESTRANCADA = 0;
                 inic = 0;
         }
 
@@ -621,7 +630,8 @@ void chefao( JOGO* jogo ){
 
                 while( inic_3 ){
                         BeginDrawing();
-                        DrawTexturePro( jogo->Res.Per[ 0 ][ 0 ][ 90 ] , (Rectangle){ 64.5 * 0 , 129 , 64.5 , 64 } , (Rectangle){ jogo->tela.width / 2 , jogo->tela.height / 2 , 170 , 190 } , (Vector2){ 85 , 95 } , 0 , WHITE );
+//                        DrawTexturePro( jogo->Res.Per[ 0 ][ 0 ][ 90 ] , (Rectangle){ 64.5 * 0 , 129 , 64.5 , 64 } , (Rectangle){ jogo->tela.width / 2 , jogo->tela.height / 2 , 170 , 190 } , (Vector2){ 85 , 95 } , 0 , WHITE );
+                        DrawTexturePro( jogo->Res.Per[ 0 ][ 0 ][ 93 ] , (Rectangle){  0 , 0 , jogo->Res.Per[ 0 ][ 0 ][ 93 ].width , jogo->Res.Per[ 0 ][ 0 ][ 93 ].height } , (Rectangle){ jogo->tela.width / 2 , jogo->tela.height / 2 , 350 , 400 } , (Vector2){ 350 / 2 , 400 / 2 } , 0 , WHITE );
                         DrawText( "\"Não pensou que fosse ser tão fácil, né?...huahuahuah\"" ,  jogo->tela.width / 2 - MeasureText("\"Não pensou que fosse ser tão fácil, né?...huahuahuah" , 30) / 2 , -250 + jogo->tela.height / 2 ,  30 , GOLD );
                         inic_3--;                        EndDrawing();
                 }
@@ -647,7 +657,7 @@ void chefao( JOGO* jogo ){
                 }
 
                 /// Spawn
-                if( !nmrRand( 0 , 400 ) ){
+                if( !nmrRand( 0 , 160 ) ){
                         jogo->salas[ jogo->atualSala ].inimigos[ jogo->salas[ jogo->atualSala].qtd_inimigos_liberados ].Rotac = 0;                        jogo->salas[ jogo->atualSala ].inimigos[ jogo->salas[ jogo->atualSala].qtd_inimigos_liberados ].VIVO = 1;
                         jogo->salas[ jogo->atualSala ].inimigos[ jogo->salas[ jogo->atualSala].qtd_inimigos_liberados ].atacando = 0;
                         jogo->salas[ jogo->atualSala ].inimigos[ jogo->salas[ jogo->atualSala].qtd_inimigos_liberados ].cor = WHITE;
@@ -673,6 +683,12 @@ void chefao( JOGO* jogo ){
 
                 if( frame == 3 )
                         frame = 0;
+
+                ///Mini mapa
+                if( jogo->atualSala == 10  &&  vidas ){
+                        DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * posMundo.x , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * posMundo.y , 5.5 , MAROON );
+                        DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * posMundo.x , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * posMundo.y , 3 , RED );
+                }
 
                 rotac = -90 + argVector( (Vector2){ alvo.y - posMundo.y , alvo.x - posMundo.x } );
                 rotac = - 90 +(180 / PI) * atan2( (alvo.y - posMundo.y), (alvo.x  - posMundo.x));
@@ -812,7 +828,7 @@ void chefao( JOGO* jogo ){
                 if( CheckCollisionPointRec( posMundo ,jogo->MapaDesenho ) ){
                         DrawRectangle( (jogo->tela.width - 650 ) / 2 , jogo->tela.height - 70 , 650 , 12 , BLACK );
                         DrawRectangle( (jogo->tela.width - 650 ) / 2 , jogo->tela.height - 70 , ( 650.0 * vidas ) / vmh , 12 , RED );
-                        DrawTextEx( jogo->Res.fonteWolfen ,  "MECHA HITLER" , (Vector2){ jogo->tela.width / 2 - MeasureText("MECHA HITLER" , 30 ) / 2 , jogo->tela.height - 45 } , 30 , 5 , RED );
+                        DrawTextEx( jogo->Res.fonteWolfen ,  "MECHA HITLER" , (Vector2){ jogo->tela.width / 2 - MeasureText("MECHA HITLER" , 35 ) / 2 , jogo->tela.height - 45 } , 35 , 5 , RED );
                 }
         }else{
                 if( inic_2 ){
@@ -821,14 +837,18 @@ void chefao( JOGO* jogo ){
                         PlaySound( LoadSound( "Som/explo.wav" ) );
                         PlaySound( LoadSound( "Som/nooo.wav" ) );
                         jogo->salas[ 10 ].portas[ 2 ].DESTRANCADA = 1;
-                        jogo->Res.Per[ 0 ][ 0 ][ 91] = LoadTexture("Sprites/setD.png");
-                        jogo->jogador.pontos += 1000;
+                        jogo->jogador.pontos += 1500;
                         frame = 0;
+
+                        jogo->salas[ 10 ].portas[ 0 ].DESTRANCADA = 1;
+                        jogo->salas[ 10 ].portas[ 1 ].DESTRANCADA = 1;
+                        jogo->salas[ 10 ].portas[ 2 ].DESTRANCADA = 1;
+
                 }
                 if( frame == 79) PlaySound( LoadSound("Som/Yeeeah!.wav") );
 
                 DrawTexturePro( jogo->Res.Per[ 0 ][ 0 ][ 90 ] , (Rectangle){ 64.6 * 6 , 129 , 62.5 , 64 } , (Rectangle){ ( posMundo.x - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( posMundo.y - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 170 , 190 } , (Vector2){ 85 , 95 } , rotac , WHITE );
-                DrawTexturePro( jogo->Res.Per[ 0 ][ 0 ][ 91 ] , (Rectangle){ 0 , 0 , jogo->Res.Per[ 0 ][ 0 ][ 91 ].width , jogo->Res.Per[ 0 ][ 0 ][ 91 ].height } , (Rectangle){ ( 1249 - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( 1089 - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 46 , 144 } , (Vector2){ 23 , 72 } , 0 , WHITE );
+                DrawTexturePro( jogo->Res.Per[ 0 ][ 0 ][ 96 ] , (Rectangle){ 0 , 0 , jogo->Res.Per[ 0 ][ 0 ][ 96 ].width , jogo->Res.Per[ 0 ][ 0 ][ 96 ].height } , (Rectangle){ ( 1263 - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( 1115 - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 100 , 300 } , (Vector2){ 50 , 150 } , 0 , cor );
 
                 if( clock ){
                         if( frame < 81 ){
@@ -839,4 +859,221 @@ void chefao( JOGO* jogo ){
                 }
         }
 }
+
+
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+extern int flag_calma;
+#define T_E_T 40
+#define A_L 1
+void nmrHorda( JOGO* jogo ){
+        static int inicio = 3.5 * FPS;
+        static int efeito_tam = 0;
+        static int flag_efeito = 0;
+        static int flag_ajuda1 = 0;
+        static int flag_ajuda2 = 0;
+        static int flag_ajuda3 = 0;
+        static int flag_ajuda4 = 0;
+        static int flag_ajuda5 = 0;
+        static int flag_ajuda6 = 0;
+        static int flag_ajuda7 = 0;
+
+
+        if( flag_calma )
+                DrawTextEx( jogo->Res.fonteWolfen , TextFormat("HORDA %d" , nHorda ) , (Vector2){ ( jogo->tela.width ) / 2 - MeasureTextEx( jogo->Res.fonteWolfen , "HORDA X" , 60 , 12 ).x / 2 , jogo->tela.height / 3 }  , 60 , 10 , YELLOW );
+
+        if( inicio ){
+                DrawTextEx( jogo->Res.fonteWolfen , "Get Psyched !!" , (Vector2){ ( jogo->tela.width ) / 2 - MeasureTextEx( jogo->Res.fonteWolfen , "Get Psyched !!" , 60 + efeito_tam * A_L , 12 ).x / 2 , jogo->tela.height / 3 }  , 60 + efeito_tam * A_L , 10 , (Color){ 255, 0 , 0, 255 } );
+                inicio--;
+                if( !flag_efeito ){
+                        efeito_tam++;
+
+                        if( efeito_tam == T_E_T ) flag_efeito = 1;
+
+                }else{
+                        efeito_tam--;
+                        if( efeito_tam == 0 ) flag_efeito = 0;
+                }
+        }
+
+        if( !inicio  &&  !mHorda ){
+                if( flag_ajuda1< 4 * FPS ){
+                        flag_ajuda1++;
+//                        DrawTexturePro( jogo->Res.Per[ 0 ][ 0 ][ 80] , (Rectangle){ 0 , 0 , jogo->Res.Per[ 0 ][ 0 ][ 80].width , jogo->Res.Per[ 0 ][ 0 ][ 80].height } , (Rectangle){ jogo->tela.width - 200 , 150 , 200 , 150 } , (Vector2){ 0 , 0 } , 0 , WHITE );
+//                        DrawRectangle( 200 , 400 , 400 , 200 , WHITE );
+                        DrawTexture( jogo->Res.Per[ 0 ][ 0 ][ 80 ] , 200 , 400 , CLITERAL(Color){ 255, 255, 255, 180 } );
+                }else{
+                        if( flag_ajuda2< 4 * FPS ){
+                                flag_ajuda2++;
+                                DrawTexture( jogo->Res.Per[ 0 ][ 0 ][ 81 ] , 200 , 400 , CLITERAL(Color){ 255, 255, 255, 180 } );
+                        }else{
+                                if( flag_ajuda3< 4 * FPS ){
+                                        flag_ajuda3++;
+                                        DrawTexture( jogo->Res.Per[ 0 ][ 0 ][ 82 ] , 200 , 400 , CLITERAL(Color){ 255, 255, 255, 180 } );
+                                }else{
+                                        if( flag_ajuda6< 4 * FPS ){
+                                                flag_ajuda6++;
+                                                DrawTexture( jogo->Res.Per[ 0 ][ 0 ][ 85 ] , 200 , 400 , CLITERAL(Color){ 255, 255, 255, 180 } );
+                                        }else{
+                                                if( flag_ajuda7< 4 * FPS ){
+                                                        flag_ajuda7++;
+                                                        DrawTexture( jogo->Res.Per[ 0 ][ 0 ][ 86 ] , 200 , 400 , CLITERAL(Color){ 255, 255, 255, 180 } );
+                                                }
+                                        }
+                                }
+                        }
+                }
+        }
+
+        if( jogo->jogador.atualLevel == 2 ){
+                if( flag_ajuda4< 4 * FPS ){
+                        flag_ajuda4++;
+                        DrawTexture( jogo->Res.Per[ 0 ][ 0 ][ 83 ] , 200 , 400 , CLITERAL(Color){ 255, 255, 255, 180 } );
+                }else{
+                        if( flag_ajuda5< 4 * FPS ){
+                                flag_ajuda5++;
+                                DrawTexture( jogo->Res.Per[ 0 ][ 0 ][ 84 ] , 200 , 400 , CLITERAL(Color){ 255, 255, 255, 180 } );
+                        }
+                }
+
+        }
+}
+
+
+
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+#ifndef L_MM
+        #define L_MM 300
+#endif
+#ifndef H_MM
+        #define H_MM 300
+#endif // H_MM
+
+#define VP 200
+void DesenhaMiniMapa( JOGO* jogo ){
+        static int ativo = 1;
+        static int visibilidade = VP;
+        static int C = 1;
+        static Sound som_b;
+        if( C ){
+                som_b = LoadSound("Som/bot1.mp3");
+                C = 0;
+        }
+
+
+        if( IsKeyPressed( KEY_M ) ){
+                ativo = ativo ? 0 : 1;
+                PlaySound( LoadSound("Som/setas.wav") );
+//                visibilidade = VP;
+        }
+
+        if( IsKeyDown( KEY_PERIOD ) )
+                if( visibilidade < 255 ){
+                        visibilidade += 5;
+                        if( !IsSoundPlaying( som_b ) ) PlaySound( som_b );
+                }
+        if( IsKeyDown( KEY_COMMA ) )
+                if( visibilidade > 60 ){
+                        visibilidade -= 5;
+                        if( !IsSoundPlaying( som_b ) ) PlaySound( som_b );
+                }
+
+
+        if( ativo ){
+                DrawTexturePro( jogo->Res.Per[ 0 ][ 0 ][ 95 ] , (Rectangle){ 0 , 0 , jogo->Res.Per[ 0 ][ 0 ][ 95 ].width , jogo->Res.Per[ 0 ][ 0 ][ 95 ].height } , (Rectangle){ jogo->tela.width - L_MM , 0 , L_MM , H_MM } , (Vector2){ 0 , 0 } , 0 , CLITERAL(Color){ 255, 255, 255, visibilidade } );
+                DrawText( "[ M ]" , jogo->tela.width - 30 , 3 , 15 , CLITERAL(Color){ 255, 203, 0, visibilidade } );
+
+//                DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * jogo->jogador.PosMundo.x , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * jogo->jogador.PosMundo.y , 5 , CLITERAL(Color){ 9 , 252, 26, 255 } );
+                DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * jogo->jogador.PosMundo.x , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * jogo->jogador.PosMundo.y , 5.5 , LIME );
+                DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * jogo->jogador.PosMundo.x , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * jogo->jogador.PosMundo.y , 3 , GREEN );
+//                DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * jogo->jogador.PosMundo.x , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * jogo->jogador.PosMundo.y , 3 , LIME );
+
+                if( jogo->jogador.atualLevel == 2 ){
+                        DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * 1260 , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * 984 , 5.5 , DARKBLUE );
+                        DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * 1260 , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * 984 , 3 , BLUE );
+                }
+                if( jogo->jogador.atualLevel == 3 ){
+                        DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * 2345 , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * 1515 , 5.5 , DARKBLUE );
+                        DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * 2345 , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * 1515 , 3 , BLUE );
+                }
+                if( jogo->jogador.atualLevel == 4 ){
+                        if( jogo->atualSala >= 11  &&  jogo->atualSala <= 113  &&  vidas){
+                                DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * 1261 , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * 1120 , 5.5 , DARKBLUE );
+                                DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * 1261 , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * 1120 , 3 , BLUE );
+                        }
+
+                        if( !vidas ){
+                                DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * 1258 , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * 2057 , 5.5 , DARKBLUE );
+                                DrawCircle(  jogo->tela.width - L_MM + ( ( L_MM * 1.0 ) / jogo->Res.Mapa.width ) * 1258 , ( (H_MM * 1.0 ) / jogo->Res.Mapa.height ) * 2057 , 3 , BLUE );
+                        }
+
+                }
+        }
+
+
+}
+
+
+
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+#define IDVIS 7
+void DesenhaSetas( JOGO* jogo ){
+        static int vis = 255;
+        static int flag = 0;
+        Color cor = CLITERAL(Color){ 255, 255, 255, vis };
+
+        if( jogo->jogador.atualLevel == 1 ){
+                DrawTexturePro( jogo->Res.Per[ 0 ][ 0 ][ 96 ] , (Rectangle){ 0 , 0 , jogo->Res.Per[ 0 ][ 0 ][ 96 ].width , jogo->Res.Per[ 0 ][ 0 ][ 96 ].height } , (Rectangle){ ( 102 - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( 755 - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 100 , 300 } , (Vector2){ 50 , 150 } , 0 , cor );
+                DrawTexturePro( jogo->Res.Per[ 0 ][ 0 ][ 96 ] , (Rectangle){ 0 , 0 , jogo->Res.Per[ 0 ][ 0 ][ 96 ].width , jogo->Res.Per[ 0 ][ 0 ][ 96 ].height } , (Rectangle){ ( 102 - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( 1425 - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 100 , 300 } , (Vector2){ 50 , 150 } , -90 , cor );
+                DrawTexturePro( jogo->Res.Per[ 0 ][ 0 ][ 96 ] , (Rectangle){ 0 , 0 , jogo->Res.Per[ 0 ][ 0 ][ 96 ].width , jogo->Res.Per[ 0 ][ 0 ][ 96 ].height } , (Rectangle){ ( 406 - jogo->MapaDesenho.x ) * jogo->escalaGeral.x , ( 1375 - jogo->MapaDesenho.y ) * jogo->escalaGeral.y , 100 , 300 } , (Vector2){ 50 , 150 } , 180 , cor );
+
+        }
+
+        if( jogo->jogador.atualLevel == 4 )
+                if( jogo->atualSala == 14 ){
+                        if( !nmrRand( 0 , 165 ) ) PlaySound( LoadSound("Som/help1.ogg") );
+                }
+
+        if( !flag ){
+                vis -= IDVIS;
+                if( vis <= 0 ){
+                        vis = 0;
+                        flag = 1;
+                }
+        }else{
+                vis += IDVIS;
+                if( vis >= 255 ){
+                        vis = 255;
+                        flag = 0;
+                }
+        }
+
+}
+
+
+
+
+
+
 

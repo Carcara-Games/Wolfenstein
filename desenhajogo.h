@@ -28,6 +28,11 @@
 
         void chefao( JOGO* jogo );
 
+        void nmrHorda( JOGO* jogo );
+        void DesenhaMiniMapa( JOGO* jogo );
+        void DesenhaSetas( JOGO* jogo );
+
+
 
 
 

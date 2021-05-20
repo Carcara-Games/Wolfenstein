@@ -5,32 +5,30 @@
 #include <math.h>
 
 
-
 /**     Funcao AtualizaLevel(): Atualiza os dados do level atual
     */
 void AtualizaLevel(JOGO *jogo)
 {
-        AtualizaLevelAtual( jogo );
-//
-        AtualizaMira(jogo);
+        AtualizaLevelGeral( jogo );
+        AtualizaMira( jogo );
 //        //        AtualizaArma( &jogo );
-        AtualizaFaca(jogo);
-        AtualizaFacaColisao(jogo);
+        AtualizaFaca( jogo );
+        AtualizaFacaColisao( jogo );
         AtualizaTirosJogador( jogo );
         AtualizaColisaoTirosJogador( jogo );
 //        //        AtualizaRecarga( &jogo );
-        AtualizaPosicao(jogo);
-        AtualizaMapa(jogo);
+        AtualizaPosicao( jogo );
+        AtualizaMapa( jogo );
 
 //        //        AtualizaSrcPer( jogo );
-        AtualizaSrcPes(jogo);
-        AtualizaOrigin(jogo);
-        AtualizaOriginPes(jogo);
+        AtualizaSrcPes( jogo );
+        AtualizaOrigin( jogo );
+        AtualizaOriginPes( jogo );
 
-        EntraEmPortas(jogo);
+        EntraEmPortas( jogo );
         abrirBaus( jogo );
         destrancarPortas( jogo );
-        AtualizaAtirar(jogo);
+        AtualizaAtirar( jogo );
 
 
         AtualizaFrameJogador( jogo );
@@ -120,7 +118,7 @@ void abrirBaus( JOGO *jogo ){
                                         jogo->salas[ jogo->atualSala ].baus[ i ].ABERTO = 1;
                                         jogo->salas[ jogo->atualSala ].baus[ i ].imagem = jogo->Res.BauAberto;
 
-                                        PlaySound( LoadSound("Som/bauwa.ogg") );
+                                        PlaySound( LoadSound("Som/bauw.mp3") );
                                 }
 
 
@@ -133,8 +131,9 @@ void abrirBaus( JOGO *jogo ){
  *
  */
 void destrancarPortas( JOGO *jogo ){
-        if( jogo->salas[ jogo->atualSala ].qtd_abatidos >= jogo->salas[ jogo->atualSala ].qtd_inimigos_liberar )
-                jogo->salas[ jogo->atualSala ].portas[ jogo->salas[ jogo->atualSala ].porta_a_ser_liberada ].DESTRANCADA = 1;
+        if( jogo->jogador.atualLevel < 4 )
+                if( jogo->salas[ jogo->atualSala ].qtd_abatidos >= jogo->salas[ jogo->atualSala ].qtd_inimigos_liberar )
+                        jogo->salas[ jogo->atualSala ].portas[ jogo->salas[ jogo->atualSala ].porta_a_ser_liberada ].DESTRANCADA = 1;
 
 }
 
@@ -420,6 +419,7 @@ void EntraEmPortas(JOGO *jogo)
         }
         else
                 jogo->PASSAGEM = 0;
+
 }
 //##############################################################################
 
@@ -429,13 +429,22 @@ void EntraEmPortas(JOGO *jogo)
 BOOL ChecaPortas(JOGO jogo)
 {
         int i;
+        static int flag = 0;
 
         for (i = 0; i < jogo.salas[jogo.atualSala].qtdPortas; i++)
-                if (jogo.salas[jogo.atualSala].portas[i].DESTRANCADA)
-                        if (jogo.jogador.PosMundo.y <= jogo.salas[jogo.atualSala].portas[i].pos.y + TOL_ENTRAR_PORTAS && jogo.jogador.PosMundo.y >= jogo.salas[jogo.atualSala].portas[i].pos.y - TOL_ENTRAR_PORTAS)
-                                if (jogo.jogador.PosMundo.x <= jogo.salas[jogo.atualSala].portas[i].pos.x + TOL_ENTRAR_PORTAS && jogo.jogador.PosMundo.x >= jogo.salas[jogo.atualSala].portas[i].pos.x - TOL_ENTRAR_PORTAS)
-                                        return i;
+                if (jogo.jogador.PosMundo.y <= jogo.salas[jogo.atualSala].portas[i].pos.y + TOL_ENTRAR_PORTAS && jogo.jogador.PosMundo.y >= jogo.salas[jogo.atualSala].portas[i].pos.y - TOL_ENTRAR_PORTAS)
+                        if (jogo.jogador.PosMundo.x <= jogo.salas[jogo.atualSala].portas[i].pos.x + TOL_ENTRAR_PORTAS && jogo.jogador.PosMundo.x >= jogo.salas[jogo.atualSala].portas[i].pos.x - TOL_ENTRAR_PORTAS){
 
+                                if (jogo.salas[jogo.atualSala].portas[i].DESTRANCADA){
+                                        PlaySound( LoadSound( "Som/portac.wav") );
+                                        return i;
+                                }else{
+                                        if( !flag ) PlaySound( LoadSound( "Som/acesso_negado.wav") );
+                                        flag = 1;
+                                        return -1;
+                                }
+                        }
+        flag = 0;
         return -1;
 }
 //##############################################################################
@@ -608,67 +617,87 @@ void AtualizaAtirar(JOGO *jogo)
  *
  */
 
+int flagTiro[ QTD_MAX_T1_SALA ] =  { 0 };
 void AtualizaFrameT1(JOGO *jogo)
 {
         static int aux[ QTD_MAX_T1_SALA ] = { 0 };
         static int frame[ QTD_MAX_T1_SALA ] = { 0 };
-        static int antStatus = 0;
-        static int flagTiro[ QTD_MAX_T1_SALA ] =  { 0 };
+        static int antStatus[ QTD_MAX_T1_SALA ] = { 0 };
+        static int sala_ant = 0;
+        int atac_at[ QTD_MAX_T1_SALA ] ={ 0 };
+
+        if( sala_ant != jogo->atualSala ){
+                for( int i = jogo->salas[ jogo->atualSala ].qtd_inimigos_liberar ; i ; i-- )
+                        aux[ i ] = 0;
+
+                for( int i = jogo->salas[ jogo->atualSala ].qtd_inimigos_liberar ; i ; i-- )
+                        frame[ i ] = 0;
+
+                for( int i = jogo->salas[ jogo->atualSala ].qtd_inimigos_liberar ; i ; i-- )
+                        flagTiro[ i ] =  0;
+
+                for( int i = jogo->salas[ jogo->atualSala ].qtd_inimigos_liberar ; i ; i-- )
+                        antStatus[ i ] = 0;
+        }
+        sala_ant = jogo->atualSala;
 
         int ini;
         int aSal = jogo->atualSala;
 
         for( ini = 0 ; ini < jogo->salas[ aSal ].qtd_inimigos_liberados ; ini++)
-                if( jogo->salas[ aSal ].inimigos[ ini ].VIVO ){
-                        //Caso atire e preciso terminar o ciclo dos frame[ ini ]s
-                        if ( jogo->salas[ aSal ].inimigos[ ini ].atacando  || flagTiro[ ini ])
-                        {
-                                if (!flagTiro[ ini ])
+                if( jogo->salas[ aSal ].inimigos[ ini ].tipo == 1 )
+                        if( jogo->salas[ aSal ].inimigos[ ini ].VIVO ){
+                                //Caso ataque e preciso terminar o ciclo dos frame[ ini ]s
+                                if ( jogo->salas[ aSal ].inimigos[ ini ].atacando  || flagTiro[ ini ] )
                                 {
-                                        flagTiro[ ini ] = 1;
-                                        frame[ ini ] = 0;
-                                        aux[ ini ] = 0;
+                                        if ( !flagTiro[ ini ] )
+                                        {
+                                                flagTiro[ ini ] = 1;
+                                                frame[ ini ] = 0;
+                                                aux[ ini ] = 0;
+                                        }
+                                        else
+                                                aux[ ini ]++;
+
+                                        jogo->salas[ aSal ].inimigos[ ini ].atacando = 1;
+
+                                        if ( aux[ ini ] == DIV_FPS_T1 )
+                                        {
+                                                aux[ ini ] = 0;
+                                                frame[ ini ]++;
+                                        }
+
+                                        if ( frame[ ini ] >= jogo->spriteDef.QTD_FRAMES_T1[ 1 ] - 1 )
+                                        {
+                                                frame[ ini ] = 0;
+                                                flagTiro[ ini ] = 0;
+                                        }
+                                        jogo->spriteDef.atualFrame_T1[ ini ] = frame[ ini ];
+
+                                        antStatus[ ini ] = jogo->salas[ aSal ].inimigos[ ini ].atacando;
+                                        atac_at[ ini ] = 1;
                                 }
-                                else
+
+                                if( !atac_at[ ini ] ){
+                                        if ( jogo->salas[ aSal ].inimigos[ ini ].atacando != antStatus[ ini ] )
+                                        {
+                                                aux[ ini ] = 0;
+                                                frame[ ini ] = 0;
+                                        }
+
                                         aux[ ini ]++;
 
-                                jogo->salas[ aSal ].inimigos[ ini ].atacando = 1;
+                                        if ( aux[ ini ] == DIV_FPS_T1 )
+                                        {
+                                                aux[ ini ] = 0;
+                                                frame[ ini ]++;
+                                                jogo->spriteDef.atualFrame_T1[ ini ] = frame[ ini ];
+                                                if (frame[ ini ] == jogo->spriteDef.QTD_FRAMES_T1[ jogo->salas[ aSal ].inimigos[ ini ].atacando ] - 1)
+                                                        frame[ ini ] = 0;
+                                        }
 
-                                if (aux[ ini ] == DIV_FPS_T1 )
-                                {
-                                        aux[ ini ] = 0;
-                                        frame[ ini ]++;
+                                        antStatus[ ini ] = jogo->salas[ aSal ].inimigos[ ini ].atacando;
                                 }
-
-                                jogo->spriteDef.atualFrame_T1[ ini ] = frame[ ini ];
-
-                                if ( frame[ ini ] >= jogo->spriteDef.QTD_FRAMES_T1[ 1 ] - 1 )
-                                {
-                                        frame[ ini ] = 0;
-                                        flagTiro[ ini ] = 0;
-                                }
-                                antStatus = jogo->salas[ aSal ].inimigos[ ini ].atacando;
-                                return;
-                        }
-
-                        if ( jogo->salas[ aSal ].inimigos[ ini ].atacando != antStatus)
-                        {
-                                aux[ ini ] = 0;
-                                frame[ ini ] = 0;
-                        }
-
-                        aux[ ini ]++;
-
-                        if ( aux[ ini ] == DIV_FPS_T1 )
-                        {
-                                aux[ ini ] = 0;
-                                frame[ ini ]++;
-                                jogo->spriteDef.atualFrame_T1[ ini ] = frame[ ini ];
-                                if (frame[ ini ] == jogo->spriteDef.QTD_FRAMES_T1[ jogo->salas[ aSal ].inimigos[ ini ].atacando ] - 1)
-                                        frame[ ini ] = 0;
-                        }
-
-                        antStatus = jogo->salas[ aSal ].inimigos[ ini ].atacando;
                 }
 }
 
@@ -1239,36 +1268,41 @@ int CalcularSpawnPerto( JOGO *jogo ){
  * \return c
  *
  */
-
 void AtualizaDanoJogador( JOGO *jogo ){
-        static int delayCor;
+        static int delayCor = 0;
+        static int delayDano = 0;
 
-        if( jogo->jogador.DANO ){
-
-                jogo->jogador.cor = RED;
-                delayCor = DELAY_DANO;
-                jogo->jogador.saude--;
-                PlaySound( LoadSound("Som/dano.wav") );
-
-                if(jogo->jogador.saude == 0 ) {
-                        jogo->jogador.saude = SAUDE_TOTAL_JOGADOR;
-                        jogo->jogador.vidas--;
-                        PlaySound( LoadSound("Som/Death2.wav") );
-
-//                        ReniciarLevel();
-                }
-
-//                if(jogo->jogador.vidas == 0 ) EGameOver();
-                jogo->jogador.DANO = 0;
-        }
-        else{
-                if( !delayCor )
-                        jogo->jogador.cor = WHITE;
-                else
+        if( jogo->jogador.DANO )
+                if( !delayDano ){
+                        delayDano = DELAY_DANO;
+                        delayCor = DELAY_DANO;
                         jogo->jogador.cor = RED;
+                        jogo->jogador.saude--;
+                        PlaySound( LoadSound("Som/dano.wav") );
+
+                        if(jogo->jogador.saude == 0 ) {
+                                jogo->jogador.saude = SAUDE_TOTAL_JOGADOR;
+                                jogo->jogador.vidas--;
+                                PlaySound( LoadSound("Som/Death2.wav") );
+
+        //                        ReniciarLevel();
+                        }
+
+        //                if(jogo->jogador.vidas == 0 ) EGameOver();
+                        jogo->jogador.DANO = 0;
         }
+
+
+        if( !delayCor )
+                jogo->jogador.cor = WHITE;
+        else
+                jogo->jogador.cor = RED;
+
 
         if( delayCor ) delayCor--;
+        if( delayDano ) delayDano--;
+
+        if( !jogo->jogador.vidas ) delayCor = 0 , delayDano = 0;
 }
 
 
@@ -1410,12 +1444,14 @@ void AtualizaColisaoTirosJogador( JOGO *jogo ){
                         if ( CheckCollisionPointRec( jogo->tirosJog[ j ].pos , jogo->salas[ jogo->atualSala ].zonas[ i ] ) )
                                 colisao = 0;
 
-                for ( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados ; i++ )
-                        if ( jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO )
-                                if ( CheckCollisionPointRec( jogo->tirosJog[ j ].pos , jogo->salas[ jogo->atualSala ].inimigos[ i ].recMundo ) ){
-                                        jogo->salas[ jogo->atualSala ].inimigos[ i ].dano = 1;
-                                        colisao = 1;
-                                }
+                if( !colisao )
+                        for ( i = 0 ; i < jogo->salas[ jogo->atualSala ].qtd_inimigos_liberados ; i++ )
+                                if( !colisao )
+                                        if ( jogo->salas[ jogo->atualSala ].inimigos[ i ].VIVO )
+                                                if ( CheckCollisionPointRec( jogo->tirosJog[ j ].pos , jogo->salas[ jogo->atualSala ].inimigos[ i ].recMundo ) ){
+                                                        jogo->salas[ jogo->atualSala ].inimigos[ i ].dano = 1;
+                                                        colisao = 1;
+                                                }
 
 
                 if( colisao ){
@@ -1463,6 +1499,7 @@ void AtualizaFacaColisao( JOGO *jogo ){
                                         if ( CheckCollisionPointRec( jogo->faca.pos , jogo->salas[ jogo->atualSala ].inimigos[ i ].recMundo ) ){
                                                 jogo->salas[ jogo->atualSala ].inimigos[ i ].dano = 1;
                                                 jogo->faca.ativo = 0;
+                                                return;
                                         }
                 }
 
@@ -1518,10 +1555,20 @@ void AtualizaFacaColisao( JOGO *jogo ){
 //                jogo->faca.posTela.y = ( jogo->faca.pos.y - jogo->MapaDesenho.y ) * jogo->escalaGeral.y;
 //        }
 //}
+
+Sound faca_som_recol;
 void AtualizaFaca(JOGO *jogo)
 {
+        static int flag = 1;
+        if( flag ){
+                faca_som_recol = LoadSound("Som/faca_recol.wav") ;
+                flag = 0;
+        }
+
         if (IsMouseButtonPressed(MOUSE_RIGHT_BUTTON)  &&  jogo->faca.disponivel == 1)
         {
+               PlaySound( LoadSound("Som/faca_arre.wav") );
+
                 jogo->faca.pos.x = jogo->jogador.PosMundo.x;
                 jogo->faca.pos.y = jogo->jogador.PosMundo.y;
                 jogo->faca.speed = 4;
@@ -1546,8 +1593,10 @@ void AtualizaFaca(JOGO *jogo)
                 else
                         jogo->faca.ativo = 0;
 
-                if ( !jogo->faca.ativo  &&  Deslocamento( jogo->faca.pos, jogo->jogador.PosMundo ) < DIST_COLETAR_ITEMS * 2)
+                if ( !jogo->faca.ativo  &&  Deslocamento( jogo->faca.pos, jogo->jogador.PosMundo ) < DIST_COLETAR_ITEMS * 2){
                         jogo->faca.disponivel = true;
+                        if( !IsSoundPlaying( faca_som_recol ) ) PlaySound( faca_som_recol );
+                }
 
 
 
@@ -1616,7 +1665,7 @@ void Pause( JOGO *jogo , int tipo ){
         int sel = 0;
         FILE* save = NULL;
         char cam[100] = "Saves/";
-        Color cor[ 3 ] = { GOLD , WHITE , WHITE };
+        Color cor[ 4 ] = { GOLD , WHITE , WHITE , WHITE };
 
         switch( tipo ){
                 case 0:
@@ -1626,7 +1675,7 @@ void Pause( JOGO *jogo , int tipo ){
                                 aux = i;
 
                                cor[ sel ] = GOLD;
-                               for( int cont = 0 ; cont < 3 ; cont++ )
+                               for( int cont = 0 ; cont < 4 ; cont++ )
                                         if( cont != sel )
                                                 cor[ cont ] = WHITE;
 
@@ -1639,11 +1688,15 @@ void Pause( JOGO *jogo , int tipo ){
 
                                 DrawRectangleRec( jogo->spriteDef.item_1 , cor[ 1 ]  );
                                 DrawRectangle( jogo->spriteDef.item_1.x + 3 , jogo->spriteDef.item_1.y + 3 , jogo->spriteDef.item_1.width - 6 , jogo->spriteDef.item_1.height - 6  , BLACK  );
-                                DrawText("SALVAR" , jogo->spriteDef.item_1.x + jogo->spriteDef.item_1.width / 2 - MeasureText("SALVAR" , 30 ) / 2 , jogo->spriteDef.item_1.y + ( jogo->spriteDef.item_1.height - 30 ) / 2 , 30 , cor[ 1 ] );
+                                DrawText("AJUDA" , jogo->spriteDef.item_1.x + jogo->spriteDef.item_1.width / 2 - MeasureText("AJUDA" , 30 ) / 2 , jogo->spriteDef.item_1.y + ( jogo->spriteDef.item_1.height - 30 ) / 2 , 30 , cor[ 1 ] );
 
                                 DrawRectangleRec( jogo->spriteDef.item_2 , cor[ 2 ]  );
                                 DrawRectangle( jogo->spriteDef.item_2.x + 3 , jogo->spriteDef.item_2.y + 3 , jogo->spriteDef.item_2.width - 6 , jogo->spriteDef.item_2.height - 6  , BLACK  );
-                                DrawText("SAIR" , jogo->spriteDef.item_2.x + jogo->spriteDef.item_2.width / 2 - MeasureText("SAIR" , 30 ) / 2 , jogo->spriteDef.item_2.y + ( jogo->spriteDef.item_2.height - 30 ) / 2 , 30 , cor[ 2 ] );
+                                DrawText("SALVAR" , jogo->spriteDef.item_2.x + jogo->spriteDef.item_2.width / 2 - MeasureText("SALVAR" , 30 ) / 2 , jogo->spriteDef.item_2.y + ( jogo->spriteDef.item_2.height - 30 ) / 2 , 30 , cor[ 2 ] );
+
+                                DrawRectangleRec( jogo->spriteDef.item_3 , cor[ 3 ]  );
+                                DrawRectangle( jogo->spriteDef.item_3.x + 3 , jogo->spriteDef.item_3.y + 3 , jogo->spriteDef.item_3.width - 6 , jogo->spriteDef.item_3.height - 6  , BLACK  );
+                                DrawText("SAIR" , jogo->spriteDef.item_3.x + jogo->spriteDef.item_3.width / 2 - MeasureText("SAIR" , 30 ) / 2 , jogo->spriteDef.item_3.y + ( jogo->spriteDef.item_3.height - 30 ) / 2 , 30 , cor[ 3 ] );
                                 EndDrawing();
 
                                 if( IsKeyPressed( KEY_ENTER ) ){
@@ -1653,20 +1706,37 @@ void Pause( JOGO *jogo , int tipo ){
                                                         flag_sair = 1;
                                                         break;
                                                 case 1:
-                                                        strcat( cam , jogo->jogador.nome );
-                                                        save = fopen(  cam , "wb");
-                                                        fwrite( jogo , sizeof(JOGO) , 1 ,  save );
-                                                        fclose(save);
+                                                        Ajuda( jogo );
                                                         flag_sair = 1;
                                                         break;
                                                 case 2:
+                                                        strcat( cam , jogo->jogador.nome );
+                                                        save = fopen(  cam , "wb");
+                                                        if( save != NULL ){
+                                                                fwrite( jogo , sizeof(JOGO) , 1 ,  save );
+                                                                fclose(save);
+                                                                PlaySound( LoadSound("Som/salvo.mp3")  );
+                                                                for( int z = 2.7 * FPS ; z ; z-- ){
+                                                                        BeginDrawing();
+                                                                        EndDrawing();
+                                                                }
+                                                        }else{
+                                                                PlaySound( LoadSound("Som/acesso_negado.wav")  );
+                                                                for( int z = 2.7 * FPS  ; z ; z-- ){
+                                                                        BeginDrawing();
+                                                                        EndDrawing();
+                                                                }
+                                                        }
+                                                        flag_sair = 1;
+                                                        break;
+                                                case 3:
                                                         jogo->VOLTARMENU = 1;
                                                         flag_sair = 1;
                                                         break;
                                         }
                                 }
 
-                                if( IsKeyPressed( KEY_DOWN )  &&  sel < 2 )
+                                if( IsKeyPressed( KEY_DOWN )  &&  sel < 3 )
                                         sel++ , PlaySound( LoadSound("Som/setas.wav") );
                                 if( IsKeyPressed( KEY_UP )  &&  sel )
                                         sel-- , PlaySound( LoadSound("Som/setas.wav") );
@@ -1674,7 +1744,7 @@ void Pause( JOGO *jogo , int tipo ){
                         }while( !IsKeyPressed( KEY_P ) &&  !flag_sair );
                         break;
         }
-
+        return;
 }
 
 
@@ -1689,6 +1759,7 @@ void Pause( JOGO *jogo , int tipo ){
 void AtualizaLevelAtual( JOGO *jogo ){
         static int tempo_para_vencer = FPS * 10;
         static int ativar_vitoria = 0;
+        static int flag_som = 1;
 
         if( !jogo->jogador.atualLevel ){
                 jogo->jogador.atualLevel = 1;
@@ -1719,10 +1790,12 @@ void AtualizaLevelAtual( JOGO *jogo ){
                         }
 
         if( jogo->jogador.atualLevel == 4 )
-                if( jogo->atualSala ==  15 ){
+                if( jogo->atualSala ==  15  &&  flag_som){
+                        PlaySound( LoadSound("Som/help1.ogg") );
                         ativar_vitoria = 1;
                         StopMusicStream( jogo->Res.musica_missao_impo );
                         PlayMusicStream( jogo->Res.musica_final );
+                        flag_som = 0;
                 }
 
         if( ativar_vitoria ){
@@ -1732,17 +1805,16 @@ void AtualizaLevelAtual( JOGO *jogo ){
         }
 
         if( !tempo_para_vencer ){
-                jogo->jogador.pontos += 500;
+                jogo->jogador.pontos += 700;
                 jogo->jogador.venceu = 1;
-                jogo->Res.MenuFundo[ 0 ] = LoadTexture("Menu_Imagens/r0l.png");
+                jogo->Res.MenuFundo[ 6 ] =  LoadTexture("Menu_Imagens/resgatados.png");   // Imagem do plano de fundo
+                ExibirVitoria( jogo );
+                jogo->Res.MenuFundo[ 0 ] = LoadTexture("Menu_Imagens/r0.png");
                 jogo->Res.MenuFundo[ 1 ] =  LoadTexture("Menu_Imagens/r1.png");   // Imagem do plano de fundo
                 jogo->Res.MenuFundo[ 2 ] =  LoadTexture("Menu_Imagens/r2.png");   // Imagem do plano de fundo
                 jogo->Res.MenuFundo[ 3 ] =  LoadTexture("Menu_Imagens/r3.png");   // Imagem do plano de fundo
                 jogo->Res.MenuFundo[ 4 ] =  LoadTexture("Menu_Imagens/r4.png");   // Imagem do plano de fundo
                 jogo->Res.MenuFundo[ 5 ] =  LoadTexture("Menu_Imagens/r5.png");   // Imagem do plano de fundo
-                jogo->Res.MenuFundo[ 6 ] =  LoadTexture("Menu_Imagens/r6.png");   // Imagem do plano de fundo
-                jogo->Res.MenuFundo[ 6 ] =  LoadTexture("Menu_Imagens/resgatados.png");   // Imagem do plano de fundo
-                ExibirVitoria( jogo );
         }
 
 }
@@ -2040,8 +2112,8 @@ void ExibirVitoria( JOGO *jogo ){
 
         for( i = 0 ; i < 13 ; i++ )
                 for( j = 0 ; j < strlen( msg[ i ] ) ; j++ ){
-                       UpdateMusicStream( jogo->Res.musica_final );
                         BeginDrawing();
+                       UpdateMusicStream( jogo->Res.musica_final );
 //                                ClearBackground( BLACK );
                                 DrawTexturePro( jogo->Res.MenuFundo[ 6 ] , (Rectangle){ 0 , 0 , jogo->Res.MenuFundo[ 6 ].width , jogo->Res.MenuFundo[ 6 ].height } , jogo->tela , (Vector2){ 0 , 0 } , 0 , WHITE );
                                 DrawTextEx( jogo->Res.fonteWolfen2 , "VITORIA" , (Vector2){ CentraTextoXEX( jogo->Res.fonteWolfen2 , "VITORIA" , 70 , 3 ) , 20 } , 70 , 5 , GREEN );
@@ -2109,4 +2181,55 @@ void ExibirVitoria( JOGO *jogo ){
 //}
 
 
+/** \brief
+ *
+ * \param
+ * \param
+ * \return
+ *
+ */
+extern int mHorda;
+extern int dificuldade;
+int nHorda = 1;
+int flag_calma = 0;
 
+void AtualizaLevelGeral( JOGO* jogo ){
+        static int clock = 0;
+
+        if( !mHorda ){
+                AtualizaLevelAtual( jogo );
+        }else{
+                if( clock == FPS * 5 ){
+                        dificuldade += .2;
+                        clock = 0;
+                }
+
+                if( jogo->salas[ SALA_HORDA ].qtd_abatidos == INIMIGOS_META - 1 ){
+                        jogo->salas[ SALA_HORDA ].qtd_abatidos = 0;
+                        jogo->salas[ SALA_HORDA ].qtd_inimigos_liberar = 0;
+                        jogo->salas[ SALA_HORDA ].qtd_inimigos_liberados = 0;
+                        flag_calma = TEMPO_CALMARIA;
+                        for( int z = 0 ; z < jogo->salas[ SALA_HORDA ].qtdSpawns ; z++)
+                                jogo->salas[ SALA_HORDA ].spawns[ z ].ATIVO = 0;
+                }
+
+                if( flag_calma == TEMPO_CALMARIA ){
+                        PlaySound( LoadSound("Som/winLevel.wav") );
+                        nHorda++;
+                }
+
+                if( flag_calma == TEMPO_CALMARIA / 2 ){
+                        PlaySound( LoadSound("Som/Yeeeah!.wav") );
+                }
+
+                if( flag_calma == 1){
+                        jogo->salas[ SALA_HORDA ].qtd_inimigos_liberar = INIMIGOS_META;
+                        for( int z = 0 ; z < jogo->salas[ SALA_HORDA ].qtdSpawns ; z++)
+                                jogo->salas[ SALA_HORDA ].spawns[ z ].ATIVO = 0;
+                }
+
+                clock++;
+                if( flag_calma ) flag_calma--;
+        }
+
+}

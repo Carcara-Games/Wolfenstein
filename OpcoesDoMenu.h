@@ -16,7 +16,7 @@
         void Continuar( JOGO *jogo);
         void ModoHorda( JOGO *jogo);
         void Ajuda( JOGO *jogo);
-        void Configurar( JOGO *jogo);
+        void HighScores( JOGO *jogo);
         void Sobre( JOGO *jogo);
         void Sair( JOGO *jogo);
 
@@ -24,5 +24,6 @@
 
         void CriarNovoJogador( JOGO* jogo );
         void som_enter( void );
+        void som_erro( void );
 
 #endif // __OPCOESDOMENU_H_

@@ -140,7 +140,7 @@
         #define MAX_ITENS_MUNDO 300
         #define TIPOS_ITEMS 3
         #define DIST_COLETAR_ITEMS 5
-        #define QTD_MUNICAO_DROP  12
+        #define QTD_MUNICAO_DROP  18
 
         ///ENERGIA
         #define ENERGIA_TOTAL 200
@@ -198,5 +198,10 @@
 
         /// REFENS
         #define QTD_REFENS 15
+
+        /// MODO HORDA
+        #define SALA_HORDA 10
+        #define INIMIGOS_META 49
+        #define TEMPO_CALMARIA 3 * FPS
 
 #endif // __DEFINICOES_H_

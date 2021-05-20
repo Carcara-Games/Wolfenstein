@@ -86,20 +86,25 @@ void IniciaNovoJogo( JOGO *jogo )
         inicializarJogador( jogo );      // Inicializa os dados do jogador para Novo Jogo
 
 
+        jogo->spriteDef.item_0.width = 180;
+        jogo->spriteDef.item_0.height = 40;
+        jogo->spriteDef.item_0.x = jogo->tela.width / 2 - jogo->spriteDef.item_0.width / 2;
+        jogo->spriteDef.item_0.y = 0 + jogo->tela.height / 2 + 120;
+
         jogo->spriteDef.item_1.width = 180;
         jogo->spriteDef.item_1.height = 40;
         jogo->spriteDef.item_1.x = jogo->tela.width / 2 - jogo->spriteDef.item_1.width / 2;
-        jogo->spriteDef.item_1.y = jogo->tela.height / 2 + 140;
+        jogo->spriteDef.item_1.y = 60 + jogo->tela.height / 2 + 120;
 
         jogo->spriteDef.item_2.width = 180;
         jogo->spriteDef.item_2.height = 40;
         jogo->spriteDef.item_2.x = jogo->tela.width / 2 - jogo->spriteDef.item_2.width / 2;
-        jogo->spriteDef.item_2.y = 60 + jogo->tela.height / 2 + 140;
+        jogo->spriteDef.item_2.y = 120 + jogo->tela.height / 2 + 120;
 
-        jogo->spriteDef.item_0.width = 180;
-        jogo->spriteDef.item_0.height = 40;
-        jogo->spriteDef.item_0.x = jogo->tela.width / 2 - jogo->spriteDef.item_2.width / 2;
-        jogo->spriteDef.item_0.y = -60 + jogo->tela.height / 2 + 140;
+        jogo->spriteDef.item_3.width = 180;
+        jogo->spriteDef.item_3.height = 40;
+        jogo->spriteDef.item_3.x = jogo->tela.width / 2 - jogo->spriteDef.item_3.width / 2;
+        jogo->spriteDef.item_3.y = 180 + jogo->tela.height / 2 + 120;
 
 
 
@@ -328,16 +333,16 @@ void carregarTexturasFontes( JOGO *jogo )
 {
         ///Texturas  Gerais
         jogo->Res.Logo =  LoadTexture("Logo/Logo.png");   // Imagem de fundo (Logo)
-        jogo->Res.MenuFundo[ 0 ] =  LoadTexture("Menu_Imagens/MP0.png");   // Imagem do plano de fundo
-        jogo->Res.MenuFundo[ 1 ] =  LoadTexture("Menu_Imagens/MP1.png");   // Imagem do plano de fundo
-        jogo->Res.MenuFundo[ 2 ] =  LoadTexture("Menu_Imagens/MP2.png");   // Imagem do plano de fundo
-        jogo->Res.MenuFundo[ 3 ] =  LoadTexture("Menu_Imagens/MP3.png");   // Imagem do plano de fundo
-        jogo->Res.MenuFundo[ 4 ] =  LoadTexture("Menu_Imagens/MP4.png");   // Imagem do plano de fundo
-        jogo->Res.MenuFundo[ 5 ] =  LoadTexture("Menu_Imagens/MP5.png");   // Imagem do plano de fundo
-        jogo->Res.MenuFundo[ 6 ] =  LoadTexture("Menu_Imagens/MP6.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 0 ] =  LoadTexture("Menu_Imagens/mc0.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 1 ] =  LoadTexture("Menu_Imagens/mc1.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 2 ] =  LoadTexture("Menu_Imagens/mc2.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 3 ] =  LoadTexture("Menu_Imagens/mc3.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 4 ] =  LoadTexture("Menu_Imagens/mc4.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 5 ] =  LoadTexture("Menu_Imagens/mc5.png");   // Imagem do plano de fundo
+        jogo->Res.MenuFundo[ 6 ] =  LoadTexture("Menu_Imagens/mc6.png");   // Imagem do plano de fundo
         jogo->Res.TelaDeFundo =  LoadTexture("Menu_Imagens/FundoLimpo.png");
         jogo->Res.FundoConfirmarSair =    LoadTexture("Menu_Imagens/FundoConfirmarSair.png");
-        jogo->Res.Ajuda_Menu =    LoadTexture("Menu_Imagens/Ajuda.png");
+        jogo->Res.Ajuda_Menu =    LoadTexture("Menu_Imagens/Ajuda2.png");
         jogo->Res.Mapa =    LoadTexture("Mapa/Mapa2.png");
         jogo->Res.Portas =    LoadTexture("Mapa/Portas.png");
         jogo->Res.Bala = LoadTexture("Sprites/Bala.png");
@@ -346,9 +351,24 @@ void carregarTexturasFontes( JOGO *jogo )
         jogo->Res.Hud_SCE = LoadTexture("HUD/HUD4.png");
         jogo->Res.coracao = LoadTexture("HUD/heart.png");
 
+        jogo->Res.Per[0][0][90] = LoadTexture( "Sprites/h4.png" );
+        jogo->Res.Per[0][0][91] = LoadTexture( "Sprites/th2.png" );
+        jogo->Res.Per[0][0][92] = LoadTexture( "Sprites/exp.png" );
+        jogo->Res.Per[0][0][93] = LoadTexture( "Sprites/mh_orig_hd.png" );
+        jogo->Res.Per[ 0 ][ 0 ][ 95 ] = LoadTexture("Mapa/MiniMapa4.png");
+        jogo->Res.Per[ 0 ][ 0 ][ 96] = LoadTexture("Sprites/setD.png");
+        jogo->Res.Per[ 0 ][ 0 ][ 80] = LoadTexture("Sprites/tut1.png");
+        jogo->Res.Per[ 0 ][ 0 ][ 81] = LoadTexture("Sprites/tut2.png");
+        jogo->Res.Per[ 0 ][ 0 ][ 82] = LoadTexture("Sprites/tut3.png");
+        jogo->Res.Per[ 0 ][ 0 ][ 83] = LoadTexture("Sprites/tut4.png");
+        jogo->Res.Per[ 0 ][ 0 ][ 84] = LoadTexture("Sprites/tut5.png");
+        jogo->Res.Per[ 0 ][ 0 ][ 85] = LoadTexture("Sprites/tut6.png");
+        jogo->Res.Per[ 0 ][ 0 ][ 86] = LoadTexture("Sprites/tut7.png");
+
+
         jogo->Res.KitMed = LoadTexture("Sprites/kitMed2.png");
         jogo->Res.KitEnergia = LoadTexture("Sprites/energiaDrop.png");
-        jogo->Res.Municao = LoadTexture("Sprites/DropMunicao3.png");
+        jogo->Res.Municao = LoadTexture("Sprites/DropMunicao5.png");
 
         ///Fontes
         jogo->Res.fonteWolfen =    LoadFontEx("Fontes/ReturnToCastle-MZnx.ttf"  ,96 , 0 , 0);
@@ -1192,7 +1212,8 @@ void CarregarBaus( JOGO *jogo ){
 
         for( i = 0 ; i < QTDSALAS ; i++)
                 for( j = 0 ; j < jogo->salas[ i ].qtdBaus ; j++){
-                        jogo->salas[ i ].baus[ j ].QtdItens = nmrRand( 1 , 3 );
+//                        jogo->salas[ i ].baus[ j ].QtdItens = nmrRand( 1 , 3 );
+                        jogo->salas[ i ].baus[ j ].QtdItens = 1;
                         for( k = 0 ; k < jogo->salas[ i ].baus[ j ].QtdItens ; k++){
                                 jogo->salas[ i ].baus[ j ].CodItens[ k ] = nmrRand( 1 , TIPOS_ITEMS );
                         }
